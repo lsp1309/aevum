@@ -1,0 +1,153 @@
+#s-intro .beam {
+  position: absolute;
+  left: 50%;
+  top: -10%;
+  width: 560px;
+  height: 120%;
+  margin-left: -280px;
+  background:
+    radial-gradient(40% 30% at 50% 50%, rgba(140, 175, 255, 0.16), transparent 70%),
+    linear-gradient(90deg, transparent, rgba(90, 130, 255, 0.05) 30%, rgba(190, 210, 255, 0.12) 50%, rgba(90, 130, 255, 0.05) 70%, transparent);
+  filter: blur(18px);
+  opacity: 0;
+}
+#s-intro .intro-cam,
+#s-intro .intro-track {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+#s-intro .name {
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-size: 210px;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  font-kerning: none;
+  letter-spacing: 0.16em;
+  padding-left: 0.16em;
+  transform-style: preserve-3d;
+}
+#s-intro .name-clip {
+  transform-style: preserve-3d;
+}
+#s-intro .name-text {
+  transform-style: preserve-3d;
+  perspective: 900px;
+}
+#s-intro .name-text .c,
+.grad-ink .c {
+  background: linear-gradient(180deg, #ffffff 0%, #e6edff 42%, #9fb2e8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  padding: 0.04em 0;
+}
+#s-intro .name-glow,
+#s-intro .name-sweep {
+  position: absolute;
+  inset: 0;
+  padding-left: inherit;
+  pointer-events: none;
+}
+#s-intro .name-glow {
+  color: #3f6bff;
+  filter: blur(46px);
+  opacity: 0;
+  transform: translateZ(-1px);
+}
+#s-intro .name-sweep {
+  color: transparent;
+  background: linear-gradient(100deg, transparent 38%, rgba(255, 255, 255, 0.9) 50%, transparent 62%);
+  background-size: 260% 100%;
+  background-position: 160% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  mix-blend-mode: screen;
+  padding-top: 0.04em;
+}
+#s-intro .name-role {
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 34px);
+  transform: translateX(-50%);
+  font-family: var(--mono);
+  font-size: 17px;
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  opacity: 0;
+  white-space: nowrap;
+}
+#s-intro .scanline {
+  position: absolute;
+  left: -10%;
+  right: -10%;
+  top: 50%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(160, 195, 255, 0.9) 30%, #ffffff 50%, rgba(160, 195, 255, 0.9) 70%, transparent);
+  box-shadow: 0 0 22px 4px rgba(90, 140, 255, 0.55), 0 0 80px 10px rgba(70, 110, 255, 0.25);
+  opacity: 0;
+}
+#s-intro .xmark {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 120px;
+  height: 120px;
+  overflow: visible;
+  opacity: 0;
+}
+#s-intro .xmark line {
+  stroke: #eaf1ff;
+  stroke-width: 3.2;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 6px rgba(120, 165, 255, 0.9)) drop-shadow(0 0 18px rgba(80, 120, 255, 0.6));
+}
+#s-intro .x-flare {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 360px;
+  height: 360px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(240, 246, 255, 0.95), rgba(130, 170, 255, 0.35) 18%, rgba(70, 110, 255, 0.1) 45%, transparent 70%);
+  mix-blend-mode: screen;
+  opacity: 0;
+}
+#s-intro .x-streak {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1500px;
+  height: 3px;
+  border-radius: 50%;
+  background: linear-gradient(90deg, transparent, rgba(110, 150, 255, 0.5) 25%, #f2f6ff 50%, rgba(110, 150, 255, 0.5) 75%, transparent);
+  box-shadow: 0 0 18px 2px rgba(110, 150, 255, 0.5);
+  mix-blend-mode: screen;
+  opacity: 0;
+}
+#s-intro .intro-sub {
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-size: 27px;
+  font-weight: 400;
+  color: var(--ink-2);
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+  perspective: 600px;
+}
+#s-intro .singularity {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 14px 4px rgba(200, 220, 255, 0.9), 0 0 60px 18px rgba(80, 125, 255, 0.55);
+  opacity: 0;
+}

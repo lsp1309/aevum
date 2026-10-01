@@ -1,0 +1,238 @@
+/* ── Surfaces ──────────────────────────────────────────────────────────
+   Cards are lit from above: a hairline rim catches light on the top edge,
+   the body falls off into navy, and a wide, very soft blue bloom anchors
+   them in space. No backdrop-filter: everything stays GPU-cheap. */
+.card {
+  position: absolute;
+  border-radius: 22px;
+  background: var(--surface);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.075),
+    inset 0 0 0 1px rgba(140, 170, 255, 0.11),
+    0 1px 0 rgba(0, 0, 0, 0.6),
+    0 40px 90px -30px rgba(0, 0, 0, 0.85),
+    0 0 110px -50px rgba(70, 120, 255, 0.5);
+  overflow: hidden;
+  transform-style: flat;
+}
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(120% 60% at 20% 0%, rgba(120, 160, 255, 0.09), transparent 60%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 28%);
+  pointer-events: none;
+}
+.card.soft {
+  border-radius: 18px;
+  background: var(--surface-2);
+}
+
+.ico {
+  width: 18px;
+  height: 18px;
+  flex: none;
+}
+
+/* ── Atoms ────────────────────────────────────────────────────────── */
+.avatar {
+  --h: 228;
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #fff;
+  background:
+    radial-gradient(80% 80% at 30% 20%, hsl(var(--h) 90% 72% / 0.55), transparent 60%),
+    linear-gradient(140deg, hsl(var(--h) 72% 54%), hsl(calc(var(--h) + 28) 70% 34%));
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16), 0 6px 16px -6px hsl(var(--h) 80% 40% / 0.8);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 26px;
+  padding: 0 11px;
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 500;
+  white-space: nowrap;
+  color: var(--ink-2);
+  background: rgba(140, 170, 255, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(140, 170, 255, 0.12);
+}
+.chip .ico {
+  width: 14px;
+  height: 14px;
+}
+.chip.amber {
+  color: #ffd29b;
+  background: rgba(255, 180, 90, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(255, 190, 110, 0.22);
+}
+.chip.blue {
+  color: #b5ccff;
+  background: rgba(80, 125, 255, 0.14);
+  box-shadow: inset 0 0 0 1px rgba(110, 150, 255, 0.26);
+}
+.chip.violet {
+  color: #cdc4ff;
+  background: rgba(140, 120, 255, 0.14);
+  box-shadow: inset 0 0 0 1px rgba(160, 140, 255, 0.24);
+}
+.chip.green {
+  color: #a6f0d4;
+  background: rgba(80, 220, 170, 0.11);
+  box-shadow: inset 0 0 0 1px rgba(100, 230, 180, 0.22);
+}
+.chip.red {
+  color: #ffb8c1;
+  background: rgba(255, 110, 130, 0.11);
+  box-shadow: inset 0 0 0 1px rgba(255, 130, 150, 0.22);
+}
+.chip.muted {
+  color: var(--ink-3);
+}
+.chip.ai {
+  color: #cfe0ff;
+  background: linear-gradient(90deg, rgba(80, 125, 255, 0.18), rgba(150, 120, 255, 0.16));
+  box-shadow: inset 0 0 0 1px rgba(140, 170, 255, 0.3), 0 0 24px -6px rgba(90, 130, 255, 0.6);
+}
+
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 42px;
+  padding: 0 20px;
+  border-radius: 13px;
+  font-size: 15px;
+  font-weight: 550;
+  white-space: nowrap;
+  color: var(--ink-2);
+  background: rgba(140, 170, 255, 0.07);
+  box-shadow: inset 0 0 0 1px rgba(140, 170, 255, 0.14);
+  overflow: hidden;
+}
+.btn.primary {
+  color: #fff;
+  background:
+    radial-gradient(120% 120% at var(--mx, 50%) -20%, rgba(170, 200, 255, 0.55), transparent 55%),
+    linear-gradient(180deg, #4d7cff, #2f5cf0);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    inset 0 0 0 1px rgba(160, 190, 255, 0.35),
+    0 10px 30px -8px rgba(60, 110, 255, 0.75),
+    0 0 0 0 rgba(90, 140, 255, 0);
+}
+.btn .btn-sheen {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, 0.45) 50%, transparent 70%);
+  pointer-events: none;
+}
+
+.kbd {
+  display: inline-grid;
+  place-items: center;
+  min-width: 34px;
+  height: 26px;
+  padding: 0 8px;
+  border-radius: 7px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--ink-2);
+  background: linear-gradient(180deg, rgba(160, 185, 255, 0.16), rgba(160, 185, 255, 0.07));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), inset 0 0 0 1px rgba(150, 180, 255, 0.2), 0 2px 0 rgba(0, 0, 0, 0.5);
+}
+
+/* shimmer text — AI is thinking. Position is driven by GSAP, not CSS keyframes. */
+.shimmer {
+  background: linear-gradient(90deg, var(--ink-3) 0%, var(--ink-3) 35%, #ffffff 50%, var(--ink-3) 65%, var(--ink-3) 100%);
+  background-size: 300% 100%;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ASTRYA mini mark */
+.mini-ring {
+  width: 18px;
+  height: 18px;
+  flex: none;
+}
+.ring-mark {
+  overflow: visible;
+}
+.ring-mark .ring-glow {
+  filter: blur(14px);
+  opacity: 0.55;
+}
+.ring-mark .ring-echo {
+  opacity: 0.35;
+}
+.ring-mark .ring-main {
+  filter: drop-shadow(0 0 6px rgba(150, 190, 255, 0.95));
+}
+.ring-mark .ring-glint {
+  opacity: 0.95;
+  filter: blur(1.5px) drop-shadow(0 0 10px #fff);
+}
+
+/* ── Adaptive cursor ──────────────────────────────────────────────── */
+.cursor {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  z-index: 40;
+  pointer-events: none;
+}
+.cursor > * {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.cursor-dot {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #ffffff, #dfe8ff 60%, #b9cbff);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.5), 0 6px 18px rgba(0, 0, 0, 0.45), 0 0 26px rgba(130, 170, 255, 0.55);
+}
+.cursor-ring {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgba(200, 220, 255, 0.35);
+}
+.cursor-hl {
+  background: rgba(160, 190, 255, 0.1);
+  box-shadow: inset 0 0 0 1px rgba(190, 210, 255, 0.35), 0 0 30px rgba(110, 150, 255, 0.35);
+}
+.cursor-ripple {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1.5px rgba(200, 220, 255, 0.8), 0 0 24px rgba(110, 150, 255, 0.6);
+}
+
+.section-label {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}

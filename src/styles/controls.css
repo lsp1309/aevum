@@ -1,0 +1,174 @@
+#hud {
+  position: fixed;
+  left: 50%;
+  bottom: max(18px, env(safe-area-inset-bottom));
+  transform: translateX(-50%) translateY(10px);
+  width: min(760px, calc(100vw - 32px));
+  z-index: 30;
+  opacity: 0;
+  transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  font-family: var(--font);
+}
+#hud.is-awake,
+#hud.is-paused {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+.hud-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 52px;
+  padding: 0 10px;
+  border-radius: 18px;
+  background: rgba(10, 16, 36, 0.62);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  box-shadow: inset 0 0 0 1px rgba(150, 180, 255, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 20px 50px -20px rgba(0, 0, 0, 0.8);
+}
+.hud-btn {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 11px;
+  background: transparent;
+  color: var(--ink-2);
+  cursor: pointer;
+  transition: background 0.25s ease, color 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.hud-btn:hover {
+  background: rgba(130, 160, 255, 0.12);
+  color: #fff;
+}
+.hud-btn:active {
+  transform: scale(0.92);
+}
+.hud-btn svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+.hud-restart svg,
+.hud-fs svg {
+  fill: none;
+}
+.hud-play .i-play,
+.is-paused .hud-play .i-pause,
+.hud-sound .i-on,
+.is-sound .hud-sound .i-off {
+  display: none;
+}
+.is-sound .hud-sound .i-on {
+  display: block;
+}
+.is-sound .hud-sound {
+  color: #b5ccff;
+}
+.is-paused .hud-play .i-play {
+  display: block;
+}
+.hud-track {
+  position: relative;
+  flex: 1;
+  height: 34px;
+  cursor: pointer;
+  touch-action: none;
+}
+.hud-rail {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 3px;
+  margin-top: -1.5px;
+  border-radius: 3px;
+  background: rgba(150, 180, 255, 0.16);
+  overflow: hidden;
+}
+.hud-fill {
+  position: absolute;
+  inset: 0;
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+  background: linear-gradient(90deg, #3d6bff, #a9c2ff);
+}
+.hud-knob {
+  position: absolute;
+  top: 50%;
+  width: 11px;
+  height: 11px;
+  margin: -5.5px 0 0 -5.5px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(90, 130, 255, 0.25), 0 0 14px rgba(120, 160, 255, 0.8);
+  pointer-events: none;
+}
+.hud-tick {
+  position: absolute;
+  top: 50%;
+  width: 14px;
+  height: 22px;
+  margin: -11px 0 0 -7px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+}
+.hud-tick::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 3px;
+  height: 3px;
+  margin: -1.5px;
+  border-radius: 50%;
+  background: rgba(220, 230, 255, 0.55);
+}
+.hud-tick span {
+  position: absolute;
+  bottom: 26px;
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  white-space: nowrap;
+  padding: 5px 8px;
+  border-radius: 8px;
+  background: rgba(10, 16, 36, 0.85);
+  box-shadow: inset 0 0 0 1px rgba(150, 180, 255, 0.14);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.hud-tick:hover span {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+.hud-time {
+  flex: none;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--ink-3);
+  letter-spacing: 0.06em;
+  display: flex;
+  gap: 6px;
+}
+.hud-now {
+  color: var(--ink);
+}
+.hud-dur::before {
+  content: "/ ";
+}
+@media (max-width: 560px) {
+  .hud-time,
+  .hud-fs {
+    display: none;
+  }
+}

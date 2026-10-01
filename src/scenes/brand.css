@@ -1,0 +1,38 @@
+#s-brand .brand-ring {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 560px;
+  height: 560px;
+}
+#s-brand .ring-tilt,
+#s-brand .ring-squash {
+  width: 100%;
+  height: 100%;
+}
+#s-brand .brand-ring svg {
+  width: 100%;
+  height: 100%;
+}
+#s-brand .brand-word {
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-size: 56px;
+  font-weight: 430;
+  letter-spacing: 0.62em;
+  padding-left: 0.62em;
+  white-space: nowrap;
+  font-kerning: none;
+  color: #eef3ff;
+  text-shadow: 0 0 30px rgba(120, 160, 255, 0.35);
+}
+#s-brand .brand-line {
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-size: 21px;
+  color: var(--ink-3);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}

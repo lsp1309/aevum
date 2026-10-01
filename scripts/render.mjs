@@ -43,8 +43,9 @@ async function startServer() {
     return { url: "http://localhost:5199", close: () => server.close() };
   }
   if (!args["no-build"]) await build({ root, logLevel: "warn" });
-  const server = await preview({ root, logLevel: "error", preview: { port: 4199 } });
-  return { url: "http://localhost:4199", close: () => new Promise((r) => server.httpServer.close(r)) };
+  const port = Number(args.port ?? 4199);
+  const server = await preview({ root, logLevel: "error", preview: { port, strictPort: true } });
+  return { url: `http://localhost:${port}`, close: () => new Promise((r) => server.httpServer.close(r)) };
 }
 
 const server = await startServer();

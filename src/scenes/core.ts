@@ -1,5 +1,5 @@
 import { gsap } from "../core/gsap";
-import { camera, html, atmos, share, onResize, W, H, UI_SCALE, toLocal } from "../core/stage";
+import { camera, html, atmos, share, onResize, W, H, UI_SCALE, toLocal, fmt } from "../core/stage";
 import { onFrame, cue } from "../core/clock";
 import { titleIn, titleOut } from "../core/text";
 import { burst, shockwave, orbitDust } from "../core/fx";
@@ -8,15 +8,23 @@ import { icon } from "../core/icons";
 import { T } from "../timing";
 import "./core.css";
 
-const CX = 960;
-const CY = 490;
+const CX = W / 2;
+const CY = fmt(490, 830);
 const NODE = 92; // on-screen node diameter
 /** Three orbits, each inclined differently in 3D (screen roll + squash). */
-const RINGS = [
-  { rx: 330, ry: 112, roll: (-16 * Math.PI) / 180 },
-  { rx: 545, ry: 172, roll: (9 * Math.PI) / 180 },
-  { rx: 760, ry: 228, roll: (-5 * Math.PI) / 180 },
-];
+const RINGS = fmt(
+  [
+    { rx: 330, ry: 112, roll: (-16 * Math.PI) / 180 },
+    { rx: 545, ry: 172, roll: (9 * Math.PI) / 180 },
+    { rx: 760, ry: 228, roll: (-5 * Math.PI) / 180 },
+  ],
+  [
+    { rx: 265, ry: 120, roll: (-18 * Math.PI) / 180 },
+    { rx: 375, ry: 205, roll: (14 * Math.PI) / 180 },
+    { rx: 455, ry: 300, roll: (-8 * Math.PI) / 180 },
+  ],
+);
+const ORB_SCALE = fmt(1, 0.78);
 
 interface NodeDef {
   key: string;
@@ -208,8 +216,8 @@ export function buildCore(tl: gsap.core.Timeline) {
     tl.to(
       card,
       {
-        left: toLocal(p.x, 960, sw) - size / 2,
-        top: toLocal(p.y, 540, sw) - size / 2,
+        left: toLocal(p.x, "x", sw) - size / 2,
+        top: toLocal(p.y, "y", sw) - size / 2,
         width: size,
         height: size,
         padding: 0,
@@ -229,7 +237,7 @@ export function buildCore(tl: gsap.core.Timeline) {
   const ig = C0 - 0.75;
   sys.radius = 1;
   tl.fromTo(orb.state, { reveal: 0, energy: 2.2 }, { reveal: 1, energy: 1, duration: 1.6, ease: "cine" }, ig);
-  tl.fromTo(".orb-holder", { scale: 0.2 }, { scale: 1, duration: 1.8, ease: "cine" }, ig);
+  tl.fromTo(".orb-holder", { scale: 0.2 }, { scale: ORB_SCALE, duration: 1.8, ease: "cine" }, ig);
   cue("hit", ig + 0.1, undefined, 1.0);
   shockwave(ig + 0.1, 1.6, CX, CY, 1000, 0.36, 3);
   burst(ig + 0.05, 1.5, CX, CY, 140, 700, 81, 0.4);
@@ -243,7 +251,7 @@ export function buildCore(tl: gsap.core.Timeline) {
   tl.fromTo(sys, { labels: 0 }, { labels: 1, duration: 0.9, ease: "sine.inOut" }, land + 0.4);
   tl.fromTo(sys, { trails: 0 }, { trails: 1, duration: 1.2, ease: "sine.inOut" }, land);
   orbitDust(land - 0.2, T.light - land + 0.4, CX, CY, 300, 300, 260, 83);
-  orbitDust(land, T.light - land + 0.2, CX, CY, 640, 210, 160, 84);
+  orbitDust(land, T.light - land + 0.2, CX, CY, fmt(640, 430), fmt(210, 320), 160, 84);
   tl.fromTo(root.querySelectorAll(".orbit"), { drawSVG: "50% 50%", opacity: 0 }, { drawSVG: "0% 100%", opacity: 1, duration: 1.6, ease: "cineInOut", stagger: 0.14 }, land - 0.3);
   tl.fromTo(sys, { lines: 0, pulses: 0 }, { lines: 1, pulses: 0.4, duration: 1.4, ease: "sine.inOut" }, land + 0.3);
   tl.to(sys, { pulses: 1, duration: 5, ease: "sine.in" }, land + 2);

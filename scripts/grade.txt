@@ -1,0 +1,1 @@
+format=gbrp,split[a][b];[b]curves=all='0/0 0.62/0 0.86/0.55 1/1',gblur=sigma=24[g];[a][g]blend=all_mode=screen:all_opacity=0.26,curves=all='0/0 0.07/0.058 0.5/0.505 0.93/0.945 1/0.985',curves=b='0/0.012 0.5/0.505 1/1':r='0/0 0.6/0.6 1/1',eq=saturation=1.06,format=yuv420p

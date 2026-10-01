@@ -631,3 +631,15 @@
   box-shadow: 0 8px 22px -6px rgba(90, 160, 255, 0.7);
   mix-blend-mode: screen;
 }
+
+/* ── 9:16: the summary docks under the email, the reply sits above the fold ── */
+.fmt-v .ai-sum {
+  left: 690px;
+  top: 748px;
+  width: 540px;
+}
+.fmt-v .reply-card {
+  left: 660px;
+  top: -140px;
+  width: 600px;
+}

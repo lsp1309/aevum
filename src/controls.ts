@@ -1,5 +1,5 @@
 import { gsap } from "./core/gsap";
-import { master, renderFrame } from "./core/clock";
+import { film } from "./core/film";
 import { $, camera } from "./core/stage";
 import { chapters } from "./timing";
 import "./styles/controls.css";
@@ -16,7 +16,7 @@ const fmt = (t: number) => {
  */
 export function initControls() {
   const hud = $("#hud");
-  const dur = master.duration();
+  const dur = film.duration;
   hud.innerHTML = `
     <div class="hud-bar">
       <button class="hud-btn hud-play" aria-label="Play / pause">
@@ -50,13 +50,13 @@ export function initControls() {
   const now = $(".hud-now", hud);
 
   // ── score: an <audio> slaved to the master timeline ────────────────
-  const audio = new Audio(`${import.meta.env.BASE_URL}audio/astrya-score.m4a`);
+  const audio = new Audio(`${import.meta.env.BASE_URL}audio/astrya-mix.m4a`);
   audio.preload = "auto";
   let soundOn = false;
   const syncAudio = (force = false) => {
     if (!soundOn) return;
-    const t = master.time();
-    const running = !master.paused() && master.progress() < 1;
+    const t = film.time;
+    const running = !film.paused && film.progress() < 1;
     if (!running) {
       if (!audio.paused) audio.pause();
       if (force) audio.currentTime = Math.min(t, audio.duration || t);
@@ -77,21 +77,20 @@ export function initControls() {
   };
 
   const seek = (t: number) => {
-    master.seek(Math.max(0, Math.min(dur, t)), false);
-    renderFrame(true);
+    film.seek(t);
     syncAudio(true);
   };
   const toggle = () => {
-    if (master.progress() >= 1) seek(0);
-    master.paused(!master.paused());
+    if (film.paused) film.play();
+    else film.pause();
   };
 
   gsap.ticker.add(() => {
-    const p = master.progress();
+    const p = film.progress();
     fill.style.transform = `scaleX(${p})`;
     knob.style.left = `${p * 100}%`;
-    now.textContent = fmt(master.time());
-    hud.classList.toggle("is-paused", master.paused() || p >= 1);
+    now.textContent = fmt(film.time);
+    hud.classList.toggle("is-paused", film.paused || p >= 1);
     syncAudio();
   });
   $(".hud-sound", hud).addEventListener("click", () => setSound(!soundOn));
@@ -99,7 +98,7 @@ export function initControls() {
   play.addEventListener("click", toggle);
   $(".hud-restart", hud).addEventListener("click", () => {
     seek(0);
-    master.play();
+    film.play();
   });
   $(".hud-fs", hud).addEventListener("click", () => {
     if (document.fullscreenElement) document.exitFullscreen();
@@ -121,26 +120,26 @@ export function initControls() {
   trackEl.addEventListener("pointerdown", (e) => {
     if ((e.target as HTMLElement).closest(".hud-tick")) return;
     scrubbing = true;
-    wasPaused = master.paused();
-    master.pause();
+    wasPaused = film.paused;
+    film.pause();
     trackEl.setPointerCapture(e.pointerId);
     fromEvent(e);
   });
   trackEl.addEventListener("pointermove", (e) => scrubbing && fromEvent(e));
   trackEl.addEventListener("pointerup", () => {
     scrubbing = false;
-    if (!wasPaused) master.play();
+    if (!wasPaused) film.play();
   });
 
   window.addEventListener("keydown", (e) => {
     if (e.code === "Space") {
       e.preventDefault();
       toggle();
-    } else if (e.code === "ArrowRight") seek(master.time() + 5);
-    else if (e.code === "ArrowLeft") seek(master.time() - 5);
+    } else if (e.code === "ArrowRight") seek(film.time + 5);
+    else if (e.code === "ArrowLeft") seek(film.time - 5);
     else if (e.code === "KeyR") {
       seek(0);
-      master.play();
+      film.play();
     } else if (e.code === "KeyF") $<HTMLButtonElement>(".hud-fs", hud).click();
     else if (/^Digit[1-9]$/.test(e.code)) {
       const c = chapters[Number(e.code.slice(5)) - 1];

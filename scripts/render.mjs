@@ -8,6 +8,7 @@
  *   npm run render -- --fps 60 --crf 14
  *   npm run render -- --from 20 --to 30 --out out/clip.mp4
  *   npm run render -- --shots 3,12.5,40 --dir out/shots   (stills only)
+ *   npm run render -- --format vertical               (9:16, 1080×1920)
  *   npm run render -- --cues scripts/cues.json             (sound cue sheet for scripts/score.py)
  */
 import { spawn } from "node:child_process";
@@ -32,8 +33,9 @@ const args = Object.fromEntries(
 
 const fps = Number(args.fps ?? 30);
 const crf = String(args.crf ?? 16);
-const width = Number(args.width ?? 1920);
-const height = Math.round((width * 9) / 16);
+const vertical = args.format === "vertical";
+const width = vertical ? 1080 : 1920;
+const height = vertical ? 1920 : 1080;
 const useDev = Boolean(args.dev);
 
 async function startServer() {
@@ -55,7 +57,7 @@ const browser = await chromium.launch({
 const page = await browser.newPage({ viewport: { width, height }, deviceScaleFactor: 1 });
 page.on("console", (m) => (m.type() === "error" || m.type() === "warning") && console.log(`[page:${m.type()}]`, m.text()));
 page.on("pageerror", (e) => console.log("[pageerror]", e.message));
-await page.goto(`${server.url}/?render=1`, { waitUntil: "load" });
+await page.goto(`${server.url}/?render=1${vertical ? "&format=vertical" : ""}`, { waitUntil: "load" });
 await page.waitForFunction(() => window.__film && window.__film.duration > 0, null, { timeout: 60000 });
 const duration = await page.evaluate(() => window.__film.duration);
 

@@ -1,6 +1,6 @@
 import { gsap } from "../core/gsap";
 import { cue } from "../core/clock";
-import { camera, html, atmos, CX, CY } from "../core/stage";
+import { camera, html, atmos, CX, CY, fmt } from "../core/stage";
 import { chars, titleIn } from "../core/text";
 import { burst, shockwave, trail, orbitDust, type Pt } from "../core/fx";
 import { ringMark, ringPoint } from "../core/icons";
@@ -8,7 +8,7 @@ import { BRAND } from "../data";
 import { T } from "../timing";
 import "./brand.css";
 
-export const RING_Y = 468;
+export const RING_Y = fmt(468, CY - 110);
 
 /** Draws the halo: main stroke unfolds both ways from one point, the hairline
  *  echo follows, and a glint travels once around it. Reused by the finale. */
@@ -51,8 +51,8 @@ export function buildBrand(tl: gsap.core.Timeline) {
   const t0 = T.brand - 0.3;
   gsap.set([ring, word, line], { xPercent: -50, yPercent: -50, x: CX });
   gsap.set(ring, { y: RING_Y });
-  gsap.set(word, { y: 690 });
-  gsap.set(line, { y: 760 });
+  gsap.set(word, { y: fmt(690, CY + 150) });
+  gsap.set(line, { y: fmt(760, CY + 228) });
   tl.set(root, { autoAlpha: 1 }, t0 - 0.1);
 
   // ── the point unfolds into a halo ─────────────────────────────────────
@@ -100,8 +100,8 @@ export function buildBrand(tl: gsap.core.Timeline) {
   cue("sweep", wAt + 1.6, 1.8, 0.35);
   // ── T3: we fly through the halo, into the product ─────────────────────
   const z = T.inbox - 1.5;
-  tl.to(word, { y: 760, opacity: 0, filter: "blur(14px)", scale: 0.92, duration: 0.8, ease: "exit" }, z - 0.15);
-  tl.to(line, { y: 820, opacity: 0, filter: "blur(10px)", duration: 0.7, ease: "exit" }, z - 0.2);
+  tl.to(word, { y: "+=70", opacity: 0, filter: "blur(14px)", scale: 0.92, duration: 0.8, ease: "exit" }, z - 0.15);
+  tl.to(line, { y: "+=60", opacity: 0, filter: "blur(10px)", duration: 0.7, ease: "exit" }, z - 0.2);
   // the halo turns to face us…
   tl.to(tilt, { rotation: 0, duration: 0.9, ease: "cineInOut" }, z);
   tl.to(squash, { scaleY: 150 / 78, duration: 0.9, ease: "cineInOut" }, z);

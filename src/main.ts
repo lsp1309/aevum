@@ -8,7 +8,8 @@ import { master, renderFrame, invalidate, cues } from "./core/clock";
 import { fit } from "./core/stage";
 import { initBackground } from "./core/background";
 import { initFx } from "./core/fx";
-import { T } from "./timing";
+import { T, EDIT } from "./timing";
+import { film, setAnchors, toFilm } from "./core/film";
 import { buildNoise } from "./scenes/noise";
 import { buildBrand } from "./scenes/brand";
 import { buildInbox } from "./scenes/inbox";
@@ -17,6 +18,7 @@ import { buildCore } from "./scenes/core";
 import { buildLightFold } from "./scenes/lightfold";
 import { buildMorning } from "./scenes/morning";
 import { buildFinale } from "./scenes/finale";
+import { buildKinetic, buildCaptions } from "./scenes/kinetic";
 import { initControls } from "./controls";
 
 declare global {
@@ -46,6 +48,7 @@ async function boot() {
   ]);
   await document.fonts.ready;
 
+  setAnchors(EDIT);
   initBackground();
   initFx();
 
@@ -57,6 +60,8 @@ async function boot() {
   buildLightFold(master);
   buildMorning(master);
   buildFinale(master);
+  buildKinetic(master);
+  buildCaptions(master);
   if (import.meta.env.DEV) {
     // guard: nothing may run past the film's end
     for (const c of master.getChildren(true, true, false)) {
@@ -68,25 +73,27 @@ async function boot() {
 
   gsap.ticker.add(() => renderFrame());
 
+  film.duration = EDIT[EDIT.length - 1].film;
   const start = Number(params.get("t") || 0);
-  master.seek(start, false);
-  renderFrame(true);
+  film.seek(start);
 
   window.__film = {
-    duration: master.duration(),
-    fps: 30,
-    cues: [...cues].sort((a, b) => a.t - b.t),
+    duration: film.duration,
+    fps: 60,
+    // sound cues, converted from authored time to film time
+    cues: [...cues]
+      .map((c) => ({ ...c, t: toFilm(c.t), dur: c.dur ? toFilm(c.t + c.dur) - toFilm(c.t) : undefined }))
+      .sort((a, b) => a.t - b.t),
     chapters: T,
     seek(t: number) {
-      master.seek(t, false);
-      renderFrame(true);
+      film.seek(t);
     },
   };
 
   document.documentElement.classList.add("ready");
   if (!renderMode) {
     initControls();
-    if (!params.has("paused")) gsap.delayedCall(0.5, () => master.play());
+    if (!params.has("paused")) gsap.delayedCall(0.5, () => film.play());
   }
 }
 

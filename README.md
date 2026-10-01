@@ -1,34 +1,49 @@
-# ASTRYA — product film
+# ASTRYA — product film (v2)
 
-An ~83-second cinematic product film for **ASTRYA**, an AI agent for professional
-email, built as a single real-time GSAP animation in the browser and exported
-frame-exactly to MP4 (1920×1080, 60 fps).
+A 56-second cinematic product film for **ASTRYA**, an AI agent for professional email:
+narrated, scored, colour-graded, delivered in **16:9** and a recomposed **9:16** cut.
+Built as one real-time GSAP animation in the browser and rendered frame-exactly to MP4.
 
 ```bash
 npm install
-npm run dev                  # http://localhost:5173 — plays in the browser
-npm run build                # static build in dist/
-./scripts/render-all.sh      # → out/astrya.mp4 (60 fps, parallel + resumable, with score)
-FPS=30 ./scripts/render-all.sh   # faster 30 fps render
+npm run dev                         # http://localhost:5173 (16:9) · /?format=vertical (9:16)
+./scripts/render-all.sh             # → out/astrya-16x9.mp4  (1920×1080, 60 fps, graded, mixed)
+FORMAT=vertical ./scripts/render-all.sh   # → out/astrya-9x16.mp4 (1080×1920, 60 fps)
 ```
 
-Player: <kbd>Space</kbd> play/pause · <kbd>←</kbd>/<kbd>→</kbd> ±5 s · <kbd>1</kbd>–<kbd>7</kbd> chapters ·
-<kbd>M</kbd> sound · <kbd>F</kbd> fullscreen · <kbd>R</kbd> restart. URL params: `?t=45` start at 45 s, `?paused`.
+Player: <kbd>Space</kbd> play/pause · <kbd>←</kbd>/<kbd>→</kbd> ±5 s · <kbd>1</kbd>–<kbd>8</kbd> chapters ·
+<kbd>M</kbd> sound · <kbd>F</kbd> fullscreen · <kbd>R</kbd> restart. URL params: `?t=35`, `?paused`, `?format=vertical`.
 
-## Storyline
+## The film
 
-| Chapter | t (s) | Beat | Transition out |
-|---|---|---|---|
-| Noise | 0 | A spark drifts in and bursts into notifications: "Your work arrives from everywhere." → "All of it. All at once." | A calm point pulls every card into a spiral vortex. |
-| ASTRYA | 9.8 | The point unfolds into the halo, traced by two comets; the wordmark racks into focus. | **The halo turns to face us and we fly through it** into the inbox. |
-| Triage | 14.2 | Scan beam tags every message, priorities rise, the rest folds into a deck; Luka's contract email opens; ASTRYA reads it and highlights the facts. | **The email turns over in 3D: its back is the reply**, typed live ("Hi Luka … Ziyad"). Approve → toast. |
-| Agents | 33.8 | Luka replies; "walk through pricing on a call" **flies into the calendar and becomes the meeting**; the conflict moves itself; tasks + finance agent: "Handled. In parallel." | **Every card collapses into a coloured node orbiting the core.** |
-| Core | 45.4 | "One intelligence." Seven coloured tools (Mail, Calendar, Slack, Finance, Tasks, Docs, Logistics) on inclined 3D orbits, with trails and pulsing links. | Push into the core → the light folds into a line → a slit opens. |
-| Calm | 58.4 | "Good morning." — the day, protected; click the focus block. | Zoom into the block: it becomes the Q4 Launch Plan, completed by the AI. |
-| Finale | 71.0 | The UI burns off into particles; two lines collide and ignite the ASTRYA halo; blade-lit wordmark, tagline, CTA. | Fade to black. |
+| t | Narration | Picture |
+|---|---|---|
+| 0 | *Every day, your work arrives from everywhere.* | a spark bursts into notifications |
+| 4 | *Emails. Meetings. Invoices. All at once.* | kinetic words, the noise accelerates |
+| 7.7 | *What if it could all… fall into place?* | slow-motion vortex |
+| 10.9 | *Meet ASTRYA.* | the halo ignites, traced by two comets |
+| 14.4 | *It reads every message. Puts what matters first. And understands every detail.* | fly through the halo · scan · re-sort · highlights |
+| 20.6 | *It drafts your reply, in your voice. You just approve.* | the email flips into the AI reply, typed live |
+| 25.3 | *A call is mentioned? It's already in your calendar.* | the sentence flies into the calendar |
+| 29 | *Invoices, deliveries, documents… handled, in parallel.* | agents at work |
+| 35.5 | *One intelligence, connected to every tool you use.* | climax: coloured tools orbit the core |
+| 43.5 | *So every morning starts with clarity.* | light folds into a slit → Good morning |
+| 50 | *ASTRYA. Intelligence that works with you.* | the day burns off; halo, wordmark, CTA |
 
-Luka (Alpine Supplies) and Ziyad (Ops) appear only as the people inside the example
-emails, calendar and tasks (`src/data.ts → PEOPLE`).
+## Pipeline
+
+- **Edit** — scenes are authored on a raw GSAP timeline; `src/timing.ts → EDIT` maps raw→film time
+  through smooth monotone speed ramps anchored to narration beats and a 120 BPM grid (`src/core/film.ts`).
+- **Voice** — `scripts/narration.json` → `python3 scripts/voice.py` (Kokoro-82M ONNX, voice *af_heart*,
+  offline). Phrase timings are exported to `src/narration.timing.json` and drive kinetic words and captions.
+- **Sound** — `npm run render -- --dev --cues scripts/cues.json` then `python3 scripts/mix.py`:
+  original score (drone → groove → build → climax → resolve), sound design from timeline cues,
+  sidechain + spectral ducking under the voice, −14 LUFS master.
+- **Grade** — `scripts/grade.txt` (RGB highlight bloom, S-curve, cool blacks) applied at final encode.
+- **9:16** — same animation recomposed per scene (`fmt()` in TS, `.fmt-v` in CSS), content kept in the
+  Reels/TikTok safe zone (y 240–1480), burned-in captions for sound-off viewing.
+
+Luka (Alpine Supplies) and Ziyad (Ops) appear only inside the example emails, calendar and tasks.
 
 ## Architecture
 
@@ -47,11 +62,11 @@ src/
     fx.ts            transition particles: converge, implode, burst, shockwave, trail, dissolve
     orb.ts           WebGL ray-marched volumetric core
     cursor.ts        adaptive pointer that morphs around controls (magnetic)
-  scenes/            noise · brand · inbox · work · core · lightfold · morning · finale (one file per scene)
+  scenes/            noise · brand · inbox · work · core · lightfold · morning · finale · kinetic (one file per scene)
 scripts/
   render.mjs         Playwright frame-by-frame renderer → ffmpeg
   render-all.sh      parallel, resumable full render (segments + score)
-  score.py           original score synthesised from the timeline's cue sheet
+  voice.py · mix.py  narration (Kokoro) · score + sound design + ducking + master
 ```
 
 **Determinism.** Everything — DOM tweens, canvas particles, the orb shader, orbit

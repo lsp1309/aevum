@@ -56,7 +56,7 @@
   position: absolute;
   left: 0;
   top: 0;
-  width: 1920px;
+  width: 100%;
   height: 3px;
   margin-top: -1.5px;
   opacity: 0;

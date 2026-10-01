@@ -129,3 +129,19 @@
   background: #010208;
   opacity: 0;
 }
+
+/* ── 9:16 ─────────────────────────────────────────────────────────── */
+.fmt-v #s-finale .fl {
+  width: 50%;
+}
+.fmt-v #s-finale .fin-word {
+  top: 1000px;
+  font-size: 70px;
+}
+.fmt-v #s-finale .fin-tag {
+  top: 1104px;
+  font-size: 34px;
+}
+.fmt-v #s-finale .fin-cta-wrap {
+  top: 1196px;
+}

@@ -556,3 +556,31 @@
   white-space: nowrap;
   perspective: 600px;
 }
+
+/* ── 9:16: one column — title, tasks, agent, agents reporting in ──────── */
+.fmt-v .work-title {
+  left: 960px;
+  top: -262px;
+  transform: translateX(-50%);
+  font-size: 72px;
+}
+.fmt-v .tasks {
+  left: 600px;
+  top: -150px;
+}
+.fmt-v .agent {
+  left: 630px;
+  top: 430px;
+}
+.fmt-v .p-docs {
+  left: 470px;
+  top: 880px;
+}
+.fmt-v .p-log {
+  left: 980px;
+  top: 880px;
+}
+.fmt-v .p-cal {
+  left: 760px;
+  top: 975px;
+}

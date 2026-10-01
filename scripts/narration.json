@@ -1,0 +1,110 @@
+{
+  "voice": "af_heart",
+  "lang": "en-us",
+  "speed": 0.94,
+  "lines": [
+    {
+      "id": "everywhere",
+      "text": "Every day, your work arrives from everywhere.",
+      "say": "Every day, your work arrives from everywhere.",
+      "at": 1.2,
+      "captions": [
+        "Every day,",
+        ""
+      ]
+    },
+    {
+      "id": "atonce",
+      "text": "Emails. Meetings. Invoices. All at once.",
+      "say": "Emails. Meetings. Invoices... All at once.",
+      "at": 4.2
+    },
+    {
+      "id": "place",
+      "text": "What if it could all fall into place?",
+      "say": "What if it could all... fall into place?",
+      "at": 7.7,
+      "captions": [
+        "What if it could all\u2026",
+        "fall into place?"
+      ]
+    },
+    {
+      "id": "meet",
+      "text": "Meet ASTRYA.",
+      "say": "Meet Astria.",
+      "speed": 0.88,
+      "at": 10.9,
+      "captions": [
+        "Meet ASTRYA."
+      ]
+    },
+    {
+      "id": "reads",
+      "text": "It reads every message. Puts what matters first. And understands every detail.",
+      "say": "It reads every message... puts what matters first... and understands every detail.",
+      "at": 14.35,
+      "captions": [
+        "It reads every message.",
+        "Puts what matters first.",
+        "And understands every detail."
+      ]
+    },
+    {
+      "id": "voice",
+      "text": "It drafts your reply, in your voice. You just approve.",
+      "say": "It drafts your reply, in your voice. You just approve.",
+      "at": 20.55,
+      "captions": [
+        "It drafts your reply, in your voice.",
+        "You just approve."
+      ]
+    },
+    {
+      "id": "calendar",
+      "text": "A call is mentioned? It's already in your calendar.",
+      "say": "A call is mentioned? It's already in your calendar.",
+      "at": 25.3,
+      "captions": [
+        "A call is mentioned?",
+        "It's already in your calendar."
+      ]
+    },
+    {
+      "id": "parallel",
+      "text": "Invoices, deliveries, documents: handled in parallel.",
+      "say": "Invoices, deliveries, documents... handled, in parallel.",
+      "at": 29.0,
+      "captions": [
+        "Invoices, deliveries, documents\u2026",
+        "handled, in parallel."
+      ]
+    },
+    {
+      "id": "one",
+      "text": "One intelligence, connected to every tool you use.",
+      "say": "One intelligence... connected to every tool you use.",
+      "at": 35.5,
+      "captions": [
+        "",
+        "connected to every tool you use."
+      ]
+    },
+    {
+      "id": "morning",
+      "text": "So every morning starts with clarity.",
+      "say": "So every morning starts with clarity.",
+      "at": 43.5,
+      "captions": [
+        "So every morning starts with clarity."
+      ]
+    },
+    {
+      "id": "astrya",
+      "text": "ASTRYA. Intelligence that works with you.",
+      "say": "Astria. Intelligence that works with you.",
+      "speed": 0.9,
+      "at": 50.0
+    }
+  ]
+}

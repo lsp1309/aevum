@@ -1,0 +1,127 @@
+{
+ "everywhere": {
+  "start": 1.2,
+  "end": 3.663,
+  "phrases": [
+   1.2,
+   2.05
+  ],
+  "captions": [
+   "Every day,",
+   ""
+  ]
+ },
+ "atonce": {
+  "start": 4.2,
+  "end": 7.152,
+  "phrases": [
+   4.2,
+   5.5,
+   6.43
+  ],
+  "captions": []
+ },
+ "place": {
+  "start": 7.7,
+  "end": 9.74,
+  "phrases": [
+   7.7,
+   8.86
+  ],
+  "captions": [
+   "What if it could all\u2026",
+   "fall into place?"
+  ]
+ },
+ "meet": {
+  "start": 10.9,
+  "end": 11.976,
+  "phrases": [
+   10.9
+  ],
+  "captions": [
+   "Meet ASTRYA."
+  ]
+ },
+ "reads": {
+  "start": 14.35,
+  "end": 19.274,
+  "phrases": [
+   14.35,
+   16.04,
+   17.58
+  ],
+  "captions": [
+   "It reads every message.",
+   "Puts what matters first.",
+   "And understands every detail."
+  ]
+ },
+ "voice": {
+  "start": 20.55,
+  "end": 23.62,
+  "phrases": [
+   20.55,
+   22.66
+  ],
+  "captions": [
+   "It drafts your reply, in your voice.",
+   "You just approve."
+  ]
+ },
+ "calendar": {
+  "start": 25.3,
+  "end": 28.135,
+  "phrases": [
+   25.3,
+   26.8
+  ],
+  "captions": [
+   "A call is mentioned?",
+   "It's already in your calendar."
+  ]
+ },
+ "parallel": {
+  "start": 29.0,
+  "end": 32.716,
+  "phrases": [
+   29.0,
+   31.43
+  ],
+  "captions": [
+   "Invoices, deliveries, documents\u2026",
+   "handled, in parallel."
+  ]
+ },
+ "one": {
+  "start": 35.5,
+  "end": 38.819,
+  "phrases": [
+   35.5,
+   36.9
+  ],
+  "captions": [
+   "",
+   "connected to every tool you use."
+  ]
+ },
+ "morning": {
+  "start": 43.5,
+  "end": 45.476,
+  "phrases": [
+   43.5
+  ],
+  "captions": [
+   "So every morning starts with clarity."
+  ]
+ },
+ "astrya": {
+  "start": 50.0,
+  "end": 52.458,
+  "phrases": [
+   50.0,
+   50.8
+  ],
+  "captions": []
+ }
+}

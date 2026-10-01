@@ -1,6 +1,6 @@
 import { gsap } from "../core/gsap";
 import { cue } from "../core/clock";
-import { camera, html, atmos, cam, share, box, UI_SCALE } from "../core/stage";
+import { camera, html, atmos, cam, share, box, UI_SCALE, placeUI, fmt } from "../core/stage";
 import { titleIn } from "../core/text";
 import { trail, burst, flareSweep } from "../core/fx";
 import { icon } from "../core/icons";
@@ -8,7 +8,7 @@ import { calendar, tasks } from "../data";
 import { T } from "../timing";
 import "./work.css";
 
-const C = { x: 770, y: 150, w: 1000, h: 780 };
+const C = fmt({ x: 770, y: 150, w: 1000, h: 780 }, { x: 460, y: 250, w: 1000, h: 780 });
 const GUTTER = 72;
 const COL = 180;
 const GRID_TOP = 150;
@@ -105,7 +105,7 @@ export function buildWork(tl: gsap.core.Timeline) {
     </div>
   </section>`);
   camera.appendChild(root);
-  gsap.set(root, { scale: UI_SCALE.work, transformOrigin: "960px 540px" });
+  placeUI(root, UI_SCALE.work);
   const q = <E extends Element = HTMLElement>(s: string) => root.querySelector(s) as unknown as E;
   const qa = (s: string) => Array.from(root.querySelectorAll<HTMLElement>(s));
   const upper = q(".work-upper");
@@ -205,8 +205,8 @@ export function buildWork(tl: gsap.core.Timeline) {
   // ── the camera tilts down: tasks and agents ────────────────────────────
   const v0 = W + 4.7;
   // the meeting block rides with the calendar
-  tl.to([upper, fly], { y: "-=980", rotationX: 16, opacity: 0.2, filter: "blur(10px)", duration: 1.35, ease: "cineInOut" }, v0);
-  tl.fromTo(lower, { y: 980, rotationX: -12 }, { y: 0, rotationX: 0, duration: 1.35, ease: "cineInOut" }, v0);
+  tl.to([upper, fly], { y: `-=${fmt(980, 1900)}`, rotationX: 16, opacity: 0.2, filter: "blur(10px)", duration: 1.35, ease: "cineInOut" }, v0);
+  tl.fromTo(lower, { y: fmt(980, 1900), rotationX: -12 }, { y: 0, rotationX: 0, duration: 1.35, ease: "cineInOut" }, v0);
   cue("whoosh", v0, 1.4, 0.7);
   flareSweep(v0 + 0.1, 1.3, 620, true, "170,150,255");
   tl.to(cam, { y: 700, duration: 1.4, ease: "cineInOut" }, v0);

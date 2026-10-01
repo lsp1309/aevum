@@ -1,7 +1,12 @@
-/** The film is authored on a fixed 1920×1080 canvas and uniformly scaled to
- *  fit any viewport: no reflow, no layout shift, identical framing everywhere. */
-export const W = 1920;
-export const H = 1080;
+import { gsap } from "./gsap";
+/** The film is authored on a fixed canvas — 1920×1080, or 1080×1920 for the
+ *  vertical (9:16) cut — and uniformly scaled to fit any viewport: no reflow,
+ *  no layout shift, identical framing everywhere. `?format=vertical` selects 9:16. */
+export const VERTICAL = new URLSearchParams(location.search).get("format") === "vertical";
+export const W = VERTICAL ? 1080 : 1920;
+export const H = VERTICAL ? 1920 : 1080;
+/** pick a value per format */
+export const fmt = <T,>(h: T, v: T): T => (VERTICAL ? v : h);
 export const CX = W / 2;
 export const CY = H / 2;
 
@@ -22,6 +27,10 @@ export const onResize = (fn: (s: number) => void) => {
   resizeFns.push(fn);
   fn(scale);
 };
+
+document.documentElement.classList.add(VERTICAL ? "fmt-v" : "fmt-h");
+stage.style.width = `${W}px`;
+stage.style.height = `${H}px`;
 
 export function fit() {
   const vw = window.innerWidth;
@@ -67,10 +76,18 @@ export const atmos = {
 /** Cross-scene handoffs (an element leaving one scene becomes part of the next). */
 export const share: Record<string, unknown> = {};
 
-/** Product UI is presented slightly larger than authored, for legibility.
- *  Scenes that hand elements to each other share the same factor. */
-export const UI_SCALE = { work: 1.12, morning: 1.08 };
-/** Stage point → local coordinates of a root scaled by `s` around the centre. */
-export const toLocal = (v: number, c: number, s: number) => c + (v - c) / s;
-/** Local coordinates of a root scaled by `s` → stage point. */
-export const toStage = (v: number, c: number, s: number) => c + (v - c) * s;
+/**
+ * Product UI scenes are authored in a 1920×1080 coordinate space. Their root
+ * is scaled about the authored centre (960,540) and centred in the frame;
+ * in 9:16 each scene also recomposes its own layout (see the `.fmt-v` rules).
+ * Scenes that hand elements to each other share the same factor.
+ */
+export const UI_SCALE = { work: fmt(1.12, 0.9), morning: fmt(1.08, 0.86) };
+/** Place an authored-space root into the frame. */
+export function placeUI(root: HTMLElement, s: number) {
+  gsap.set(root, { scale: s, transformOrigin: "960px 540px", x: W / 2 - 960, y: H / 2 - 540 });
+}
+/** Stage point → authored coordinates of a placed root (axis: "x" | "y"). */
+export const toLocal = (v: number, axis: "x" | "y", s: number) => (axis === "x" ? 960 + (v - W / 2) / s : 540 + (v - H / 2) / s);
+/** Authored coordinates of a placed root → stage point. */
+export const toStage = (v: number, axis: "x" | "y", s: number) => (axis === "x" ? W / 2 + (v - 960) * s : H / 2 + (v - 540) * s);

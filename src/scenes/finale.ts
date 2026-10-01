@@ -1,6 +1,6 @@
 import { gsap } from "../core/gsap";
 import { cue } from "../core/clock";
-import { camera, overlay, html, atmos, share, CX } from "../core/stage";
+import { camera, overlay, html, atmos, share, CX, fmt } from "../core/stage";
 import { titleIn } from "../core/text";
 import { dissolve, orbitDust, burst, shockwave, trail, type Pt } from "../core/fx";
 import { icon, ringMark, ringPoint } from "../core/icons";
@@ -9,7 +9,7 @@ import { BRAND } from "../data";
 import { T } from "../timing";
 import "./finale.css";
 
-const RING = { y: 410, size: 520 };
+const RING = { y: fmt(410, 760), size: 520 };
 
 /**
  * CONCLUSION. The interface lets go — its layers drift apart and burn off as
@@ -37,22 +37,22 @@ export function buildFinale(tl: gsap.core.Timeline) {
 
   const q = (s: string) => root.querySelector(s) as HTMLElement;
   const F = T.finale;
-  const editor = share.editor as HTMLElement;
-  const ED = share.editorScreenRect as { x: number; y: number; w: number; h: number };
+  const world = share.morningWorld as HTMLElement;
+  const MR = share.morningRect as { x: number; y: number; w: number; h: number };
   gsap.set(q(".btn-sheen"), { xPercent: -130 });
 
-  // ── the interface lets go ───────────────────────────────────────────────
+  // ── the day lets go: its layers drift apart in depth and burn off ──────
   const d0 = F - 0.3;
-  const layer = (sel: string, v: gsap.TweenVars, at: number) => tl.to(editor.querySelector(sel), { ...v, filter: "blur(12px)", opacity: 0, duration: 1.6, ease: "exit" }, at);
-  layer(".ed-bar", { y: -70, scale: 1.04 }, d0);
-  layer(".ed-ctx", { x: 140, y: 20, scale: 0.92 }, d0 + 0.05);
-  layer(".ed-title", { y: -40, scale: 1.12 }, d0 + 0.12);
-  layer(".ed-p1", { y: 10, scale: 1.05 }, d0 + 0.18);
-  layer(".ed-ms", { y: 30, scale: 1.1 }, d0 + 0.2);
-  layer(".ed-p2", { y: 50, scale: 1.16 }, d0 + 0.24);
-  tl.to(editor, { scale: 1.05, opacity: 0, filter: "blur(16px)", duration: 1.6, ease: "exit" }, d0 + 0.25);
+  const layer = (sel: string, v: gsap.TweenVars, at: number) => tl.to(world.querySelectorAll(sel), { ...v, filter: "blur(14px)", opacity: 0, duration: 1.5, ease: "exit" }, at);
+  layer(".mo-date", { x: 60, y: -30 }, d0);
+  layer(".mo-hello", { y: -80, scale: 1.1 }, d0 + 0.04);
+  layer(".mo-sub", { y: -50, scale: 1.05 }, d0 + 0.08);
+  layer(".stat.s1", { x: -90, y: -20, scale: 0.94 }, d0 + 0.1);
+  layer(".stat.s2", { y: -30, scale: 1.08 }, d0 + 0.14);
+  layer(".stat.s3", { x: 90, y: -20, scale: 0.94 }, d0 + 0.12);
+  layer(".mo-today", { y: 70, scale: 1.12 }, d0 + 0.18);
   cue("whoosh", d0, 2.0, 0.6);
-  dissolve(d0, 2.4, ED, 420, 91);
+  dissolve(d0, 2.4, MR, 460, 91);
   tl.to(atmos, { stars: 0.32, halo: 0.18, core: 0, leak: 0, duration: 2.0, ease: "sine.inOut" }, d0);
   tl.set(share.morningRoot as HTMLElement, { autoAlpha: 0 }, d0 + 2.0);
 
@@ -138,11 +138,11 @@ export function buildFinale(tl: gsap.core.Timeline) {
   cue("chime", c0 + 0.1, undefined, 0.5);
   tl.fromTo(cta.querySelector(".btn-sheen"), { xPercent: -130 }, { xPercent: 130, duration: 1.2, ease: "cineInOut", immediateRender: false }, c0 + 0.7);
   tl.fromTo(".fin-arrow", { x: 0 }, { x: 6, duration: 0.5, ease: "sine.inOut", yoyo: true, repeat: 5 }, c0 + 0.9);
-  tl.fromTo(".cta-pulse", { scale: 1, opacity: 0.7 }, { scale: 1.5, opacity: 0, duration: 1.6, ease: "cine", stagger: 0.8, repeat: 1, immediateRender: false }, c0 + 0.8);
+  tl.fromTo(".cta-pulse", { scale: 1, opacity: 0.7 }, { scale: 1.5, opacity: 0, duration: 1.6, ease: "cine", stagger: 0.8, repeat: 0, immediateRender: false }, c0 + 0.8);
   tl.fromTo(
     cta,
     { boxShadow: "inset 0 1px 0 rgba(255,255,255,0.3), 0 14px 40px -10px rgba(60,110,255,0.7), 0 0 0px rgba(90,140,255,0)" },
-    { boxShadow: "inset 0 1px 0 rgba(255,255,255,0.3), 0 14px 40px -10px rgba(60,110,255,0.85), 0 0 60px rgba(90,140,255,0.65)", duration: 1.4, ease: "sine.inOut", yoyo: true, repeat: 2 },
+    { boxShadow: "inset 0 1px 0 rgba(255,255,255,0.3), 0 14px 40px -10px rgba(60,110,255,0.85), 0 0 60px rgba(90,140,255,0.65)", duration: 1.4, ease: "sine.inOut", yoyo: true, repeat: 1 },
     c0 + 0.9,
   );
   glintRing(tl, svg, c0 + 1.4);

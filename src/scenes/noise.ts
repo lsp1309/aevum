@@ -1,16 +1,18 @@
 import { gsap } from "../core/gsap";
 import { cue } from "../core/clock";
-import { camera, html, atmos, CX, CY } from "../core/stage";
+import { camera, html, atmos, CX, CY, fmt, W } from "../core/stage";
 import { titleIn, titleOut } from "../core/text";
 import { burst, implode, shockwave, mote } from "../core/fx";
 import { icon, avatar } from "../core/icons";
 import { noise, type Noise } from "../data";
 import { T } from "../timing";
+import { toRaw } from "../core/film";
+import VO from "../narration.timing.json";
 import "./noise.css";
 
 /** Hand-composed depth layout: [cx, cy, z, rotY]. The centre band is kept
  *  clear for the headline; far cards may pass behind it, blurred. */
-const SLOTS: Array<[number, number, number, number]> = [
+const SLOTS_H: Array<[number, number, number, number]> = [
   [560, 262, 40, 8],
   [1395, 238, -90, -10],
   [1515, 805, 60, -12],
@@ -30,6 +32,28 @@ const SLOTS: Array<[number, number, number, number]> = [
   [372, 610, 240, 14],
   [960, 970, 120, 0],
 ];
+/** 9:16 constellation: the centre band (y 820–1100) stays clear for the words. */
+const SLOTS_V: Array<[number, number, number, number]> = [
+  [300, 430, 40, 8],
+  [790, 350, -90, -10],
+  [790, 1380, 60, -12],
+  [290, 1330, -40, 10],
+  [560, 250, -460, 0],
+  [880, 700, -320, -16],
+  [190, 640, -380, 16],
+  [700, 1560, -240, -4],
+  [330, 1610, -520, 4],
+  [860, 200, -640, -14],
+  [220, 190, -700, 14],
+  [640, 560, -900, -4],
+  [430, 1470, -880, 6],
+  [900, 1240, -560, -18],
+  [160, 1190, -600, 18],
+  [800, 1210, 200, -14],
+  [270, 1250, 240, 14],
+  [560, 1720, 120, 0],
+];
+const SLOTS = fmt(SLOTS_H, SLOTS_V);
 
 function cardHTML(n: Noise) {
   const lead =
@@ -60,7 +84,8 @@ export function buildNoise(tl: gsap.core.Timeline) {
     </div>
     <div class="noise-shade"></div>
     <h2 class="noise-title t-a">Your work arrives from everywhere.</h2>
-    <h2 class="noise-title t-b">All of it. All at once.</h2>
+    <h2 class="noise-title t-b">All at once.</h2>
+    <div class="noise-kin"><span>Emails.</span><span>Meetings.</span><span class="amber">Invoices.</span></div>
     <div class="noise-counter card soft">
       <span class="nc-ico">${icon.bell}</span>
       <span class="nc-label">Unread</span>
@@ -84,7 +109,7 @@ export function buildNoise(tl: gsap.core.Timeline) {
   tl.to(atmos, { halo: 0.5, zoom: 1.06, duration: 3, ease: "sine.inOut" }, 0.2);
   const spark = (p: number) => {
     const e = 1 - Math.pow(1 - p, 2.2);
-    return { x: 1520 - 560 * e, y: 770 - 230 * e - Math.sin(p * Math.PI) * 110 };
+    return { x: CX + (W * 0.29) * (1 - e), y: CY + 230 * (1 - e) - Math.sin(p * Math.PI) * 110 };
   };
   mote(0.05, t0 - 0.05, spark, (p) => Math.min(1, p * 5));
   cue("riser", 0.1, t0 - 0.1, 0.45);
@@ -144,8 +169,21 @@ export function buildNoise(tl: gsap.core.Timeline) {
   const tb = q(".t-b");
   tl.fromTo(".noise-shade", { opacity: 0 }, { opacity: 1, duration: 1.2, ease: "sine.out" }, t0 + 0.5);
   tl.add(titleIn(ta, { stagger: 0.085, dur: 1.4, track: ["0.04em", "-0.025em"] }), t0 + 0.8);
-  tl.add(titleOut(ta, { stagger: 0.035, dur: 0.6 }), t0 + 3.5);
-  tl.add(titleIn(tb, { stagger: 0.07, dur: 1.1, track: ["0.06em", "-0.025em"] }), t0 + 3.9);
+  const K = VO.atonce.phrases; // emails · (meetings) · invoices · all at once
+  tl.add(titleOut(ta, { stagger: 0.03, dur: 0.5 }), toRaw(K[0] - 0.45));
+  // Emails. Meetings. Invoices. — each word lands on the voice, the previous one is knocked out
+  const kin = Array.from(root.querySelectorAll<HTMLElement>(".noise-kin span"));
+  gsap.set(".noise-kin", { xPercent: -50, yPercent: -50, x: CX, y: CY });
+  const ins = [K[0], (K[0] + K[1]) / 2 + 0.02, K[1]];
+  const outs = [ins[1] - 0.2, ins[2] - 0.2, K[2] - 0.22];
+  ins.forEach((f, i) => {
+    const el = kin[i];
+    const span = (g: number, d: number) => toRaw(g + d) - toRaw(g);
+    tl.fromTo(el, { opacity: 0, scale: 1.3, y: 24, filter: "blur(16px)", letterSpacing: "0.18em" }, { opacity: 1, scale: 1, y: 0, filter: "blur(0px)", letterSpacing: "-0.03em", duration: span(f, 0.34), ease: "cine" }, toRaw(f));
+    tl.to(el, { opacity: 0, scale: 0.9, y: -16, filter: "blur(12px)", duration: span(outs[i], 0.17), ease: "exit" }, toRaw(outs[i]));
+    cue("soft", toRaw(f), undefined, 0.35);
+  });
+  tl.add(titleIn(tb, { stagger: 0.12, dur: 0.9, track: ["0.1em", "-0.03em"] }), toRaw(K[2] - 0.05));
 
   // unread counter: climbs with an accelerating ease
   const counter = q(".noise-counter");

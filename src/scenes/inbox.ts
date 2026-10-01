@@ -1,6 +1,6 @@
 import { gsap } from "../core/gsap";
 import { cue } from "../core/clock";
-import { camera, html, atmos, box, share, UI_SCALE } from "../core/stage";
+import { camera, html, atmos, box, share, UI_SCALE, placeUI, fmt } from "../core/stage";
 import { titleIn, typeChars } from "../core/text";
 import { Cursor } from "../core/cursor";
 import { icon, avatar, ringMark } from "../core/icons";
@@ -16,9 +16,9 @@ const P2 = { y: 262, h: 556 };
 const ROW_H = 64;
 const ROW0 = 100;
 /** Email / composer card. */
-const E = { x: 330, y: 168, w: 900, h: 690 };
+const E = fmt({ x: 330, y: 168, w: 900, h: 690 }, { x: 510, y: 20, w: 900, h: 690 });
 /** Toast after sending. */
-const TOAST = { x: 960 - 200, y: 84, w: 400, h: 60 };
+const TOAST = fmt({ x: 960 - 200, y: 84, w: 400, h: 60 }, { x: 960 - 220, y: -150, w: 440, h: 64 });
 
 export function buildInbox(tl: gsap.core.Timeline) {
   const L = PEOPLE.luka;
@@ -116,7 +116,7 @@ export function buildInbox(tl: gsap.core.Timeline) {
     </div>
   </section>`);
   camera.appendChild(root);
-  gsap.set(root, { scale: UI_SCALE.work, transformOrigin: "960px 540px" });
+  placeUI(root, UI_SCALE.work);
 
   const q = <E extends Element = HTMLElement>(s: string) => root.querySelector(s) as unknown as E;
   const qa = (s: string) => Array.from(root.querySelectorAll<HTMLElement>(s));
@@ -264,7 +264,7 @@ export function buildInbox(tl: gsap.core.Timeline) {
   const hl = qa(".em-body .hl");
   tl.to(hl, { backgroundSize: "100% 100%", color: "#ffffff", duration: 0.7, ease: "cineInOut", stagger: 0.35 }, m0 + 2.15);
   const s0 = m0 + 1.8;
-  tl.fromTo(sum, { x: -300, z: -220, rotationY: -38, opacity: 0, filter: "blur(10px)" }, { x: 0, z: 0, rotationY: 0, opacity: 1, filter: "blur(0px)", duration: 1.3, ease: "cine" }, s0);
+  tl.fromTo(sum, { x: fmt(-300, 0), y: fmt(0, -280), z: -220, rotationY: fmt(-38, 0), rotationX: fmt(0, 30), opacity: 0, filter: "blur(10px)" }, { x: 0, y: 0, z: 0, rotationY: 0, rotationX: 0, opacity: 1, filter: "blur(0px)", duration: 1.3, ease: "cine" }, s0);
   tl.fromTo(".as-list li", { opacity: 0, x: -14, filter: "blur(5px)" }, { opacity: 1, x: 0, filter: "blur(0px)", duration: 0.8, stagger: 0.14, ease: "cine" }, s0 + 0.5);
   tl.fromTo(".as-dot", { scale: 0 }, { scale: 1, duration: 0.6, stagger: 0.14, ease: "spring" }, s0 + 0.5);
   tl.fromTo(".as-actions .btn", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.8, stagger: 0.08, ease: "cine" }, s0 + 1.0);
@@ -282,7 +282,7 @@ export function buildInbox(tl: gsap.core.Timeline) {
 
   // ── T: the email turns over — its back is the reply ───────────────────
   const f0 = c2 + 1.45;
-  tl.to(sum, { x: -260, z: -320, rotationY: -40, opacity: 0, filter: "blur(10px)", duration: 0.85, ease: "exit" }, f0 - 0.05);
+  tl.to(sum, { x: fmt(-260, 0), y: fmt(0, -240), z: -320, rotationY: fmt(-40, 0), opacity: 0, filter: "blur(10px)", duration: 0.85, ease: "exit" }, f0 - 0.05);
   cue("whoosh", f0, 1.4, 0.6);
   flareSweep(f0 + 0.35, 1.0, 480, true);
   tl.to(flip, { rotationY: 180, duration: 1.4, ease: "cineInOut" }, f0);

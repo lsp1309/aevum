@@ -80,6 +80,6 @@ the orb renders at reduced internal resolution live. Measured JS cost per frame:
 p50 < 1 ms, p95 < 3.5 ms across the film.
 
 **Score.** `scenes/*` register sound cues (`cue("hit", t)`), exported with
-`npm run render -- --cues scripts/cues.json`; `python3 scripts/score.py`
+`npm run render -- --dev --cues scripts/cues.json`; `python3 scripts/voice.py`; `python3 scripts/mix.py`
 (numpy + scipy + ffmpeg) builds `public/audio/astrya-score.m4a` so impacts,
 risers and UI clicks land on the exact frame.

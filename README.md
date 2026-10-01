@@ -1,32 +1,34 @@
-# ASTRYA — product film · LUKA × ZIYAD
+# ASTRYA — product film
 
-A ~99-second cinematic product film for **ASTRYA**, an AI assistant, built as a
-single real-time GSAP animation in the browser and exportable frame-exactly to MP4.
+An ~83-second cinematic product film for **ASTRYA**, an AI agent for professional
+email, built as a single real-time GSAP animation in the browser and exported
+frame-exactly to MP4 (1920×1080, 60 fps).
 
 ```bash
 npm install
-npm run dev          # http://localhost:5173 — plays in the browser
-npm run build        # static build in dist/
-npm run render       # → out/astrya.mp4 (1920×1080, 30 fps, frame-exact)
-npm run render -- --audio public/audio/astrya-score.m4a   # with the score
+npm run dev                  # http://localhost:5173 — plays in the browser
+npm run build                # static build in dist/
+./scripts/render-all.sh      # → out/astrya.mp4 (60 fps, parallel + resumable, with score)
+FPS=30 ./scripts/render-all.sh   # faster 30 fps render
 ```
 
-Player: <kbd>Space</kbd> play/pause · <kbd>←</kbd>/<kbd>→</kbd> ±5 s · <kbd>1</kbd>–<kbd>9</kbd> chapters ·
-<kbd>M</kbd> sound · <kbd>F</kbd> fullscreen · <kbd>R</kbd> restart. URL params: `?t=56` start at 56 s, `?paused`.
+Player: <kbd>Space</kbd> play/pause · <kbd>←</kbd>/<kbd>→</kbd> ±5 s · <kbd>1</kbd>–<kbd>7</kbd> chapters ·
+<kbd>M</kbd> sound · <kbd>F</kbd> fullscreen · <kbd>R</kbd> restart. URL params: `?t=45` start at 45 s, `?paused`.
 
 ## Storyline
 
 | Chapter | t (s) | Beat | Transition out |
 |---|---|---|---|
-| Origin | 0 | A spark lands; dust condenses into **LUKA**, the camera travels and a scanline writes **ZIYAD**; the names lock up around a crossing of light. | The lockup squeezes into a single point of light. |
-| Noise | 14.4 | The point pulses and the first email is born from it; notifications erupt from depth, faster and faster. | A calm point pulls every card into a spiral vortex. |
-| ASTRYA | 22.4 | The vortex point unfolds into the ASTRYA halo; the wordmark racks into focus. | **The halo turns to face us and we fly through it** — the inbox is framed in its opening. |
-| Triage | 26.8 | AI scan beam tags every message; priorities rise, the rest folds into a deck; a click lifts the row into the email; facts highlight; summary slides from behind. | **The email turns over in 3D: its back is the reply.** Approve → the composer condenses into a toast. |
-| Agents | 45.4 | Eva's reply: "walk through pricing on a call" — the phrase **detaches and flies into the calendar, becoming the meeting**; the conflict moves itself; the camera tilts down to tasks and a finance agent working in parallel. | **Every card collapses into a node on an orbit around a live WebGL core.** |
-| Core | 57.0 | One intelligence, connected to everything: orbiting nodes, depth-sorted, data pulses. | Nodes converge and the camera pushes into the core until it's pure light. |
-| Founders | 65.6 | In the light: **LUKA × ZIYAD**, ink on light. | The light folds into one line, which opens like a slit onto the next scene. |
-| Calm | 71.2 | "Good morning." — the day, protected; click the focus block. | Zoom into the block: it grows into the document; AI completes the sentence. |
-| Finale | 83.8 | The UI separates into layers and burns off as particles; two lines cross into the ×, **LUKA × ZIYAD** unfold; the lockup rises into a signature; the halo returns: ASTRYA. | Fade to black. |
+| Noise | 0 | A spark drifts in and bursts into notifications: "Your work arrives from everywhere." → "All of it. All at once." | A calm point pulls every card into a spiral vortex. |
+| ASTRYA | 9.8 | The point unfolds into the halo, traced by two comets; the wordmark racks into focus. | **The halo turns to face us and we fly through it** into the inbox. |
+| Triage | 14.2 | Scan beam tags every message, priorities rise, the rest folds into a deck; Luka's contract email opens; ASTRYA reads it and highlights the facts. | **The email turns over in 3D: its back is the reply**, typed live ("Hi Luka … Ziyad"). Approve → toast. |
+| Agents | 33.8 | Luka replies; "walk through pricing on a call" **flies into the calendar and becomes the meeting**; the conflict moves itself; tasks + finance agent: "Handled. In parallel." | **Every card collapses into a coloured node orbiting the core.** |
+| Core | 45.4 | "One intelligence." Seven coloured tools (Mail, Calendar, Slack, Finance, Tasks, Docs, Logistics) on inclined 3D orbits, with trails and pulsing links. | Push into the core → the light folds into a line → a slit opens. |
+| Calm | 58.4 | "Good morning." — the day, protected; click the focus block. | Zoom into the block: it becomes the Q4 Launch Plan, completed by the AI. |
+| Finale | 71.0 | The UI burns off into particles; two lines collide and ignite the ASTRYA halo; blade-lit wordmark, tagline, CTA. | Fade to black. |
+
+Luka (Alpine Supplies) and Ziyad (Ops) appear only as the people inside the example
+emails, calendar and tasks (`src/data.ts → PEOPLE`).
 
 ## Architecture
 
@@ -45,9 +47,10 @@ src/
     fx.ts            transition particles: converge, implode, burst, shockwave, trail, dissolve
     orb.ts           WebGL ray-marched volumetric core
     cursor.ts        adaptive pointer that morphs around controls (magnetic)
-  scenes/            intro · noise · brand · inbox · work · core · founders · morning · finale
+  scenes/            noise · brand · inbox · work · core · lightfold · morning · finale (one file per scene)
 scripts/
   render.mjs         Playwright frame-by-frame renderer → ffmpeg
+  render-all.sh      parallel, resumable full render (segments + score)
   score.py           original score synthesised from the timeline's cue sheet
 ```
 

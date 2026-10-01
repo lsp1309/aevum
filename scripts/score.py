@@ -56,7 +56,7 @@ def place(sig, t0, gain=1.0, pan=0.0):
 
 def env_adsr(n, a, r):
     e = np.ones(n)
-    na, nr = int(a * SR), int(r * SR)
+    na, nr = min(int(a * SR), n // 2), min(int(r * SR), n // 2)
     if na:
         e[:na] = np.sin(np.linspace(0, np.pi / 2, na)) ** 2
     if nr:

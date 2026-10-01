@@ -57,6 +57,13 @@ async function boot() {
   buildLightFold(master);
   buildMorning(master);
   buildFinale(master);
+  if (import.meta.env.DEV) {
+    // guard: nothing may run past the film's end
+    for (const c of master.getChildren(true, true, false)) {
+      const end = (c as any).globalTime(c.totalDuration()) as number;
+      if (end > T.end + 0.01) console.warn("[overrun]", end.toFixed(2), (c as gsap.core.Tween).targets?.().map((t: any) => t.className || t.id || "obj"), (c as gsap.core.Tween).vars && Object.keys((c as gsap.core.Tween).vars));
+    }
+  }
   master.set({}, {}, T.end); // pad to the exact running time
 
   gsap.ticker.add(() => renderFrame());

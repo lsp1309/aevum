@@ -138,7 +138,7 @@ export function buildFinale(tl: gsap.core.Timeline) {
   cue("chime", c0 + 0.1, undefined, 0.5);
   tl.fromTo(cta.querySelector(".btn-sheen"), { xPercent: -130 }, { xPercent: 130, duration: 1.2, ease: "cineInOut", immediateRender: false }, c0 + 0.7);
   tl.fromTo(".fin-arrow", { x: 0 }, { x: 6, duration: 0.5, ease: "sine.inOut", yoyo: true, repeat: 5 }, c0 + 0.9);
-  tl.fromTo(".cta-pulse", { scale: 1, opacity: 0.7 }, { scale: 1.5, opacity: 0, duration: 1.6, ease: "cine", stagger: 0.8, repeat: 2 }, c0 + 0.8);
+  tl.fromTo(".cta-pulse", { scale: 1, opacity: 0.7 }, { scale: 1.5, opacity: 0, duration: 1.6, ease: "cine", stagger: 0.8, repeat: 1, immediateRender: false }, c0 + 0.8);
   tl.fromTo(
     cta,
     { boxShadow: "inset 0 1px 0 rgba(255,255,255,0.3), 0 14px 40px -10px rgba(60,110,255,0.7), 0 0 0px rgba(90,140,255,0)" },

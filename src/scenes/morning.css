@@ -90,7 +90,7 @@
   right: 26px;
   top: 24px;
 }
-.spark {
+.stat .spark {
   position: absolute;
   left: 28px;
   right: 28px;
@@ -99,10 +99,10 @@
   height: 60px;
   overflow: visible;
 }
-.spark-line {
+.stat .spark-line {
   filter: drop-shadow(0 0 6px rgba(110, 150, 255, 0.8));
 }
-.bars {
+.stat .bars {
   position: absolute;
   left: 28px;
   right: 28px;
@@ -112,13 +112,13 @@
   align-items: flex-end;
   gap: 12px;
 }
-.bars i {
+.stat .bars i {
   flex: 1;
   border-radius: 6px 6px 3px 3px;
   background: linear-gradient(180deg, rgba(130, 165, 255, 0.85), rgba(80, 120, 255, 0.25));
   transform-origin: 50% 100%;
 }
-.bars i:last-child {
+.stat .bars i:last-child {
   background: linear-gradient(180deg, #b5ccff, #4d7cff);
   box-shadow: 0 0 18px rgba(90, 140, 255, 0.6);
 }
@@ -142,7 +142,7 @@
   stroke-linecap: round;
   filter: drop-shadow(0 0 6px rgba(150, 130, 255, 0.8));
 }
-.today {
+.mo-today {
   left: 250px;
   top: 648px;
   width: 1420px;

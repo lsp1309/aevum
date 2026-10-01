@@ -52,7 +52,7 @@ export function buildMorning(tl: gsap.core.Timeline) {
         <svg class="ring" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" class="ring-bg"/><circle cx="50" cy="50" r="40" class="ring-fg" transform="rotate(-90 50 50)"/></svg>
       </div>
 
-      <div class="today card">
+      <div class="mo-today card">
         <div class="td-head"><span class="td-title">Today</span><span class="chip blue">${icon.shield}Focus time protected</span></div>
         <div class="td-axis">${Array.from({ length: 11 }, (_, i) => `<span style="left:${hx(8 + i)}px">${String(8 + i).padStart(2, "0")}</span>`).join("")}</div>
         <div class="td-track">${Array.from({ length: 11 }, (_, i) => `<i style="left:${hx(8 + i)}px"></i>`).join("")}</div>
@@ -156,7 +156,7 @@ export function buildMorning(tl: gsap.core.Timeline) {
   tl.fromTo(".st-delta", { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.6, ease: "spring", stagger: 0.1 }, M + 2.0);
 
   // the day, protected
-  const today = q(".today");
+  const today = q(".mo-today");
   tl.fromTo(today, { z: -240, y: 60, rotationX: 18, opacity: 0, filter: "blur(10px)" }, { z: 0, y: 0, rotationX: 0, opacity: 1, filter: "blur(0px)", duration: 1.3, ease: "cine" }, M + 1.4);
   tl.fromTo(".td-axis span, .td-track i", { opacity: 0, y: 6 }, { opacity: 1, y: 0, duration: 0.6, stagger: 0.02 }, M + 1.8);
   tl.fromTo(qa(".blk"), { opacity: 0, scaleX: 0.3, filter: "blur(6px)", transformOrigin: "0% 50%" }, { opacity: 1, scaleX: 1, filter: "blur(0px)", duration: 0.9, ease: "cine", stagger: 0.09 }, M + 2.0);

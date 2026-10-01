@@ -120,7 +120,18 @@ export function typeChars(el: HTMLElement, caret: HTMLElement | null, perChar = 
   cs.forEach((c, i) => {
     const at = i * perChar + (/[,.—;]/.test(c.textContent || "") ? 0.04 : 0);
     tl.fromTo(c, { opacity: 0, y: 3, filter: "blur(3px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.16, ease: "cine" }, at);
-    if (caret) tl.set(caret, { x: c.offsetLeft + c.offsetWidth + 1, y: c.offsetTop }, at + 0.01);
+    if (caret) {
+      // chars sit inside split words: accumulate offsets up to the text block
+      let x = c.offsetLeft;
+      let y = c.offsetTop;
+      let n = c.offsetParent as HTMLElement | null;
+      while (n && n !== el && el.contains(n)) {
+        x += n.offsetLeft;
+        y += n.offsetTop;
+        n = n.offsetParent as HTMLElement | null;
+      }
+      tl.set(caret, { x: x + c.offsetWidth + 1, y }, at + 0.01);
+    }
   });
   return { tl, count: cs.length };
 }

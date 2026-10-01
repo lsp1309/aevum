@@ -2,7 +2,7 @@ import { gsap } from "../core/gsap";
 import { cue } from "../core/clock";
 import { camera, html, atmos, CX, CY } from "../core/stage";
 import { titleIn, titleOut } from "../core/text";
-import { burst, implode, shockwave } from "../core/fx";
+import { burst, implode, shockwave, mote } from "../core/fx";
 import { icon, avatar } from "../core/icons";
 import { noise, type Noise } from "../data";
 import { T } from "../timing";
@@ -67,6 +67,7 @@ export function buildNoise(tl: gsap.core.Timeline) {
       <span class="nc-num">3</span>
     </div>
     <div class="noise-seed"></div>
+    <div class="noise-spark"></div>
   </section>`);
   camera.appendChild(root);
   const q = (s: string) => root.querySelector(s) as HTMLElement;
@@ -76,7 +77,22 @@ export function buildNoise(tl: gsap.core.Timeline) {
   const t0 = T.noise;
   const vortex = T.brand - 1.9;
 
-  tl.set(root, { autoAlpha: 1 }, t0 - 0.1);
+  tl.set(root, { autoAlpha: 1 }, 0);
+
+  // ── opening: the dark wakes up, a spark drifts in and lands ───────────
+  tl.to(atmos, { stars: 0.6, duration: 2.6, ease: "sine.inOut" }, 0);
+  tl.to(atmos, { halo: 0.5, zoom: 1.06, duration: 3, ease: "sine.inOut" }, 0.2);
+  const spark = (p: number) => {
+    const e = 1 - Math.pow(1 - p, 2.2);
+    return { x: 1520 - 560 * e, y: 770 - 230 * e - Math.sin(p * Math.PI) * 110 };
+  };
+  mote(0.05, t0 - 0.05, spark, (p) => Math.min(1, p * 5));
+  cue("riser", 0.1, t0 - 0.1, 0.45);
+  gsap.set(".noise-spark", { xPercent: -50, yPercent: -50, x: CX, y: CY });
+  tl.fromTo(".noise-spark", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.25, ease: "cine" }, t0 - 0.15);
+  tl.to(".noise-spark", { scale: 2.6, duration: 0.18, ease: "sine.out" }, t0 - 0.02);
+  tl.to(".noise-spark", { scale: 0.4, opacity: 0, duration: 0.5, ease: "cine" }, t0 + 0.16);
+  cue("hit", t0, undefined, 0.9);
   gsap.set(orbits, { x: CX, y: CY });
   gsap.set(".noise-title, .noise-seed", { xPercent: -50, yPercent: -50, x: CX, y: CY });
 
@@ -137,7 +153,7 @@ export function buildNoise(tl: gsap.core.Timeline) {
   tl.fromTo(counter, { opacity: 0, y: -16, filter: "blur(8px)", scale: 0.92 }, { opacity: 1, y: 0, filter: "blur(0px)", scale: 1, duration: 1, ease: "cine" }, t0 + 1.0);
   const cnt = { v: 3 };
   tl.to(cnt, { v: 147, duration: 5.0, ease: "power2.in", onUpdate: () => (num.textContent = String(Math.round(cnt.v))) }, t0 + 1.2);
-  tl.fromTo(counter, { boxShadow: "0 0 0px rgba(255,120,140,0)" }, { boxShadow: "0 0 40px rgba(255,120,140,0.35)", duration: 2, ease: "sine.in" }, t0 + 4.2);
+  tl.fromTo(counter, { boxShadow: "0 0 0px rgba(255,180,90,0)" }, { boxShadow: "0 0 40px rgba(255,180,90,0.35)", duration: 2, ease: "sine.in" }, t0 + 4.2);
 
   // ── T2: a point of calm appears and pulls everything in ───────────────
   const seed = q(".noise-seed");

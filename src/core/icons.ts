@@ -43,5 +43,18 @@ export function ringMark(cls = "", tilt = -28) {
 }
 
 export function avatar(initials: string, hue: number) {
-  return `<span class="avatar" style="--h:${hue}">${initials}</span>`;
+  return `<span class="avatar${initials.length === 1 ? " solo" : ""}" style="--h:${hue}">${initials}</span>`;
 }
+
+/** Point on the halo path (SVG ellipse 150×78, drawn from the left, through
+ *  the bottom, then the top) at path fraction s ∈ [0,1], in the mark's own
+ *  units, before the −28° tilt. */
+export function ringPoint(s: number) {
+  if (s <= 0.5) {
+    const a = Math.PI * (s * 2);
+    return { x: -150 * Math.cos(a), y: 78 * Math.sin(a) };
+  }
+  const a = Math.PI * (s * 2 - 1);
+  return { x: 150 * Math.cos(a), y: -78 * Math.sin(a) };
+}
+

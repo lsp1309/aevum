@@ -1,8 +1,8 @@
 import { gsap } from "../core/gsap";
 import { cue } from "../core/clock";
-import { camera, html, atmos, cam, share, box } from "../core/stage";
+import { camera, html, atmos, cam, share, box, UI_SCALE } from "../core/stage";
 import { titleIn } from "../core/text";
-import { trail, burst } from "../core/fx";
+import { trail, burst, flareSweep } from "../core/fx";
 import { icon } from "../core/icons";
 import { calendar, tasks } from "../data";
 import { T } from "../timing";
@@ -32,7 +32,7 @@ export function buildWork(tl: gsap.core.Timeline) {
     .join("");
   const kick = calendar.events.find((e) => e.id === "kickoff")!;
   const kr = evRect(kick.day, kick.start, kick.end);
-  const pr = evRect(3, 14.5, 15);
+  const pr = evRect(3, 14.5, 15.5);
 
   const taskRows = tasks
     .map(
@@ -70,7 +70,7 @@ export function buildWork(tl: gsap.core.Timeline) {
       </div>
     </div>
 
-    <div class="fly"><span class="fly-a">walk through pricing on a call</span><span class="fly-b"><b>Pricing call</b><span>14:30 – 15:00</span></span></div>
+    <div class="fly"><span class="fly-a">walk through pricing on a call</span><span class="fly-b"><b>Pricing call · Luka</b><span>14:30 – 15:30</span></span></div>
 
     <div class="work-lower">
       <div class="tasks card">
@@ -78,7 +78,7 @@ export function buildWork(tl: gsap.core.Timeline) {
         ${taskRows}
         <div class="task task-new" data-id="call">
           <span class="tk-box"><svg viewBox="0 0 24 24"><path d="m6.5 12.5 3.6 3.6L17.5 8.5"/></svg></span>
-          <div class="tk-text"><div class="tk-title">Pricing call with Eva Brunner</div><div class="tk-meta">Thursday · 14:30 · invite sent</div></div>
+          <div class="tk-text"><div class="tk-title">Pricing call with Luka</div><div class="tk-meta">Thursday · 14:30 · invite sent</div></div>
           <span class="chip tk-chip blue">${icon.sparkle}New</span>
         </div>
       </div>
@@ -93,18 +93,19 @@ export function buildWork(tl: gsap.core.Timeline) {
         <div class="ag-steps">
           <div class="ag-step"><span class="ag-st"><svg class="sp" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg><svg class="ok" viewBox="0 0 24 24"><path d="m6.5 12.5 3.6 3.6L17.5 8.5"/></svg></span><span class="ag-tx">Checked the September payment run</span><span class="ag-r mono">done</span></div>
           <div class="ag-step"><span class="ag-st"><svg class="sp" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg><svg class="ok" viewBox="0 0 24 24"><path d="m6.5 12.5 3.6 3.6L17.5 8.5"/></svg></span><span class="ag-tx">Found the transfer · 12 Sep</span><span class="ag-r ag-amount">CHF 0</span></div>
-          <div class="ag-step"><span class="ag-st"><svg class="sp" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg><svg class="ok" viewBox="0 0 24 24"><path d="m6.5 12.5 3.6 3.6L17.5 8.5"/></svg></span><span class="ag-tx">Reply drafted for Marc Dufour</span><span class="ag-r mono">ready</span></div>
+          <div class="ag-step"><span class="ag-st"><svg class="sp" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg><svg class="ok" viewBox="0 0 24 24"><path d="m6.5 12.5 3.6 3.6L17.5 8.5"/></svg></span><span class="ag-tx">Reply drafted for Luka</span><span class="ag-r mono">ready</span></div>
         </div>
         <div class="ag-foot"><span class="btn primary ag-btn"><span class="btn-sheen"></span>Mark as paid &amp; send</span><span class="btn">View transfer</span></div>
       </div>
 
       <div class="pill card soft p-log"><span class="pl-ico">${icon.truck}</span><div><b>Logistics agent</b><span>AT-8891 rerouted via Basel</span></div><i class="pl-ok">${icon.check}</i></div>
-      <div class="pill card soft p-docs"><span class="pl-ico">${icon.doc}</span><div><b>Docs agent</b><span>Q4 brief drafted for Priya</span></div><i class="pl-ok">${icon.check}</i></div>
+      <div class="pill card soft p-docs"><span class="pl-ico">${icon.doc}</span><div><b>Docs agent</b><span>Q4 brief drafted for Ziyad</span></div><i class="pl-ok">${icon.check}</i></div>
       <div class="pill card soft p-cal"><span class="pl-ico">${icon.calendar}</span><div><b>Calendar</b><span>3 conflicts resolved this week</span></div><i class="pl-ok">${icon.check}</i></div>
       <h3 class="work-title">Handled. In parallel.</h3>
     </div>
   </section>`);
   camera.appendChild(root);
+  gsap.set(root, { scale: UI_SCALE.work, transformOrigin: "960px 540px" });
   const q = <E extends Element = HTMLElement>(s: string) => root.querySelector(s) as unknown as E;
   const qa = (s: string) => Array.from(root.querySelectorAll<HTMLElement>(s));
   const upper = q(".work-upper");
@@ -122,6 +123,7 @@ export function buildWork(tl: gsap.core.Timeline) {
   // ── calendar glides in; the world pans with it ─────────────────────────
   tl.fromTo(cal, { x: 760, z: -320, rotationY: -26, opacity: 0, filter: "blur(12px)" }, { x: 0, z: 0, rotationY: 0, opacity: 1, filter: "blur(0px)", duration: 1.6, ease: "cine" }, W - 0.35);
   cue("whoosh", W - 0.5, 1.8, 0.6);
+  flareSweep(W - 0.55, 1.5, 460, false);
   tl.to(cam, { x: 420, duration: 1.8, ease: "cineInOut" }, W - 0.4);
   tl.add(titleIn(q(".cal-title"), { stagger: 0.05, dur: 1, blur: 8, y: 10, glow: false }), W + 0.1);
   tl.fromTo(qa(".cal-hline"), { scaleX: 0 }, { scaleX: 1, duration: 1.0, ease: "cine", stagger: 0.03 }, W + 0.15);
@@ -206,6 +208,7 @@ export function buildWork(tl: gsap.core.Timeline) {
   tl.to([upper, fly], { y: "-=980", rotationX: 16, opacity: 0.2, filter: "blur(10px)", duration: 1.35, ease: "cineInOut" }, v0);
   tl.fromTo(lower, { y: 980, rotationX: -12 }, { y: 0, rotationX: 0, duration: 1.35, ease: "cineInOut" }, v0);
   cue("whoosh", v0, 1.4, 0.7);
+  flareSweep(v0 + 0.1, 1.3, 620, true, "170,150,255");
   tl.to(cam, { y: 700, duration: 1.4, ease: "cineInOut" }, v0);
   tl.set([upper, fly], { autoAlpha: 0 }, v0 + 1.4);
 
@@ -225,7 +228,7 @@ export function buildWork(tl: gsap.core.Timeline) {
   tl.fromTo(renew.querySelector(".tk-box path"), { drawSVG: "0%" }, { drawSVG: "100%", duration: 0.45, ease: "cine" }, c0 + 0.05);
   tl.fromTo(renew.querySelector(".tk-strike"), { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "cineInOut" }, c0 + 0.2);
   tl.to(renew.querySelector(".tk-text"), { opacity: 0.45, duration: 0.5 }, c0 + 0.4);
-  tl.set(renew.querySelector(".tk-meta"), { textContent: "Done · replied 09:14 by ASTRYA" }, c0 + 0.4);
+  tl.set(renew.querySelector(".tk-meta"), { textContent: "Done · reply to Luka sent 09:14" }, c0 + 0.4);
 
   // the meeting appears as a task, pushing the rest down
   const n0 = c0 + 0.55;

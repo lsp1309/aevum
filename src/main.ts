@@ -9,13 +9,12 @@ import { fit } from "./core/stage";
 import { initBackground } from "./core/background";
 import { initFx } from "./core/fx";
 import { T } from "./timing";
-import { buildIntro } from "./scenes/intro";
 import { buildNoise } from "./scenes/noise";
 import { buildBrand } from "./scenes/brand";
 import { buildInbox } from "./scenes/inbox";
 import { buildWork } from "./scenes/work";
 import { buildCore } from "./scenes/core";
-import { buildFounders } from "./scenes/founders";
+import { buildLightFold } from "./scenes/lightfold";
 import { buildMorning } from "./scenes/morning";
 import { buildFinale } from "./scenes/finale";
 import { initControls } from "./controls";
@@ -50,13 +49,12 @@ async function boot() {
   initBackground();
   initFx();
 
-  buildIntro(master);
   buildNoise(master);
   buildBrand(master);
   buildInbox(master);
   buildWork(master);
   buildCore(master);
-  buildFounders(master);
+  buildLightFold(master);
   buildMorning(master);
   buildFinale(master);
   master.set({}, {}, T.end); // pad to the exact running time

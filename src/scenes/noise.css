@@ -123,9 +123,9 @@
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 1300px;
-  height: 420px;
-  margin: -210px 0 0 -650px;
+  width: 1600px;
+  height: 480px;
+  margin: -240px 0 0 -800px;
   background: radial-gradient(closest-side, rgba(2, 4, 14, 0.92), rgba(2, 4, 14, 0.6) 55%, transparent);
   opacity: 0;
   transform: translateZ(10px);
@@ -135,8 +135,8 @@
   left: 0;
   top: 0;
   margin: 0;
-  font-size: 68px;
-  font-weight: 520;
+  font-size: 86px;
+  font-weight: 540;
   letter-spacing: -0.025em;
   white-space: nowrap;
   color: #f3f6ff;
@@ -167,10 +167,11 @@
   font-family: var(--mono);
   font-size: 19px;
   font-weight: 500;
-  color: #ffb8c1;
+  color: #ffc178;
   font-variant-numeric: tabular-nums;
   text-align: right;
 }
+#s-noise .noise-spark,
 #s-noise .noise-seed {
   position: absolute;
   left: 0;

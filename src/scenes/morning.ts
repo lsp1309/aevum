@@ -1,8 +1,9 @@
 import { gsap } from "../core/gsap";
 import { cue } from "../core/clock";
-import { camera, overlay, html, atmos, box, share, CY } from "../core/stage";
+import { camera, overlay, html, atmos, box, share, CY, UI_SCALE, toStage } from "../core/stage";
 import { titleIn, chars, words } from "../core/text";
 import { Cursor } from "../core/cursor";
+import { flareSweep } from "../core/fx";
 import { icon, ringMark } from "../core/icons";
 import { T } from "../timing";
 import "./morning.css";
@@ -15,9 +16,9 @@ const ED = { x: 400, y: 128, w: 1120, h: 740 };
 const BLOCKS = [
   { s: 9.5, e: 10.5, t: "Ops weekly", c: "muted" },
   { s: 10.5, e: 12.5, t: "Focus · Q4 launch plan", c: "focus" },
-  { s: 14.5, e: 15, t: "Pricing call", c: "blue" },
+  { s: 14.5, e: 15.5, t: "Pricing call · Luka", c: "blue" },
   { s: 16, e: 17, t: "Northline kickoff", c: "violet" },
-  { s: 17, e: 17.5, t: "Priya", c: "muted" },
+  { s: 17, e: 18, t: "Q4 review · Ziyad", c: "muted" },
 ];
 
 export function buildMorning(tl: gsap.core.Timeline) {
@@ -83,13 +84,14 @@ export function buildMorning(tl: gsap.core.Timeline) {
       </div>
       <div class="ed-ctx card soft">
         <div class="ctx-head">${ringMark("ctx", -28).replace('class="ring-mark ctx"', 'class="ring-mark mini-ring"')}<span>Context</span></div>
-        <div class="ctx-item">${icon.calendar}<div><b>Pricing call · Eva</b><span>Thu 14:30</span></div></div>
-        <div class="ctx-item">${icon.file}<div><b>Q4 allocation</b><span>Priya · due Fri</span></div></div>
+        <div class="ctx-item">${icon.calendar}<div><b>Pricing call · Luka</b><span>Thu 14:30</span></div></div>
+        <div class="ctx-item">${icon.file}<div><b>Q4 allocation</b><span>Ziyad · due Fri</span></div></div>
         <div class="ctx-item">${icon.doc}<div><b>Supply agreement</b><span>Renewed today</span></div></div>
       </div>
     </div>
   </section>`);
   camera.appendChild(root);
+  gsap.set(root, { scale: UI_SCALE.morning, transformOrigin: "960px 540px" });
   const calm = html(`<div class="calm-toast card soft"><span class="ct-ico">${icon.check}</span><span>3 new messages handled</span><span class="ct-dim">· nothing needs you</span></div>`);
   overlay.appendChild(calm);
 
@@ -174,6 +176,7 @@ export function buildMorning(tl: gsap.core.Timeline) {
   // ── T: zoom into the block — it opens into the document ──────────────
   const z0 = c0 + 1.45;
   cue("whoosh", z0, 1.4, 0.7);
+  flareSweep(z0 + 0.3, 1.2, 520, true);
   cue("soft", z0 + 1.2, undefined, 0.5);
   tl.to(world, { scale: 2.4, duration: 1.4, ease: "power3.in" }, z0);
   tl.to(world, { opacity: 0, filter: "blur(16px)", duration: 0.9, ease: "power2.in" }, z0 + 0.45);
@@ -229,5 +232,7 @@ export function buildMorning(tl: gsap.core.Timeline) {
 
   share.editor = editor;
   share.editorRect = ED;
+  const sm = UI_SCALE.morning;
+  share.editorScreenRect = { x: toStage(ED.x, 960, sm), y: toStage(ED.y, 540, sm), w: ED.w * sm, h: ED.h * sm };
   share.morningRoot = root;
 }

@@ -40,54 +40,16 @@
   margin: -120px 0 0 -600px;
   background: rgba(255, 255, 255, 0.9);
 }
-#s-light .lf-group {
+#s-light .lf-flare {
   position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 54px;
-  color: #0a1434;
-}
-#s-light .lf-kicker {
-  font-family: var(--mono);
-  font-size: 17px;
-  text-transform: uppercase;
-  letter-spacing: 0.42em;
-  padding-left: 0.42em;
-  color: rgba(12, 24, 70, 0.55);
+  left: 0;
+  top: 0;
+  width: 1900px;
+  height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 255, 255, 0.95), rgba(190, 210, 255, 0.5) 40%, transparent);
+  filter: blur(8px);
   opacity: 0;
-}
-#s-light .lf-names {
-  display: flex;
-  align-items: center;
-  gap: 54px;
-  margin-bottom: 60px;
-}
-#s-light .lf-name {
-  font-size: 150px;
-  font-weight: 560;
-  line-height: 1;
-  letter-spacing: 0.12em;
-  font-kerning: none;
-  color: #091331;
-  opacity: 0;
-}
-#s-light .lf-a,
-#s-light .lf-b {
-  margin-right: -0.12em;
-}
-#s-light .lf-x {
-  width: 80px;
-  height: 80px;
-  overflow: visible;
-  opacity: 0;
-}
-#s-light .lf-x line {
-  stroke: #1d3fae;
-  stroke-width: 4.5;
-  stroke-linecap: round;
 }
 .light-ov .lf-line,
 .light-ov .slit {

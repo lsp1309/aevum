@@ -1,50 +1,53 @@
 import { gsap } from "../core/gsap";
-import { camera, html, atmos, share, onResize, W, H } from "../core/stage";
+import { camera, html, atmos, share, onResize, W, H, UI_SCALE, toLocal } from "../core/stage";
 import { onFrame, cue } from "../core/clock";
 import { titleIn, titleOut } from "../core/text";
-import { burst, shockwave } from "../core/fx";
+import { burst, shockwave, orbitDust } from "../core/fx";
 import { createOrb } from "../core/orb";
 import { icon } from "../core/icons";
 import { T } from "../timing";
 import "./core.css";
 
 const CX = 960;
-const CY = 500;
-const TILT = (-7 * Math.PI) / 180;
+const CY = 490;
+const NODE = 92; // on-screen node diameter
+/** Three orbits, each inclined differently in 3D (screen roll + squash). */
 const RINGS = [
-  { rx: 360, ry: 118 },
-  { rx: 565, ry: 186 },
-  { rx: 770, ry: 252 },
+  { rx: 330, ry: 112, roll: (-16 * Math.PI) / 180 },
+  { rx: 545, ry: 172, roll: (9 * Math.PI) / 180 },
+  { rx: 760, ry: 228, roll: (-5 * Math.PI) / 180 },
 ];
 
 interface NodeDef {
   key: string;
   label: string;
   icon: string;
+  color: string; // r,g,b
   ring: number;
   a0: number;
   w: number;
 }
 const NODES: NodeDef[] = [
-  { key: "email", label: "Email", icon: icon.mail, ring: 1, a0: 3.5, w: 0.2 },
-  { key: "calendar", label: "Calendar", icon: icon.calendar, ring: 2, a0: 5.2, w: 0.15 },
-  { key: "finance", label: "Finance", icon: icon.finance, ring: 1, a0: 0.25, w: 0.2 },
-  { key: "tasks", label: "Tasks", icon: icon.tasks, ring: 2, a0: 2.55, w: 0.15 },
-  { key: "docs", label: "Docs", icon: icon.doc, ring: 0, a0: 1.75, w: 0.26 },
-  { key: "logistics", label: "Logistics", icon: icon.truck, ring: 0, a0: 4.9, w: 0.26 },
+  { key: "email", label: "Mail", icon: icon.mail, color: "52,217,255", ring: 1, a0: 2.3, w: 0.21 },
+  { key: "calendar", label: "Calendar", icon: icon.calendar, color: "160,123,255", ring: 2, a0: 5.7, w: 0.15 },
+  { key: "chat", label: "Slack", icon: icon.hash, color: "255,95,196", ring: 1, a0: 0.75, w: 0.21 },
+  { key: "finance", label: "Finance", icon: icon.finance, color: "255,157,66", ring: 1, a0: 4.25, w: 0.21 },
+  { key: "tasks", label: "Tasks", icon: icon.tasks, color: "79,134,255", ring: 2, a0: 1.75, w: 0.15 },
+  { key: "docs", label: "Docs", icon: icon.doc, color: "255,213,77", ring: 0, a0: 0.35, w: 0.28 },
+  { key: "logistics", label: "Logistics", icon: icon.truck, color: "63,232,178", ring: 0, a0: 3.5, w: 0.28 },
 ];
 
 /** Shared camera/orbit state, tweened by GSAP, read by the per-frame layout. */
-const sys = { spin: 0, tilt: 1, radius: 1, lines: 0, pulses: 0, nodes: 1 };
+const sys = { spin: 0, tilt: 1, radius: 1, lines: 0, pulses: 0, trails: 0, labels: 0 };
 
-function orbitPos(n: NodeDef, t: number) {
+function orbitAt(n: NodeDef, t: number, back = 0) {
   const r = RINGS[n.ring];
-  const a = n.a0 + n.w * (t - T.core) + sys.spin * (n.ring === 0 ? 1.6 : n.ring === 1 ? 1.2 : 1);
+  const a = n.a0 + n.w * (t - T.core) + sys.spin * (n.ring === 0 ? 1.6 : n.ring === 1 ? 1.2 : 1) - back;
   const x0 = Math.cos(a) * r.rx * sys.radius;
   const y0 = Math.sin(a) * r.ry * sys.radius * sys.tilt;
   return {
-    x: CX + x0 * Math.cos(TILT) - y0 * Math.sin(TILT),
-    y: CY + x0 * Math.sin(TILT) + y0 * Math.cos(TILT),
+    x: CX + x0 * Math.cos(r.roll) - y0 * Math.sin(r.roll),
+    y: CY + x0 * Math.sin(r.roll) + y0 * Math.cos(r.roll),
     depth: Math.sin(a), // +1 = nearest the camera
   };
 }
@@ -53,14 +56,16 @@ export function buildCore(tl: gsap.core.Timeline) {
   const root = html(`<section class="scene" id="s-core">
     <div class="core-sys">
       <svg class="core-orbits" viewBox="0 0 ${W} ${H}">
-        <g transform="rotate(-7 ${CX} ${CY})">
-          ${RINGS.map((r, i) => `<ellipse class="orbit o${i}" cx="${CX}" cy="${CY}" rx="${r.rx}" ry="${r.ry}"/>`).join("")}
-        </g>
+        ${RINGS.map(
+          (r, i) => `<ellipse class="orbit o${i}" cx="${CX}" cy="${CY}" rx="${r.rx}" ry="${r.ry}" transform="rotate(${(r.roll * 180) / Math.PI} ${CX} ${CY})"/>`,
+        ).join("")}
       </svg>
       <canvas class="core-lines"></canvas>
       <div class="orb-holder"></div>
+      <canvas class="core-front"></canvas>
       ${NODES.map(
-        (n) => `<div class="node" data-key="${n.key}"><div class="node-disc">${n.icon}</div><div class="node-label mono">${n.label}</div></div>`,
+        (n) =>
+          `<div class="node" data-key="${n.key}" style="--c:${n.color}"><div class="node-disc">${n.icon}</div><div class="node-label">${n.label}</div></div>`,
       ).join("")}
     </div>
     <h2 class="core-title">One intelligence.</h2>
@@ -70,6 +75,7 @@ export function buildCore(tl: gsap.core.Timeline) {
   const q = (s: string) => root.querySelector(s) as HTMLElement;
   const sysEl = q(".core-sys");
   const nodes = Array.from(root.querySelectorAll<HTMLElement>(".node"));
+  const labels = nodes.map((el) => el.querySelector(".node-label") as HTMLElement);
   const orb = createOrb(900, document.documentElement.classList.contains("render") ? 720 : 540);
   q(".orb-holder").appendChild(orb.canvas);
   gsap.set(".orb-holder", { x: CX - 450, y: CY - 450 });
@@ -80,25 +86,33 @@ export function buildCore(tl: gsap.core.Timeline) {
   share.coreCenter = { x: CX, y: CY };
 
   const lines = q(".core-lines") as unknown as HTMLCanvasElement;
+  const front = q(".core-front") as unknown as HTMLCanvasElement;
   const lctx = lines.getContext("2d")!;
+  const fctx = front.getContext("2d")!;
   let k = 1;
   onResize((s) => {
     k = Math.min(1.5, Math.max(0.6, s * (window.devicePixelRatio || 1)));
-    lines.width = Math.round(W * k);
-    lines.height = Math.round(H * k);
+    for (const c of [lines, front]) {
+      c.width = Math.round(W * k);
+      c.height = Math.round(H * k);
+    }
   });
 
   const C0 = T.core;
   const land = C0 - 0.15; // cards arrive on their orbits
 
-  // ── per-frame layout: orbits, depth sorting, connection lines, pulses ──
+  // ── per-frame layout: orbits, depth, trails, links, pulses ─────────────
   let visible = false;
+  const clear = (c: CanvasRenderingContext2D) => {
+    c.setTransform(1, 0, 0, 1, 0, 0);
+    c.clearRect(0, 0, W * k, H * k);
+  };
   onFrame((t) => {
     const on = t > C0 - 1.8 && t < T.light + 1.2;
     if (!on) {
       if (visible) {
-        lctx.setTransform(1, 0, 0, 1, 0, 0);
-        lctx.clearRect(0, 0, lines.width, lines.height);
+        clear(lctx);
+        clear(fctx);
         orb.render(-1);
       }
       visible = false;
@@ -106,26 +120,49 @@ export function buildCore(tl: gsap.core.Timeline) {
     }
     visible = true;
     orb.render(t);
-    lctx.setTransform(k, 0, 0, k, 0, 0);
-    lctx.clearRect(0, 0, W, H);
-    lctx.globalCompositeOperation = "lighter";
+    for (const c of [lctx, fctx]) {
+      clear(c);
+      c.setTransform(k, 0, 0, k, 0, 0);
+      c.globalCompositeOperation = "lighter";
+      c.lineCap = "round";
+    }
     NODES.forEach((n, i) => {
-      const p = orbitPos(n, t);
+      const p = orbitAt(n, t);
       const el = nodes[i];
-      const sc = 0.78 + 0.22 * ((p.depth + 1) / 2);
-      const behind = p.depth < -0.05 && Math.abs(p.x - CX) < 260;
-      el.style.transform = `translate3d(${p.x - 36}px, ${p.y - 36}px, 0) scale(${sc * (0.35 + 0.65 * sys.radius)})`;
-      el.style.zIndex = behind ? "1" : "5";
-      el.style.filter = behind ? "brightness(0.55) blur(1.2px)" : "none";
+      const d01 = (p.depth + 1) / 2; // 0 far … 1 near
+      const sc = (0.74 + 0.4 * d01) * (0.3 + 0.7 * sys.radius);
+      el.style.transform = `translate3d(${p.x - NODE / 2}px, ${p.y - NODE / 2}px, 0) scale(${sc})`;
+      el.style.zIndex = p.depth < 0 ? "1" : "6";
+      el.style.filter = p.depth < 0 ? `blur(${(1 - d01) * 1.3}px) brightness(${0.75 + 0.25 * d01})` : "none";
+      labels[i].style.opacity = String(sys.labels * Math.min(1, Math.max(0, d01 * 1.5 - 0.2)));
 
-      // connection line node → core
-      const la = sys.lines * (0.25 + 0.35 * ((p.depth + 1) / 2)) * (behind ? 0.4 : 1);
+      // luminous trail behind the node, split across the back/front layers
+      if (sys.trails > 0.01) {
+        let prev = p;
+        for (let j = 1; j <= 22; j++) {
+          const q2 = orbitAt(n, t, j * 0.03);
+          const f = 1 - j / 23;
+          const ctx = (prev.depth + q2.depth) / 2 < 0 ? lctx : fctx;
+          ctx.strokeStyle = `rgba(${n.color},${0.85 * f * f * sys.trails})`;
+          ctx.lineWidth = 11 * f * sc + 0.6;
+          ctx.beginPath();
+          ctx.moveTo(prev.x, prev.y);
+          ctx.lineTo(q2.x, q2.y);
+          ctx.stroke();
+          prev = q2;
+        }
+      }
+
+      // link node → core: gradient from the node's colour into the globe's blue, breathing
+      const breathe = 0.65 + 0.35 * Math.sin(t * 2.2 + i * 1.3);
+      const la = sys.lines * (0.25 + 0.45 * d01) * breathe;
       if (la > 0.002) {
         const g = lctx.createLinearGradient(p.x, p.y, CX, CY);
-        g.addColorStop(0, `rgba(150,185,255,${la})`);
-        g.addColorStop(1, `rgba(150,185,255,0)`);
+        g.addColorStop(0, `rgba(${n.color},${la})`);
+        g.addColorStop(0.7, `rgba(140,175,255,${la * 0.45})`);
+        g.addColorStop(1, `rgba(140,175,255,0)`);
         lctx.strokeStyle = g;
-        lctx.lineWidth = 1.2;
+        lctx.lineWidth = 1.6;
         lctx.beginPath();
         lctx.moveTo(p.x, p.y);
         lctx.lineTo(CX, CY);
@@ -133,17 +170,17 @@ export function buildCore(tl: gsap.core.Timeline) {
       }
       // data pulses travelling into the core, faster as the story accelerates
       if (sys.pulses > 0.01) {
-        const speed = 0.45 + sys.pulses * 0.9;
+        const speed = 0.4 + sys.pulses * 0.8;
         for (let j = 0; j < 3; j++) {
           const f = (t * speed + i * 0.37 + j / 3) % 1;
           const x = p.x + (CX - p.x) * f;
           const y = p.y + (CY - p.y) * f;
-          const a = Math.sin(f * Math.PI) * sys.pulses * (behind ? 0.3 : 0.9);
-          const rr = 2.2 + (1 - f) * 1.5;
+          const a = Math.sin(f * Math.PI) * sys.pulses * (0.4 + 0.6 * d01);
+          const rr = 2.4 + (1 - f) * 1.8;
           const grd = lctx.createRadialGradient(x, y, 0, x, y, rr * 4);
-          grd.addColorStop(0, `rgba(235,242,255,${a})`);
-          grd.addColorStop(0.3, `rgba(130,170,255,${a * 0.5})`);
-          grd.addColorStop(1, "rgba(80,120,255,0)");
+          grd.addColorStop(0, `rgba(255,255,255,${a})`);
+          grd.addColorStop(0.3, `rgba(${n.color},${a * 0.7})`);
+          grd.addColorStop(1, `rgba(${n.color},0)`);
           lctx.fillStyle = grd;
           lctx.fillRect(x - rr * 4, y - rr * 4, rr * 8, rr * 8);
         }
@@ -157,31 +194,32 @@ export function buildCore(tl: gsap.core.Timeline) {
   const from = share.nodesFrom as Record<string, HTMLElement>;
   const m0 = C0 - 1.55;
   tl.add(titleOut(share.workTitle as HTMLElement, { stagger: 0.04, dur: 0.6 }), m0 - 0.05);
+  const sw = UI_SCALE.work; // cards live in the (scaled) work scene
   Object.entries(from).forEach(([key, card], i) => {
     const n = NODES.find((d) => d.key === key)!;
-    const p = orbitPos({ ...n }, land);
+    const p = orbitAt(n, land);
+    const size = (NODE * (0.74 + 0.4 * ((p.depth + 1) / 2))) / sw;
     const at = m0 + i * 0.07;
     const content = Array.from(card.children);
-    const energy = html(`<div class="morph-energy"></div>`);
+    const energy = html(`<div class="morph-energy" style="--c:${n.color}"></div>`);
     card.appendChild(energy);
     tl.to(content, { opacity: 0, filter: "blur(6px)", duration: 0.35, ease: "sine.in" }, at);
     tl.fromTo(energy, { opacity: 0 }, { opacity: 1, duration: 0.7, ease: "sine.inOut" }, at + 0.1);
     tl.to(
       card,
       {
-        left: p.x - 36,
-        top: p.y - 36,
-        width: 72,
-        height: 72,
+        left: toLocal(p.x, 960, sw) - size / 2,
+        top: toLocal(p.y, 540, sw) - size / 2,
+        width: size,
+        height: size,
         padding: 0,
-        borderRadius: 36,
+        borderRadius: size / 2,
         duration: 1.35,
         ease: "cineInOut",
       },
       at,
     );
-    tl.to(card, { boxShadow: "inset 0 0 0 1px rgba(170,200,255,0.6), 0 0 46px rgba(90,140,255,0.8)", duration: 1.2, ease: "sine.inOut" }, at);
-    tl.fromTo(card, { filter: "blur(0px) brightness(1)" }, { filter: "blur(0px) brightness(1.55)", duration: 1.2, ease: "sine.inOut", immediateRender: false }, at);
+    tl.to(card, { boxShadow: `inset 0 0 0 1px rgba(255,255,255,0.4), 0 0 46px rgba(${n.color},0.9)`, duration: 1.2, ease: "sine.inOut" }, at);
     tl.to(card, { opacity: 0, duration: 0.25, ease: "none" }, land + 0.05);
   });
   tl.set(share.workRoot as HTMLElement, { autoAlpha: 0 }, land + 0.35);
@@ -199,10 +237,13 @@ export function buildCore(tl: gsap.core.Timeline) {
   tl.to(atmos, { core: 0.6, duration: 3, ease: "sine.inOut" }, ig + 1.4);
 
   // nodes take over from the cards
-  const emailNode = root.querySelector('.node[data-key="email"]') as HTMLElement;
-  tl.fromTo(nodes.filter((n) => n !== emailNode), { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "none" }, land);
-  tl.fromTo(emailNode, { opacity: 0 }, { opacity: 1, duration: 0.7, ease: "cine" }, land + 0.25);
-  tl.fromTo(".node-label", { opacity: 0, y: -6 }, { opacity: 1, y: 0, duration: 0.7, stagger: 0.06 }, land + 0.4);
+  const fresh = nodes.filter((el) => !(el.dataset.key! in from));
+  tl.fromTo(nodes.filter((el) => el.dataset.key! in from), { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "none" }, land);
+  tl.fromTo(fresh, { opacity: 0 }, { opacity: 1, duration: 0.8, ease: "cine", stagger: 0.2 }, land + 0.25);
+  tl.fromTo(sys, { labels: 0 }, { labels: 1, duration: 0.9, ease: "sine.inOut" }, land + 0.4);
+  tl.fromTo(sys, { trails: 0 }, { trails: 1, duration: 1.2, ease: "sine.inOut" }, land);
+  orbitDust(land - 0.2, T.light - land + 0.4, CX, CY, 300, 300, 260, 83);
+  orbitDust(land, T.light - land + 0.2, CX, CY, 640, 210, 160, 84);
   tl.fromTo(root.querySelectorAll(".orbit"), { drawSVG: "50% 50%", opacity: 0 }, { drawSVG: "0% 100%", opacity: 1, duration: 1.6, ease: "cineInOut", stagger: 0.14 }, land - 0.3);
   tl.fromTo(sys, { lines: 0, pulses: 0 }, { lines: 1, pulses: 0.4, duration: 1.4, ease: "sine.inOut" }, land + 0.3);
   tl.to(sys, { pulses: 1, duration: 5, ease: "sine.in" }, land + 2);
@@ -221,7 +262,8 @@ export function buildCore(tl: gsap.core.Timeline) {
   tl.add(titleOut(q(".core-title"), { stagger: 0.06, dur: 0.7 }), v);
   tl.add(titleOut(q(".core-sub"), { stagger: 0.03, dur: 0.6 }), v + 0.05);
   tl.to(".orbit", { opacity: 0, duration: 1.0, stagger: 0.1 }, v + 0.2);
-  tl.to(".node-label", { opacity: 0, duration: 0.4 }, v);
+  tl.to(sys, { labels: 0, duration: 0.4 }, v);
+  tl.to(sys, { trails: 0, duration: 1.2, ease: "sine.in" }, v + 0.5);
   tl.to(sys, { radius: 0.06, spin: "+=2.2", duration: 1.7, ease: "suck" }, v + 0.2);
   tl.to(nodes, { opacity: 0, duration: 0.35, ease: "sine.in" }, v + 1.55);
   tl.to(sys, { lines: 2, pulses: 0, duration: 1.4, ease: "sine.in" }, v + 0.2);

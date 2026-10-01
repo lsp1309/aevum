@@ -1,11 +1,11 @@
 import { gsap } from "../core/gsap";
 import { cue } from "../core/clock";
-import { camera, html, atmos, box, share } from "../core/stage";
-import { titleIn, writeWords } from "../core/text";
+import { camera, html, atmos, box, share, UI_SCALE } from "../core/stage";
+import { titleIn, typeChars } from "../core/text";
 import { Cursor } from "../core/cursor";
 import { icon, avatar, ringMark } from "../core/icons";
-import { burst } from "../core/fx";
-import { inbox } from "../data";
+import { burst, flareSweep } from "../core/fx";
+import { inbox, PEOPLE } from "../data";
 import { T } from "../timing";
 import "./inbox.css";
 
@@ -21,6 +21,8 @@ const E = { x: 330, y: 168, w: 900, h: 690 };
 const TOAST = { x: 960 - 200, y: 84, w: 400, h: 60 };
 
 export function buildInbox(tl: gsap.core.Timeline) {
+  const L = PEOPLE.luka;
+  const Z = PEOPLE.ziyad;
   const rowsHTML = inbox
     .map(
       (m) => `<div class="row" data-id="${m.id}">
@@ -48,7 +50,7 @@ export function buildInbox(tl: gsap.core.Timeline) {
         <div class="ib-label lab-b section-label">Can wait · 6</div>
         ${rowsHTML}
         <div class="stack-cover">
-          <div class="sc-avatars">${["HL", "SP", "AF", "MC", "NR", "LR"].map((i, k) => avatar(i, 190 + k * 14)).join("")}</div>
+          <div class="sc-avatars">${[["HL", 190], ["SP", 160], ["AF", 205], ["Z", 266], ["NR", 214], ["L", 196]].map(([i, h]) => avatar(i as string, h as number)).join("")}</div>
           <div class="sc-text"><b>6 messages can wait</b><span>Summarized · nothing needs a reply today</span></div>
           <span class="chip muted">${icon.sparkle}Digest at 17:00</span>
         </div>
@@ -62,29 +64,30 @@ export function buildInbox(tl: gsap.core.Timeline) {
         <div class="sheen"></div>
         <div class="em-crumb mono">Inbox / Operations</div>
         <div class="em-title">Contract renewal — confirmation needed</div>
-        <div class="em-avatar">${avatar("EB", 228)}</div>
-        <div class="em-from"><b>Eva Brunner</b><span class="chip amber">Key supplier · Alpine Supplies</span></div>
-        <div class="em-addr">eva.brunner@alpinesupplies.ch</div>
+        <div class="em-avatar">${avatar(L.initials, L.hue)}</div>
+        <div class="em-from"><b>${L.name}</b><span class="chip amber">Key supplier · Alpine Supplies</span></div>
+        <div class="em-addr">${L.email} → ${Z.email}</div>
         <div class="em-time">Today, 09:12</div>
         <div class="em-rule"></div>
+        <div class="em-read"></div>
         <div class="em-body">
-          <p>Hi Ziyad,</p>
-          <p>Following up: the current contract expires <span class="hl">Friday</span>. Please confirm the renewal so we can lock the Q4 allocation. Without confirmation we cannot <span class="hl">hold the Geneva warehouse slot</span>.</p>
-          <p>Best regards,<br/>Eva</p>
+          <p>Hi ${Z.name},</p>
+          <p>Following up: the current contract expires <span class="hl amber">Friday</span>. Please confirm the renewal so we can lock the Q4 allocation. Without confirmation we cannot <span class="hl">hold the Geneva warehouse slot</span>.</p>
+          <p>Best regards,<br/>${L.name}</p>
         </div>
         <div class="em-attach chip">${icon.paperclip}Supply agreement 2026–27.pdf <span class="dim">412 KB</span></div>
       </div>
       <div class="face back card">
         <div class="sheen"></div>
         <div class="cmp">
-          <div class="cmp-head"><span class="cmp-ico">${icon.reply}</span><span class="cmp-title">Reply to Eva Brunner</span>
+          <div class="cmp-head"><span class="cmp-ico">${icon.reply}</span><span class="cmp-title">Reply to ${L.name}</span>
             <span class="chip ai cmp-ai">${ringMark("cmp", -28).replace('class="ring-mark cmp"', 'class="ring-mark mini-ring"')}Prepared by ASTRYA</span></div>
-          <div class="cmp-meta"><span>To</span>eva.brunner@alpinesupplies.ch</div>
+          <div class="cmp-meta"><span>To</span>${L.name} · ${L.email}</div>
           <div class="cmp-meta"><span>Re</span>Contract renewal — confirmation needed</div>
           <div class="cmp-tone"><span class="tone-ind"></span><span class="tone">Formal</span><span class="tone on">Concise</span><span class="tone">Warm</span></div>
-          <div class="cmp-body"><p>Hi Eva,</p><p>Thanks for the reminder — we confirm the renewal of the 2026–27 agreement. Please hold the Geneva warehouse slot; the signed copy follows today.</p><p>Best regards,</p><span class="caret"></span></div>
+          <div class="cmp-body"><p>Hi ${L.name},</p><p>Thanks for the reminder — we confirm the renewal of the 2026–27 agreement. Please hold the Geneva warehouse slot; the signed copy follows today.</p><p>Best regards,<br/>${Z.name}</p><span class="caret"></span></div>
           <div class="cmp-foot">
-            <span class="cmp-note">${icon.sparkle}Matched to your tone in 3 earlier threads with Eva</span>
+            <span class="cmp-note">${icon.sparkle}Matched to your tone in 3 earlier threads with ${L.name}</span>
             <span class="btn">Edit</span>
             <span class="btn primary send"><span class="btn-sheen"></span><span class="send-label">Approve &amp; send</span>
               <svg class="send-spin" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -92,7 +95,7 @@ export function buildInbox(tl: gsap.core.Timeline) {
             </span>
           </div>
         </div>
-        <div class="toast"><span class="toast-ico">${icon.check}</span><span class="toast-text">Sent to <b>Eva Brunner</b></span><span class="toast-time">now</span></div>
+        <div class="toast"><span class="toast-ico">${icon.check}</span><span class="toast-text">Sent to <b>${L.name}</b></span><span class="toast-time">now</span></div>
       </div>
     </div>
 
@@ -107,12 +110,13 @@ export function buildInbox(tl: gsap.core.Timeline) {
     </div>
 
     <div class="reply-card card">
-      <div class="rc-head">${avatar("EB", 228)}<div><b>Eva Brunner</b><span>Alpine Supplies · 2 min later</span></div></div>
-      <div class="rc-body">Sharing the 2026–27 agreement draft for review. Happy to <span class="intent">walk through pricing on a call</span>.</div>
+      <div class="rc-head">${avatar(L.initials, L.hue)}<div><b>${L.name}</b><span>${L.org} · 2 min later</span></div></div>
+      <div class="rc-body">Thanks ${Z.name} — sharing the 2026–27 draft for review. Happy to <span class="intent">walk through pricing on a call</span>.</div>
       <div class="rc-detect mono">${icon.sparkle}<span class="rc-detect-t">Meeting intent detected</span></div>
     </div>
   </section>`);
   camera.appendChild(root);
+  gsap.set(root, { scale: UI_SCALE.work, transformOrigin: "960px 540px" });
 
   const q = <E extends Element = HTMLElement>(s: string) => root.querySelector(s) as unknown as E;
   const qa = (s: string) => Array.from(root.querySelectorAll<HTMLElement>(s));
@@ -138,8 +142,7 @@ export function buildInbox(tl: gsap.core.Timeline) {
   const bodyParas = qa(".em-body p");
   gsap.set(qa(".sheen, .btn-sheen"), { xPercent: -130 });
   const caret = q(".caret");
-  const writer = writeWords(q(".cmp-body"), caret, 0.052);
-  const nWords = q(".cmp-body").querySelectorAll(".w").length;
+  const typing = typeChars(q(".cmp-body"), caret, 0.016);
   rows.forEach((r, i) => gsap.set(r, { y: ROW0 + i * ROW_H }));
 
   const I = T.inbox;
@@ -254,8 +257,12 @@ export function buildInbox(tl: gsap.core.Timeline) {
   tl.fromTo(".em-attach", { opacity: 0, y: 10, filter: "blur(4px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.8 }, m0 + 1.5);
 
   // ── AI understands: key facts light up, a summary slides from behind ───
+  // ASTRYA reads: a soft beam scans the body before the key facts light up
+  tl.fromTo(".em-read", { y: 236, opacity: 0 }, { y: 520, opacity: 1, duration: 1.0, ease: "sine.inOut" }, m0 + 1.35);
+  tl.to(".em-read", { opacity: 0, duration: 0.3 }, m0 + 2.2);
+  cue("sweep", m0 + 1.35, 1.0, 0.3);
   const hl = qa(".em-body .hl");
-  tl.to(hl, { backgroundSize: "100% 100%", color: "#ffffff", duration: 0.7, ease: "cineInOut", stagger: 0.4 }, m0 + 1.9);
+  tl.to(hl, { backgroundSize: "100% 100%", color: "#ffffff", duration: 0.7, ease: "cineInOut", stagger: 0.35 }, m0 + 2.15);
   const s0 = m0 + 1.8;
   tl.fromTo(sum, { x: -300, z: -220, rotationY: -38, opacity: 0, filter: "blur(10px)" }, { x: 0, z: 0, rotationY: 0, opacity: 1, filter: "blur(0px)", duration: 1.3, ease: "cine" }, s0);
   tl.fromTo(".as-list li", { opacity: 0, x: -14, filter: "blur(5px)" }, { opacity: 1, x: 0, filter: "blur(0px)", duration: 0.8, stagger: 0.14, ease: "cine" }, s0 + 0.5);
@@ -277,6 +284,7 @@ export function buildInbox(tl: gsap.core.Timeline) {
   const f0 = c2 + 1.45;
   tl.to(sum, { x: -260, z: -320, rotationY: -40, opacity: 0, filter: "blur(10px)", duration: 0.85, ease: "exit" }, f0 - 0.05);
   cue("whoosh", f0, 1.4, 0.6);
+  flareSweep(f0 + 0.35, 1.0, 480, true);
   tl.to(flip, { rotationY: 180, duration: 1.4, ease: "cineInOut" }, f0);
   tl.to(flip, { z: -240, rotationX: 5, duration: 0.7, ease: "sine.inOut" }, f0);
   tl.to(flip, { z: 0, rotationX: 0, duration: 0.7, ease: "sine.inOut" }, f0 + 0.7);
@@ -289,8 +297,9 @@ export function buildInbox(tl: gsap.core.Timeline) {
   tl.fromTo(".tone-ind", { x: 0, width: 82 }, { x: 88, width: 92, duration: 0.7, ease: "spring" }, w0 + 0.35);
   tl.fromTo(".tone.on", { color: "rgba(196,212,255,0.5)" }, { color: "#ffffff", duration: 0.4 }, w0 + 0.45);
   tl.fromTo(caret, { opacity: 0 }, { opacity: 1, duration: 0.2 }, w0 + 0.6);
-  tl.add(writer, w0 + 0.7);
-  const typed = w0 + 0.7 + nWords * 0.052;
+  tl.add(typing.tl, w0 + 0.7);
+  const typed = w0 + 0.7 + typing.tl.duration();
+  cue("sweep", w0 + 0.7, typing.tl.duration(), 0.25);
   tl.to(caret, { opacity: 0, duration: 0.15, repeat: 3, yoyo: true, ease: "steps(1)" }, typed + 0.3);
   tl.fromTo(".cmp-foot", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.8, ease: "cine" }, w0 + 0.4);
 
@@ -325,7 +334,7 @@ export function buildInbox(tl: gsap.core.Timeline) {
   tl.fromTo(".toast", { opacity: 0, filter: "blur(6px)", scale: 1.4 }, { opacity: 1, filter: "blur(0px)", scale: 1, duration: 0.7, ease: "cine" }, k0 + 0.3);
   tl.fromTo(".toast-ico", { scale: 0.4 }, { scale: 1, duration: 0.6, ease: "spring" }, k0 + 0.5);
 
-  // ── Eva answers — and ASTRYA hears a meeting in it ────────────────────
+  // ── Luka answers — and ASTRYA hears a meeting in it ────────────────────
   const r0 = k0 + 0.75;
   tl.fromTo(reply, { x: 530, y: 60, z: -240, rotationX: 22, opacity: 0, filter: "blur(10px)" }, { y: 0, z: 0, rotationX: 0, opacity: 1, filter: "blur(0px)", duration: 1.3, ease: "cine" }, r0);
   // the camera pans: the reply slides aside as the calendar arrives

@@ -3,11 +3,11 @@
   --mono: "Geist Mono Variable", ui-monospace, "SF Mono", Menlo, monospace;
 
   --ink: #eef3ff;
-  --ink-2: rgba(222, 232, 255, 0.74);
-  --ink-3: rgba(196, 212, 255, 0.5);
-  --ink-4: rgba(176, 196, 255, 0.3);
-  --line: rgba(150, 180, 255, 0.09);
-  --line-2: rgba(150, 180, 255, 0.16);
+  --ink-2: rgba(226, 235, 255, 0.86);
+  --ink-3: rgba(200, 215, 255, 0.66);
+  --ink-4: rgba(180, 200, 255, 0.44);
+  --line: rgba(150, 180, 255, 0.12);
+  --line-2: rgba(150, 180, 255, 0.2);
 
   --blue: #4f7dff;
   --blue-2: #7ea4ff;
@@ -17,8 +17,8 @@
   --green: #63e2b7;
   --red: #ff8a98;
 
-  --surface: linear-gradient(180deg, rgba(25, 35, 68, 0.9), rgba(12, 18, 40, 0.94));
-  --surface-2: linear-gradient(180deg, rgba(30, 42, 80, 0.75), rgba(16, 24, 52, 0.8));
+  --surface: linear-gradient(180deg, rgba(32, 45, 88, 0.94), rgba(15, 23, 50, 0.96));
+  --surface-2: linear-gradient(180deg, rgba(36, 50, 96, 0.85), rgba(18, 27, 58, 0.88));
 }
 
 * {
@@ -171,7 +171,7 @@ body {
   pointer-events: none;
   z-index: 7;
   background:
-    radial-gradient(120% 90% at 50% 50%, transparent 52%, rgba(0, 0, 4, 0.55) 100%),
+    radial-gradient(120% 90% at 50% 50%, transparent 58%, rgba(0, 0, 4, 0.5) 100%),
     linear-gradient(180deg, rgba(0, 0, 6, 0.25), transparent 14%, transparent 86%, rgba(0, 0, 6, 0.3));
 }
 

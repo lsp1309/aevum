@@ -66,3 +66,11 @@ export const atmos = {
 
 /** Cross-scene handoffs (an element leaving one scene becomes part of the next). */
 export const share: Record<string, unknown> = {};
+
+/** Product UI is presented slightly larger than authored, for legibility.
+ *  Scenes that hand elements to each other share the same factor. */
+export const UI_SCALE = { work: 1.12, morning: 1.08 };
+/** Stage point → local coordinates of a root scaled by `s` around the centre. */
+export const toLocal = (v: number, c: number, s: number) => c + (v - c) / s;
+/** Local coordinates of a root scaled by `s` → stage point. */
+export const toStage = (v: number, c: number, s: number) => c + (v - c) * s;

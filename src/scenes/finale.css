@@ -1,11 +1,11 @@
 #s-finale .fin-cam {
   position: absolute;
   inset: 0;
-  transform-origin: 50% 50%;
+  transform-origin: 50% 40%;
 }
 #s-finale .fl {
   position: absolute;
-  top: 539px;
+  top: 409px;
   width: 960px;
   height: 2px;
   opacity: 0;
@@ -14,99 +14,30 @@
 #s-finale .fl-l {
   left: 0;
   transform-origin: 0 50%;
-  background: linear-gradient(90deg, transparent, rgba(130, 170, 255, 0.7) 60%, #ffffff);
+  background: linear-gradient(90deg, transparent, rgba(110, 200, 255, 0.7) 55%, #ffffff);
 }
 #s-finale .fl-r {
   right: 0;
   transform-origin: 100% 50%;
-  background: linear-gradient(270deg, transparent, rgba(130, 170, 255, 0.7) 60%, #ffffff);
+  background: linear-gradient(270deg, transparent, rgba(160, 130, 255, 0.7) 55%, #ffffff);
 }
 #s-finale .fin-flash {
   position: absolute;
   left: 0;
   top: 0;
-  width: 520px;
-  height: 520px;
+  width: 560px;
+  height: 560px;
   border-radius: 50%;
   background: radial-gradient(closest-side, rgba(245, 248, 255, 0.95), rgba(140, 175, 255, 0.4) 16%, rgba(70, 110, 255, 0.12) 42%, transparent 70%);
   mix-blend-mode: screen;
   opacity: 0;
 }
-#s-finale .fin-lock {
-  position: absolute;
-  inset: 0;
-  transform-origin: 960px 540px;
-}
-#s-finale .fin-x {
-  position: absolute;
-  left: 900px;
-  top: 480px;
-  width: 120px;
-  height: 120px;
-  overflow: visible;
-  opacity: 0;
-}
-#s-finale .fin-x line {
-  stroke: #eef3ff;
-  stroke-width: 3.6;
-  stroke-linecap: round;
-  filter: drop-shadow(0 0 6px rgba(130, 170, 255, 0.95)) drop-shadow(0 0 20px rgba(80, 120, 255, 0.6));
-}
-#s-finale .fin-name {
-  position: absolute;
-  top: 555px;
-  margin-top: -0.5em;
-  font-size: 150px;
-  font-weight: 500;
-  line-height: 1;
-  white-space: nowrap;
-  font-kerning: none;
-  letter-spacing: 0.17em;
-}
-#s-finale .fin-a {
-  right: calc(50% + 74px);
-  margin-right: -0.17em;
-}
-#s-finale .fin-b {
-  left: calc(50% + 74px);
-}
-#s-finale .fn-clip {
-  position: relative;
-}
-#s-finale .fn-text .c {
-  background: linear-gradient(180deg, #ffffff 0%, #e6edff 42%, #9fb2e8 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  padding: 0.04em 0;
-}
-#s-finale .fn-glow,
-#s-finale .fn-sweep {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-#s-finale .fn-glow {
-  color: #3f6bff;
-  filter: blur(46px);
-  opacity: 0;
-}
-#s-finale .fn-sweep {
-  color: transparent;
-  background: linear-gradient(100deg, transparent 38%, rgba(255, 255, 255, 0.9) 50%, transparent 62%);
-  background-size: 260% 100%;
-  background-position: -60% 0;
-  -webkit-background-clip: text;
-  background-clip: text;
-  mix-blend-mode: screen;
-  padding-top: 0.04em;
-}
 #s-finale .fin-ring {
   position: absolute;
   left: 0;
   top: 0;
-  width: 460px;
-  height: 460px;
+  width: 520px;
+  height: 520px;
   opacity: 0;
 }
 #s-finale .fin-ring svg {
@@ -116,50 +47,81 @@
 #s-finale .fin-word {
   position: absolute;
   left: 0;
-  top: 668px;
-  font-size: 54px;
-  font-weight: 430;
+  top: 628px;
+  font-size: 66px;
+  font-weight: 440;
   letter-spacing: 0.62em;
   padding-left: 0.62em;
   font-kerning: none;
   white-space: nowrap;
-  text-shadow: 0 0 30px rgba(120, 160, 255, 0.35);
+  line-height: 1;
+}
+#s-finale .fw-text {
+  display: inline-block;
+  background: linear-gradient(180deg, #ffffff 20%, #c8d8ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 22px rgba(110, 150, 255, 0.45));
+  padding: 0.06em 0;
+}
+#s-finale .fw-blade {
+  position: absolute;
+  top: -30%;
+  bottom: -30%;
+  width: 3px;
+  margin-left: -1.5px;
+  background: linear-gradient(180deg, transparent, #ffffff 30%, #ffffff 70%, transparent);
+  box-shadow: 0 0 18px 4px rgba(140, 180, 255, 0.85), 0 0 60px 12px rgba(80, 120, 255, 0.4);
+  opacity: 0;
 }
 #s-finale .fin-tag {
   position: absolute;
   left: 0;
-  top: 760px;
-  font-size: 24px;
+  top: 730px;
+  font-size: 30px;
+  font-weight: 420;
   color: var(--ink-2);
   white-space: nowrap;
   perspective: 600px;
 }
-#s-finale .fin-cta {
+#s-finale .fin-cta-wrap {
   position: absolute;
   left: 0;
-  top: 836px;
+  top: 812px;
+}
+#s-finale .cta-pulse {
+  position: absolute;
+  inset: 0;
+  border-radius: 36px;
+  box-shadow: 0 0 0 1.5px rgba(150, 185, 255, 0.8), 0 0 30px rgba(90, 140, 255, 0.5);
+  opacity: 0;
+}
+#s-finale .fin-cta {
+  position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  height: 54px;
-  padding: 0 24px 0 28px;
-  border-radius: 27px;
-  font-size: 17px;
-  font-weight: 560;
+  gap: 12px;
+  height: 72px;
+  padding: 0 34px 0 40px;
+  border-radius: 36px;
+  font-size: 22px;
+  font-weight: 580;
+  letter-spacing: 0.005em;
   color: #fff;
   overflow: hidden;
   background:
-    radial-gradient(120% 120% at 30% -20%, rgba(170, 200, 255, 0.5), transparent 55%),
-    linear-gradient(180deg, #4d7cff, #2f5cf0);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 10px 30px -8px rgba(60, 110, 255, 0.6);
+    radial-gradient(120% 120% at 30% -20%, rgba(180, 210, 255, 0.55), transparent 55%),
+    linear-gradient(180deg, #5584ff, #2f5cf0);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 14px 40px -10px rgba(60, 110, 255, 0.7);
   opacity: 0;
 }
 #s-finale .fin-arrow {
   display: grid;
 }
 #s-finale .fin-arrow .ico {
-  width: 18px;
-  height: 18px;
+  width: 22px;
+  height: 22px;
 }
 .fin-black {
   position: absolute;

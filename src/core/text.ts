@@ -112,3 +112,15 @@ export function countTo(el: HTMLElement, to: number, dur: number, fmt: (v: numbe
   el.textContent = fmt(from);
   return gsap.to(o, { v: to, duration: dur, ease: "cine", onUpdate: () => (el.textContent = fmt(o.v)) });
 }
+
+/** Character-by-character typing with a caret, as if the AI were writing live. */
+export function typeChars(el: HTMLElement, caret: HTMLElement | null, perChar = 0.016) {
+  const cs = chars(el);
+  const tl = gsap.timeline();
+  cs.forEach((c, i) => {
+    const at = i * perChar + (/[,.—;]/.test(c.textContent || "") ? 0.04 : 0);
+    tl.fromTo(c, { opacity: 0, y: 3, filter: "blur(3px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.16, ease: "cine" }, at);
+    if (caret) tl.set(caret, { x: c.offsetLeft + c.offsetWidth + 1, y: c.offsetTop }, at + 0.01);
+  });
+  return { tl, count: cs.length };
+}

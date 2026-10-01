@@ -2,8 +2,8 @@ import { gsap } from "../core/gsap";
 import { cue } from "../core/clock";
 import { camera, html, atmos, CX, CY } from "../core/stage";
 import { chars, titleIn } from "../core/text";
-import { burst, shockwave } from "../core/fx";
-import { ringMark } from "../core/icons";
+import { burst, shockwave, trail, orbitDust, type Pt } from "../core/fx";
+import { ringMark, ringPoint } from "../core/icons";
 import { BRAND } from "../data";
 import { T } from "../timing";
 import "./brand.css";
@@ -60,6 +60,25 @@ export function buildBrand(tl: gsap.core.Timeline) {
   cue("hit", t0 + 0.08, undefined, 1.0);
   cue("chime", t0 + 0.3, undefined, 0.5);
   igniteRing(tl, svg, t0 + 0.05, 1.7);
+  // two comets trace the halo as it unfolds (same curves as the tweens above)
+  const eT = gsap.parseEase("cine");
+  const eD = gsap.parseEase("cineInOut");
+  const tiltR = (-28 * Math.PI) / 180;
+  const k = 560 / 400;
+  const head = (sOf: (d: number) => number) => (p: number): Pt => {
+    const tau = 0.05 + 1.7 * p;
+    const e = eT(Math.min(1, tau / 2.0));
+    const d = eD(p);
+    const o = ringPoint(sOf(d));
+    const sc = (0.15 + 0.85 * e) * k;
+    const rot = ((70 * (1 - e)) * Math.PI) / 180;
+    const x1 = o.x * Math.cos(tiltR) - o.y * Math.sin(tiltR);
+    const y1 = o.x * Math.sin(tiltR) + o.y * Math.cos(tiltR);
+    return { x: CX + sc * (x1 * Math.cos(rot) - y1 * Math.sin(rot)), y: CY + (RING_Y - CY) * e + sc * (x1 * Math.sin(rot) + y1 * Math.cos(rot)) };
+  };
+  trail(t0 + 0.05, 1.7, head((d) => 0.62 * (1 - d)), 140, 111);
+  trail(t0 + 0.05, 1.7, head((d) => 0.62 + 0.38 * d), 140, 113);
+  orbitDust(t0 + 0.4, T.inbox - t0 - 1.6, CX, RING_Y, 420, 170, 150, 115);
   shockwave(t0 + 0.15, 1.6, CX, CY - 20, 1100, 0.55, 3);
   burst(t0 + 0.1, 1.6, CX, CY - 30, 160, 760, 51, 0.55);
   tl.to(atmos, { core: 1, duration: 0.5, ease: "sine.out" }, t0 + 0.1);

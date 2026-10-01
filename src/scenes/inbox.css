@@ -299,6 +299,9 @@
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
 }
+.hl.amber {
+  background-image: linear-gradient(90deg, rgba(255, 170, 70, 0.45), rgba(255, 140, 80, 0.35));
+}
 .em-attach {
   left: 48px;
   bottom: 44px;
@@ -614,4 +617,17 @@
 .rc-detect .ico {
   width: 14px;
   height: 14px;
+}
+
+.em-read {
+  left: 30px;
+  right: 30px;
+  top: 0;
+  height: 70px;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(180deg, transparent, rgba(80, 140, 255, 0.1) 70%, rgba(130, 200, 255, 0.28));
+  border-bottom: 1.5px solid rgba(160, 210, 255, 0.85);
+  box-shadow: 0 8px 22px -6px rgba(90, 160, 255, 0.7);
+  mix-blend-mode: screen;
 }

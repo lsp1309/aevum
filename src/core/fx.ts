@@ -306,3 +306,38 @@ export function orbitDust(start: number, dur: number, cx: number, cy: number, rx
     }
   });
 }
+
+/** Anamorphic light streak sweeping across the frame, with soft lens ghosts —
+ *  the "light passing through the lens" between two shots. */
+export function flareSweep(start: number, dur: number, y = 540, fromLeft = true, tint = "150,190,255") {
+  addFx(start, dur, (ctx, p) => {
+    const e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+    const x = fromLeft ? -300 + (W + 600) * e : W + 300 - (W + 600) * e;
+    const a = Math.sin(p * Math.PI);
+    // wide soft band
+    const band = ctx.createLinearGradient(x - 420, 0, x + 420, 0);
+    band.addColorStop(0, `rgba(${tint},0)`);
+    band.addColorStop(0.5, `rgba(${tint},${0.16 * a})`);
+    band.addColorStop(1, `rgba(${tint},0)`);
+    ctx.fillStyle = band;
+    ctx.fillRect(x - 420, 0, 840, H);
+    // anamorphic streak
+    const s = ctx.createLinearGradient(x - 900, 0, x + 900, 0);
+    s.addColorStop(0, `rgba(${tint},0)`);
+    s.addColorStop(0.5, `rgba(255,255,255,${0.85 * a})`);
+    s.addColorStop(1, `rgba(${tint},0)`);
+    ctx.fillStyle = s;
+    ctx.fillRect(x - 900, y - 1.5, 1800, 3);
+    ctx.globalAlpha = 0.35 * a;
+    ctx.fillRect(x - 900, y - 7, 1800, 14);
+    // core + ghosts mirrored through the frame centre
+    ctx.globalAlpha = a;
+    ctx.drawImage(spriteW, x - 60, y - 60, 120, 120);
+    for (const [f, r, al] of [[0.35, 34, 0.18], [0.7, 18, 0.22], [1.25, 52, 0.1]] as const) {
+      const gx = W / 2 + (W / 2 - x) * f;
+      const gy = H / 2 + (H / 2 - y) * f;
+      ctx.globalAlpha = al * a;
+      ctx.drawImage(spriteC, gx - r, gy - r, r * 2, r * 2);
+    }
+  });
+}

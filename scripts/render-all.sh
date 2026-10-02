@@ -33,8 +33,10 @@ seq 0 $((N-1)) | xargs -P "$JOBS" -I{} bash -c '
     cp "$EN_DIR/seg_$k.mp4" "$f" && touch "$f.done" && echo "segment $k reused" && exit 0
   fi
   to=$(python3 -c "print(min($DUR, ($k+1)*$SEG))")
+  want=$(python3 -c "print(round(($to - $k*$SEG) * $FPS))")
   node scripts/render.mjs --no-build --format $FORMAT --lang $CUT --fps $FPS --crf 12 --port $((4400+k)) --from $((k*SEG)) --to $to --out $f > $DIR/log_$k.txt 2>&1
-  touch "$f.done"; echo "segment $k done"
+  got=$(ffprobe -v error -count_frames -select_streams v -show_entries stream=nb_read_frames -of csv=p=0 "$f" 2>/dev/null)
+  if [ "$got" = "$want" ]; then touch "$f.done"; echo "segment $k done"; else echo "segment $k FAILED ($got/$want frames) — rerun to resume"; fi
 '
 for k in $(seq 0 $((N-1))); do
   [ -f "$DIR/seg_$k.mp4.done" ] || { echo "segment $k missing — rerun"; exit 1; }

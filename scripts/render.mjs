@@ -87,7 +87,7 @@ if (args.cues) {
   for (const t of times) {
     await seek(t);
     const file = `${dir}/t${t.toFixed(2).padStart(6, "0")}.jpg`;
-    await page.screenshot({ path: file, type: "jpeg", quality: 90 });
+    await page.screenshot({ path: file, type: "jpeg", quality: 90, timeout: 180000 });
     console.log("shot", file);
   }
 } else {
@@ -118,7 +118,7 @@ if (args.cues) {
   const t0 = Date.now();
   for (let f = 0; f < total; f++) {
     await seek(from + f / fps);
-    const buf = await page.screenshot({ type: "jpeg", quality: 95 });
+    const buf = await page.screenshot({ type: "jpeg", quality: 95, timeout: 180000 });
     if (!ff.stdin.write(buf)) await new Promise((r) => ff.stdin.once("drain", r));
     if (f % fps === 0) {
       const el = (Date.now() - t0) / 1000;

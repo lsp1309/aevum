@@ -33,8 +33,8 @@
 }
 .sc-pill {
   position: relative;
-  width: 66px;
-  height: 24px;
+  width: 80px;
+  height: 29px;
   border-radius: 6px;
   background: linear-gradient(180deg, rgba(120, 150, 255, 0.5), rgba(70, 100, 220, 0.42));
   box-shadow:
@@ -43,32 +43,32 @@
 }
 .sc-pill i {
   position: absolute;
-  left: 7px;
-  top: 9px;
-  width: 6px;
-  height: 6px;
+  left: 9px;
+  top: 11px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background: #dfe9ff;
   box-shadow: 0 0 6px #9fc0ff;
 }
 .sc-pill b {
   position: absolute;
-  left: 18px;
-  top: 8px;
-  width: 38px;
-  height: 2.5px;
+  left: 22px;
+  top: 10px;
+  width: 46px;
+  height: 3px;
   border-radius: 2px;
   background: rgba(225, 235, 255, 0.85);
 }
 .sc-pill b.s {
-  top: 14px;
-  width: 24px;
+  top: 17px;
+  width: 30px;
   background: rgba(225, 235, 255, 0.5);
 }
 .sc-label {
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: 0.24em;
-  color: rgba(170, 200, 255, 0.85);
+  color: rgba(185, 210, 255, 0.92);
   text-shadow: 0 0 10px rgba(90, 140, 255, 0.6);
 }
 

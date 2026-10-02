@@ -2,7 +2,7 @@ import { gsap } from "../core/gsap";
 import { cue } from "../core/clock";
 import { camera, overlay, html, atmos, CX, fmt } from "../core/stage";
 import { titleIn } from "../core/text";
-import { orbitDust, shockwave, trail, type Pt } from "../core/fx";
+import { orbitDust, trail, type Pt } from "../core/fx";
 import { icon, ringMark, ringPoint } from "../core/icons";
 import { glintRing } from "./brand";
 import { BRAND } from "../data";
@@ -60,7 +60,6 @@ export function buildFinale(tl: gsap.core.Timeline) {
   tl.to(".fin-echo", { scale: 1.32, opacity: 0, duration: 1.8, ease: "cine" }, hit + 0.4);
   cue("hit", hit, undefined, 0.9);
   cue("chime", hit + 0.2, undefined, 0.55);
-  shockwave(hit, 1.5, CX, RING.y, 900, 0.42, 2);
 
   // two glints run once around the halo as it settles
   const tilt = (-28 * Math.PI) / 180;

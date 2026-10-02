@@ -1,5 +1,6 @@
 import { gsap } from "./core/gsap";
 import { film } from "./core/film";
+import { LANG } from "./i18n";
 import { $, camera } from "./core/stage";
 import { chapters } from "./timing";
 import "./styles/controls.css";
@@ -50,7 +51,7 @@ export function initControls() {
   const now = $(".hud-now", hud);
 
   // ── score: an <audio> slaved to the master timeline ────────────────
-  const audio = new Audio(`${import.meta.env.BASE_URL}audio/astrya-mix.m4a`);
+  const audio = new Audio(`${import.meta.env.BASE_URL}audio/astrya-mix-${LANG}.m4a`);
   audio.preload = "auto";
   let soundOn = false;
   const syncAudio = (force = false) => {

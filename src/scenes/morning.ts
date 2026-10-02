@@ -1,150 +1,112 @@
 import { gsap } from "../core/gsap";
 import { cue } from "../core/clock";
-import { camera, overlay, html, share, H, UI_SCALE, placeUI, toStage, fmt } from "../core/stage";
+import { camera, html, atmos, share, UI_SCALE, placeUI, toStage, fmt } from "../core/stage";
 import { chars, words } from "../core/text";
 import { icon } from "../core/icons";
+import { PEOPLE } from "../data";
 import { T } from "../timing";
 import "./morning.css";
 
-/** Timeline axis of the "Today" strip. */
-const AX = { x: 60, w: fmt(1300, 1020), from: 8, to: 18 };
-const hx = (h: number) => AX.x + ((h - AX.from) / (AX.to - AX.from)) * AX.w;
+/** The "Today" strip (authored px, relative to the card). */
+const CARD = fmt({ x: 330, y: 590, w: 1260, h: 200 }, { x: 380, y: 508, w: 1160, h: 200 });
+const BLOCKS = fmt(
+  [
+    { x: 148, w: 170 },
+    { x: 500, w: 470 },
+    { x: 1010, w: 210 },
+  ],
+  [
+    { x: 40, w: 170 },
+    { x: 236, w: 470 },
+    { x: 730, w: 390 },
+  ],
+);
+const BY = 74;
+const BH = 98;
 
-const BLOCKS = [
-  { s: 9.5, e: 10.5, t: "Ops weekly", c: "muted" },
-  { s: 10.5, e: 12.5, t: "Focus · Q4 launch plan", c: "focus" },
-  { s: 14.5, e: 15.5, t: "Pricing call · Luka", c: "blue" },
-  { s: 16, e: 17, t: "Northline kickoff", c: "violet" },
-  { s: 17, e: 18, t: "Q4 review · Ziyad", c: "muted" },
-];
-
+/**
+ * CALM. A quiet morning: one greeting, what needs you, and a day whose focus
+ * time is protected. Composition follows the original: greeting top-left of a
+ * centred "Today" strip, focus block in the middle.
+ */
 export function buildMorning(tl: gsap.core.Timeline) {
-  const spark = "M0 56 L40 50 L80 52 L120 40 L160 44 L200 30 L240 34 L280 20 L320 12 L360 6";
+  const Z = PEOPLE.ziyad;
+  const L = PEOPLE.luka;
   const root = html(`<section class="scene" id="s-morning">
     <div class="mo-world">
-      <div class="mo-date mono">Thursday · 1 October · 09:05</div>
-      <h1 class="mo-hello">Good morning.</h1>
-      <p class="mo-sub">Two things need you today. <span class="mo-handled">ASTRYA handled the rest.</span></p>
-
-      <div class="stat card s1">
-        <div class="st-label">Emails triaged</div>
-        <div class="st-num"><span class="n">0</span></div>
-        <span class="chip green st-delta">+18% this week</span>
-        <svg class="spark" viewBox="0 0 360 60" preserveAspectRatio="none">
-          <defs><linearGradient id="spf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5d8cff" stop-opacity=".35"/><stop offset="1" stop-color="#5d8cff" stop-opacity="0"/></linearGradient></defs>
-          <path class="spark-fill" d="${spark} L360 60 L0 60 Z" fill="url(#spf)"/>
-          <path class="spark-line" d="${spark}" fill="none" stroke="#8fb0ff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </div>
-      <div class="stat card s2">
-        <div class="st-label">Time given back</div>
-        <div class="st-num"><span class="n">0h 00m</span></div>
-        <span class="chip st-delta">this week</span>
-        <div class="bars">${[38, 52, 30, 64, 48, 72, 86].map((h) => `<i style="height:${h}%"></i>`).join("")}</div>
-      </div>
-      <div class="stat card s3">
-        <div class="st-label">Closed by agents</div>
-        <div class="st-num"><span class="n">0</span><small>/ 15</small></div>
-        <span class="chip violet st-delta">${icon.sparkle}4 agents</span>
-        <svg class="ring" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" class="ring-bg"/><circle cx="50" cy="50" r="40" class="ring-fg" transform="rotate(-90 50 50)"/></svg>
-      </div>
-
-      <div class="mo-today card">
-        <div class="td-head"><span class="td-title">Today</span><span class="chip blue">${icon.shield}Focus time protected</span></div>
-        <div class="td-axis">${Array.from({ length: 11 }, (_, i) => `<span style="left:${hx(8 + i)}px">${String(8 + i).padStart(2, "0")}</span>`).join("")}</div>
-        <div class="td-track">${Array.from({ length: 11 }, (_, i) => `<i style="left:${hx(8 + i)}px"></i>`).join("")}</div>
-        ${BLOCKS.map(
-          (b) =>
-            `<div class="blk blk-${b.c}" style="left:${hx(b.s)}px;width:${hx(b.e) - hx(b.s) - 6}px">${b.c === "focus" ? icon.shield : ""}<span>${b.t}</span></div>`,
-        ).join("")}
-        <div class="td-now" style="left:${hx(9 + 5 / 60)}px"><i></i></div>
+      <h1 class="mo-hello">Good morning, ${Z.name}</h1>
+      <p class="mo-sub"><b>2 things</b> need you today. <span class="mo-handled"><i></i>ASTRYA is handling the rest</span></p>
+      <div class="mo-today card" style="left:${CARD.x}px;top:${CARD.y}px;width:${CARD.w}px;height:${CARD.h}px">
+        <div class="td-label mono">Today</div>
+        <div class="td-rail"></div>
+        <div class="blk blk-muted" style="left:${BLOCKS[0].x}px;width:${BLOCKS[0].w}px;top:${BY}px;height:${BH}px"><b>Ops sync</b><span>09:00 – 09:30</span></div>
+        <div class="blk blk-focus" style="left:${BLOCKS[1].x}px;width:${BLOCKS[1].w}px;top:${BY}px;height:${BH}px"><b>${icon.shield}Focus · Q4 launch plan</b><span>10:00 – 11:30 · protected</span><i class="blk-sheen"></i></div>
+        <div class="blk blk-amber" style="left:${BLOCKS[2].x}px;width:${BLOCKS[2].w}px;top:${BY}px;height:${BH}px"><b>Pricing call · ${L.name}</b><span>14:30 – 15:30</span></div>
+        <div class="td-now" style="left:${BLOCKS[1].x - 26}px"><i></i></div>
       </div>
     </div>
-
   </section>`);
   camera.appendChild(root);
-  placeUI(root, UI_SCALE.morning);
-  const calm = html(`<div class="calm-toast card soft"><span class="ct-ico">${icon.check}</span><span>3 new messages handled</span><span class="ct-dim">· nothing needs you</span></div>`);
-  overlay.appendChild(calm);
+  const sm = UI_SCALE.morning;
+  placeUI(root, sm);
 
   const q = (s: string) => root.querySelector(s) as HTMLElement;
   const qa = (s: string) => Array.from(root.querySelectorAll<HTMLElement>(s));
   const world = q(".mo-world");
-  const M = T.morning;
+  const at = (f: number) => T.morning + (f - 47.4); // film seconds (1:1 here)
+  gsap.set(world, { transformOrigin: "960px 560px" });
 
-  const focus = qa(".blk")[1];
-  gsap.set(world, { transformOrigin: "960px 600px" });
+  tl.set(root, { autoAlpha: 1 }, at(47.1));
+  tl.to(atmos, { halo: 0.5, leak: 0.18, core: 0.12, stars: 0.5, duration: 1.6, ease: "sine.inOut" }, at(46.9));
 
-  tl.set(root, { autoAlpha: 1 }, M - 1.2);
-  // revealed through the opening slit
-  tl.fromTo(root, { clipPath: `inset(540px -3000px ${H - 540}px -3000px)` }, { clipPath: "inset(-3000px -3000px -3000px -3000px)", duration: 1.0, ease: "cineInOut" }, M - 1.15);
-  tl.fromTo(world, { scale: 1.08, filter: "blur(6px)" }, { scale: 1, filter: "blur(0px)", duration: 1.8, ease: "cine" }, M - 1.15);
-  tl.to("#vignette", { opacity: 1, duration: 0.6 }, M - 1.2);
-
-  // greeting
+  // greeting — first alone near the centre, the frame then settles on the day
   const hello = q(".mo-hello");
-  const hc = chars(hello);
+  tl.fromTo(world, { x: fmt(190, 0), y: fmt(40, 60) }, { x: 0, y: 0, duration: 2.4, ease: "cine" }, at(47.15));
   tl.fromTo(
-    hc,
-    { opacity: 0, filter: "blur(16px)", y: 30, rotationX: -70, transformOrigin: "50% 100% -30px" },
-    { opacity: 1, filter: "blur(0px)", y: 0, rotationX: 0, duration: 1.5, ease: "cine", stagger: 0.035 },
-    M - 0.55,
+    chars(hello),
+    { opacity: 0, filter: "blur(14px)", y: 26, rotationX: -60, transformOrigin: "50% 100% -30px" },
+    { opacity: 1, filter: "blur(0px)", y: 0, rotationX: 0, duration: 1.3, ease: "cine", stagger: 0.026 },
+    at(47.2),
   );
-  tl.fromTo(hello, { letterSpacing: "0.02em" }, { letterSpacing: "-0.035em", duration: 2.0, ease: "cine" }, M - 0.55);
-  const sw = words(q(".mo-sub"));
-  tl.fromTo(sw, { opacity: 0, filter: "blur(10px)", y: 12 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 1.1, stagger: 0.05, ease: "cine" }, M + 0.2);
-  tl.fromTo(".mo-handled", { backgroundPosition: "100% 0" }, { backgroundPosition: "-100% 0", duration: 1.6, ease: "sine.inOut" }, M + 1.0);
-  tl.fromTo(".mo-date", { opacity: 0, x: 14 }, { opacity: 1, x: 0, duration: 1 }, M + 0.1);
+  tl.fromTo(hello, { letterSpacing: "0.01em" }, { letterSpacing: "-0.035em", duration: 2.0, ease: "cine" }, at(47.2));
+  cue("soft", at(47.2), undefined, 0.4);
+  tl.fromTo(words(q(".mo-sub")), { opacity: 0, filter: "blur(10px)", y: 12 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 1.0, stagger: 0.045, ease: "cine" }, at(47.7));
+  tl.fromTo(".mo-handled i", { scale: 0 }, { scale: 1, duration: 0.6, ease: "spring" }, at(48.1));
 
-  // stats rise from depth, numbers count
-  const stats = qa(".stat");
-  tl.fromTo(stats, { z: -260, y: 50, rotationX: 22, opacity: 0, filter: "blur(10px)" }, { z: 0, y: 0, rotationX: 0, opacity: 1, filter: "blur(0px)", duration: 1.3, ease: "cine", stagger: 0.12 }, M + 0.6);
-  cue("tick", M + 0.7, undefined, 0.35);
-  cue("tick", M + 0.82, undefined, 0.35);
-  cue("tick", M + 0.94, undefined, 0.35);
-  const n1 = q(".s1 .n");
-  const n2 = q(".s2 .n");
-  const n3 = q(".s3 .n");
-  const o = { a: 0, b: 0, c: 0 };
-  tl.to(o, { a: 47, duration: 1.6, ease: "cine", onUpdate: () => (n1.textContent = String(Math.round(o.a))) }, M + 1.0);
-  tl.to(o, {
-    b: 220,
-    duration: 1.6,
-    ease: "cine",
-    onUpdate: () => {
-      const m = Math.round(o.b);
-      n2.textContent = `${Math.floor(m / 60)}h ${String(m % 60).padStart(2, "0")}m`;
-    },
-  }, M + 1.12);
-  tl.to(o, { c: 12, duration: 1.6, ease: "cine", onUpdate: () => (n3.textContent = String(Math.round(o.c))) }, M + 1.24);
-  tl.fromTo(".spark-line", { drawSVG: "0%" }, { drawSVG: "100%", duration: 1.6, ease: "cineInOut" }, M + 1.0);
-  tl.fromTo(".spark-fill", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 1.6, ease: "cineInOut" }, M + 1.0);
-  tl.fromTo(".bars i", { scaleY: 0 }, { scaleY: 1, duration: 0.9, ease: "spring", stagger: 0.06 }, M + 1.15);
-  tl.fromTo(".ring-fg", { drawSVG: "0%" }, { drawSVG: "80%", duration: 1.6, ease: "cineInOut" }, M + 1.25);
-  tl.fromTo(".st-delta", { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.6, ease: "spring", stagger: 0.1 }, M + 2.0);
-
-  // the day, protected
+  // the day, its focus time protected
   const today = q(".mo-today");
-  tl.fromTo(today, { z: -240, y: 60, rotationX: 18, opacity: 0, filter: "blur(10px)" }, { z: 0, y: 0, rotationX: 0, opacity: 1, filter: "blur(0px)", duration: 1.3, ease: "cine" }, M + 1.4);
-  tl.fromTo(".td-axis span, .td-track i", { opacity: 0, y: 6 }, { opacity: 1, y: 0, duration: 0.6, stagger: 0.02 }, M + 1.8);
-  tl.fromTo(qa(".blk"), { opacity: 0, scaleX: 0.3, filter: "blur(6px)", transformOrigin: "0% 50%" }, { opacity: 1, scaleX: 1, filter: "blur(0px)", duration: 0.9, ease: "cine", stagger: 0.09 }, M + 2.0);
-  tl.fromTo(".td-now", { scaleY: 0, opacity: 0 }, { scaleY: 1, opacity: 1, duration: 0.7, ease: "spring" }, M + 2.4);
-  tl.fromTo(focus, { boxShadow: "0 0 0 1px rgba(150,185,255,0.4), 0 0 0px rgba(90,140,255,0)" }, { boxShadow: "0 0 0 1px rgba(170,200,255,0.8), 0 0 36px rgba(90,140,255,0.7)", duration: 0.9, ease: "sine.inOut", yoyo: true, repeat: 1 }, M + 2.8);
-
-  // the calm: things keep getting handled, quietly
-  const k0 = M + 2.9;
-  cue("chime", k0 + 0.1, undefined, 0.45);
-  tl.fromTo(calm, { y: 40, opacity: 0, filter: "blur(8px)", xPercent: -50 }, { y: 0, opacity: 1, filter: "blur(0px)", duration: 1.0, ease: "cine" }, k0);
-  tl.fromTo(calm.querySelector(".ct-ico"), { scale: 0.4 }, { scale: 1, duration: 0.6, ease: "spring" }, k0 + 0.2);
-  tl.to(calm, { y: 30, opacity: 0, filter: "blur(6px)", duration: 0.6, ease: "exit" }, T.finale - 0.35);
-  // a slow push while the calm settles in
-  tl.to(world, { scale: 1.035, duration: T.finale - M, ease: "sine.inOut" }, M);
-
-  share.morningWorld = world;
-  const sm = UI_SCALE.morning;
-  share.morningRect = fmt(
-    { x: toStage(250, "x", sm), y: toStage(392, "y", sm), w: 1420 * sm, h: 492 * sm },
-    { x: toStage(390, "x", sm), y: toStage(-40, "y", sm), w: 1140 * sm, h: 876 * sm },
+  tl.fromTo(today, { z: -220, y: 50, rotationX: 16, opacity: 0, filter: "blur(10px)" }, { z: 0, y: 0, rotationX: 0, opacity: 1, filter: "blur(0px)", duration: 1.15, ease: "cine" }, at(48.1));
+  tl.fromTo([q(".td-label"), q(".td-rail")], { opacity: 0, x: -10 }, { opacity: 1, x: 0, duration: 0.7, stagger: 0.06 }, at(48.35));
+  const blocks = qa(".blk");
+  tl.fromTo(blocks, { opacity: 0, scaleX: 0.4, filter: "blur(6px)", transformOrigin: "0% 50%" }, { opacity: 1, scaleX: 1, filter: "blur(0px)", duration: 0.85, ease: "cine", stagger: 0.1 }, at(48.45));
+  blocks.forEach((_, i) => cue("tick", at(48.55 + i * 0.1), undefined, 0.3));
+  tl.fromTo(".td-now", { scaleY: 0, opacity: 0 }, { scaleY: 1, opacity: 1, duration: 0.6, ease: "spring" }, at(48.8));
+  const focus = blocks[1];
+  tl.fromTo(
+    focus,
+    { boxShadow: "inset 0 0 0 1px rgba(140,180,255,0.5), 0 0 0px rgba(80,130,255,0)" },
+    { boxShadow: "inset 0 0 0 1.5px rgba(170,205,255,0.95), 0 0 44px rgba(80,130,255,0.75)", duration: 0.8, ease: "sine.inOut" },
+    at(49.1),
   );
-  share.morningRoot = root;
+  tl.fromTo(focus.querySelector(".blk-sheen"), { xPercent: -120 }, { xPercent: 260, duration: 1.0, ease: "cineInOut", immediateRender: false }, at(49.2));
+  cue("chime", at(49.2), undefined, 0.35);
+  tl.to(world, { scale: 1.025, duration: 3.0, ease: "sine.inOut" }, at(47.4));
+
+  // hand-off: the focus block opens into the work it protects
+  tl.to(world, { scale: 1.07, filter: "blur(10px)", opacity: 0, duration: 0.65, ease: "sine.in" }, at(50.05));
+  tl.to(focus, { opacity: 0, duration: 0.2 }, at(50.05));
+  tl.set(root, { autoAlpha: 0 }, at(50.8));
+
+  // stage-space rect of the focus block, at hand-off time (world settled, scale 1.025)
+  const fx = CARD.x + BLOCKS[1].x;
+  const fy = CARD.y + BY;
+  const ws = 1.025;
+  const wx = (v: number) => 960 + (v - 960) * ws;
+  const wy = (v: number) => 560 + (v - 560) * ws;
+  share.focusRect = {
+    x: toStage(wx(fx), "x", sm),
+    y: toStage(wy(fy), "y", sm),
+    w: BLOCKS[1].w * ws * sm,
+    h: BH * ws * sm,
+  };
 }

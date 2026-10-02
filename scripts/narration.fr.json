@@ -1,0 +1,229 @@
+{
+  "voice": "ff_siwis",
+  "lang": "fr-fr",
+  "speed": 0.95,
+  "pause": 0.16,
+  "lines": [
+    {
+      "id": "everywhere",
+      "text": "Chaque jour, votre travail arrive de partout.",
+      "chunks": [
+        {
+          "say": "Chaque jour,"
+        },
+        {
+          "say": "votre travail arrive de partout."
+        }
+      ],
+      "at": 1.2,
+      "captions": [
+        "Chaque jour,",
+        ""
+      ]
+    },
+    {
+      "id": "atonce",
+      "text": "Messages. Réunions. Factures. Tout, en même temps.",
+      "chunks": [
+        {
+          "say": "Messages."
+        },
+        {
+          "say": "Réunions."
+        },
+        {
+          "say": "Factures…"
+        },
+        {
+          "say": "Tout, en même temps."
+        }
+      ],
+      "pause": 0.1,
+      "at": 4.05,
+      "speed": 1.02
+    },
+    {
+      "id": "place",
+      "text": "Et si tout pouvait enfin se mettre en place ?",
+      "chunks": [
+        {
+          "say": "Et si tout pouvait…"
+        },
+        {
+          "say": "enfin se mettre en place ?"
+        }
+      ],
+      "pause": 0.3,
+      "at": 7.7,
+      "captions": [
+        "Et si tout pouvait…",
+        "enfin se mettre en place ?"
+      ]
+    },
+    {
+      "id": "meet",
+      "text": "Voici ASTRYA.",
+      "chunks": [
+        {
+          "say": "Voici Astria."
+        }
+      ],
+      "speed": 0.9,
+      "at": 10.9,
+      "captions": [
+        "Voici ASTRYA."
+      ]
+    },
+    {
+      "id": "reads",
+      "text": "Elle lit chaque message. Fait passer l'essentiel en premier. Et comprend chaque détail.",
+      "chunks": [
+        {
+          "say": "Elle lit chaque message…"
+        },
+        {
+          "say": "fait passer l'essentiel en premier…"
+        },
+        {
+          "say": "et comprend chaque détail."
+        }
+      ],
+      "pause": 0.22,
+      "at": 14.35,
+      "captions": [
+        "Elle lit chaque message.",
+        "Fait passer l'essentiel en premier.",
+        "Et comprend chaque détail."
+      ]
+    },
+    {
+      "id": "voice",
+      "text": "Elle rédige votre réponse, avec vos mots. Vous n'avez plus qu'à valider.",
+      "chunks": [
+        {
+          "say": "Elle rédige votre réponse,"
+        },
+        {
+          "say": "avec vos mots."
+        },
+        {
+          "say": "Vous n'avez plus qu'à valider."
+        }
+      ],
+      "pause": 0.1,
+      "at": 20.55,
+      "captions": [
+        "Elle rédige votre réponse,",
+        "avec vos mots.",
+        "Vous n'avez plus qu'à valider."
+      ]
+    },
+    {
+      "id": "calendar",
+      "text": "Un appel est évoqué ? Il est déjà dans votre agenda.",
+      "chunks": [
+        {
+          "say": "Un appel est évoqué ?"
+        },
+        {
+          "say": "Il est déjà dans votre agenda."
+        }
+      ],
+      "pause": 0.2,
+      "at": 25.3,
+      "captions": [
+        "Un appel est évoqué ?",
+        "Il est déjà dans votre agenda."
+      ]
+    },
+    {
+      "id": "parallel",
+      "text": "Factures, livraisons, documents : tout est géré, en parallèle.",
+      "chunks": [
+        {
+          "say": "Factures, livraisons, documents…"
+        },
+        {
+          "say": "tout est géré, en parallèle."
+        }
+      ],
+      "pause": 0.22,
+      "at": 29.0,
+      "captions": [
+        "Factures, livraisons, documents…",
+        "tout est géré, en parallèle."
+      ]
+    },
+    {
+      "id": "one",
+      "text": "Une seule intelligence.",
+      "chunks": [
+        {
+          "say": "Une seule intelligence."
+        }
+      ],
+      "at": 36.7,
+      "captions": [
+        "Une seule intelligence."
+      ]
+    },
+    {
+      "id": "connected",
+      "text": "Connectée à tous vos outils.",
+      "chunks": [
+        {
+          "say": "Connectée à tous vos outils."
+        }
+      ],
+      "at": 41.6,
+      "captions": [
+        "Connectée à tous vos outils."
+      ]
+    },
+    {
+      "id": "morning",
+      "text": "Et chaque matin commence dans la clarté.",
+      "chunks": [
+        {
+          "say": "Et chaque matin commence dans la clarté."
+        }
+      ],
+      "at": 47.7,
+      "captions": [
+        "Et chaque matin commence dans la clarté."
+      ]
+    },
+    {
+      "id": "focus",
+      "text": "Votre temps revient enfin à l'essentiel.",
+      "chunks": [
+        {
+          "say": "Votre temps revient enfin à l'essentiel."
+        }
+      ],
+      "at": 50.6,
+      "captions": [
+        "Votre temps revient enfin à l'essentiel."
+      ]
+    },
+    {
+      "id": "astrya",
+      "text": "ASTRYA. L'intelligence qui travaille avec vous.",
+      "chunks": [
+        {
+          "say": "Astria."
+        },
+        {
+          "say": "L'intelligence qui travaille avec vous."
+        }
+      ],
+      "pause": 0.35,
+      "speed": 0.9,
+      "at": 55.6,
+      "captions": [
+        "",
+        ""
+      ]
+    }
+  ]
+}

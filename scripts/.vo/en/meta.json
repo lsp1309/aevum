@@ -9,7 +9,8 @@
   "phrases": [
    0.0,
    0.85
-  ]
+  ],
+  "speed": 0.94
  },
  {
   "i": 1,
@@ -22,7 +23,8 @@
    0.0,
    1.3,
    2.23
-  ]
+  ],
+  "speed": 0.94
  },
  {
   "i": 2,
@@ -34,7 +36,8 @@
   "phrases": [
    0.0,
    1.16
-  ]
+  ],
+  "speed": 0.94
  },
  {
   "i": 3,
@@ -45,7 +48,8 @@
   "text": "Meet ASTRYA.",
   "phrases": [
    0.0
-  ]
+  ],
+  "speed": 0.88
  },
  {
   "i": 4,
@@ -58,7 +62,8 @@
    0.0,
    1.69,
    3.23
-  ]
+  ],
+  "speed": 0.94
  },
  {
   "i": 5,
@@ -70,7 +75,8 @@
   "phrases": [
    0.0,
    2.11
-  ]
+  ],
+  "speed": 0.94
  },
  {
   "i": 6,
@@ -82,7 +88,8 @@
   "phrases": [
    0.0,
    1.5
-  ]
+  ],
+  "speed": 0.94
  },
  {
   "i": 7,
@@ -94,41 +101,68 @@
   "phrases": [
    0.0,
    2.43
-  ]
+  ],
+  "speed": 0.94
  },
  {
   "i": 8,
   "id": "one",
-  "at": 35.5,
-  "dur": 3.319,
+  "at": 36.7,
+  "dur": 1.175,
   "sr": 24000,
-  "text": "One intelligence, connected to every tool you use.",
+  "text": "One intelligence.",
   "phrases": [
-   0.0,
-   1.4
-  ]
+   0.0
+  ],
+  "speed": 0.94
  },
  {
   "i": 9,
+  "id": "connected",
+  "at": 41.6,
+  "dur": 1.867,
+  "sr": 24000,
+  "text": "Connected to every tool you use.",
+  "phrases": [
+   0.0
+  ],
+  "speed": 0.94
+ },
+ {
+  "i": 10,
   "id": "morning",
-  "at": 43.5,
+  "at": 47.7,
   "dur": 1.976,
   "sr": 24000,
   "text": "So every morning starts with clarity.",
   "phrases": [
    0.0
-  ]
+  ],
+  "speed": 0.94
  },
  {
-  "i": 10,
+  "i": 11,
+  "id": "focus",
+  "at": 50.6,
+  "dur": 2.034,
+  "sr": 24000,
+  "text": "And your time goes back to what matters.",
+  "phrases": [
+   0.0
+  ],
+  "speed": 0.94
+ },
+ {
+  "i": 12,
   "id": "astrya",
-  "at": 50.0,
+  "at": 55.6,
   "dur": 2.458,
   "sr": 24000,
   "text": "ASTRYA. Intelligence that works with you.",
   "phrases": [
    0.0,
    0.8
-  ]
+  ],
+  "speed": 0.9
  }
 ]

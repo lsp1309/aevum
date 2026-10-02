@@ -82,7 +82,7 @@ export const share: Record<string, unknown> = {};
  * in 9:16 each scene also recomposes its own layout (see the `.fmt-v` rules).
  * Scenes that hand elements to each other share the same factor.
  */
-export const UI_SCALE = { work: fmt(1.12, 0.9), morning: fmt(1.08, 0.86) };
+export const UI_SCALE = { work: fmt(1.12, 0.9), morning: fmt(1, 0.86) };
 /** Place an authored-space root into the frame. */
 export function placeUI(root: HTMLElement, s: number) {
   gsap.set(root, { scale: s, transformOrigin: "960px 540px", x: W / 2 - 960, y: H / 2 - 540 });

@@ -1,0 +1,192 @@
+#s-system .sys-back,
+#s-system .sys-front,
+#s-system .globe-canvas {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+#s-system .sys-globe {
+  position: absolute;
+  inset: 0;
+}
+#s-system .sys-ui {
+  position: absolute;
+  inset: 0;
+}
+#s-system .sys-ui > * {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+/* work items streaming into the core: a tiny glass card + its kind */
+.sys-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+.sc-pill {
+  position: relative;
+  width: 66px;
+  height: 24px;
+  border-radius: 6px;
+  background: linear-gradient(180deg, rgba(120, 150, 255, 0.5), rgba(70, 100, 220, 0.42));
+  box-shadow:
+    inset 0 0 0 1px rgba(190, 210, 255, 0.7),
+    0 0 18px rgba(100, 150, 255, 0.55);
+}
+.sc-pill i {
+  position: absolute;
+  left: 7px;
+  top: 9px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #dfe9ff;
+  box-shadow: 0 0 6px #9fc0ff;
+}
+.sc-pill b {
+  position: absolute;
+  left: 18px;
+  top: 8px;
+  width: 38px;
+  height: 2.5px;
+  border-radius: 2px;
+  background: rgba(225, 235, 255, 0.85);
+}
+.sc-pill b.s {
+  top: 14px;
+  width: 24px;
+  background: rgba(225, 235, 255, 0.5);
+}
+.sc-label {
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  color: rgba(170, 200, 255, 0.85);
+  text-shadow: 0 0 10px rgba(90, 140, 255, 0.6);
+}
+
+.sys-core-label {
+  font-size: 23px;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  padding-left: 0.3em;
+  color: rgba(232, 240, 255, 0.95);
+  text-shadow: 0 0 18px rgba(120, 165, 255, 0.75);
+  white-space: nowrap;
+  opacity: 0;
+}
+
+.sys-msg {
+  width: 440px;
+  padding: 18px 22px 20px;
+  border-radius: 18px;
+  opacity: 0;
+}
+.sys-msg .sm-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+}
+.sys-msg .sm-head b {
+  font-weight: 600;
+  color: var(--ink);
+}
+.sys-msg .sm-head span {
+  color: var(--ink-4);
+  font-size: 13px;
+}
+.sys-msg .sm-head em {
+  margin-left: auto;
+  font-style: normal;
+  color: var(--ink-4);
+  font-size: 13px;
+}
+.sys-msg .avatar {
+  width: 30px;
+  height: 30px;
+  font-size: 12px;
+}
+.sys-msg p {
+  margin: 12px 0 0;
+  font-size: 17px;
+  color: var(--ink-2);
+}
+
+.sys-need {
+  height: 38px;
+  padding: 0 16px;
+  font-size: 16px;
+  gap: 9px;
+  opacity: 0;
+  color: #e4ecff;
+  background: linear-gradient(180deg, rgba(36, 42, 110, 0.92), rgba(22, 26, 78, 0.94));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 0 0 1px rgba(160, 175, 255, 0.5),
+    0 10px 30px -8px rgba(0, 0, 20, 0.8),
+    0 0 34px -6px rgba(120, 120, 255, 0.8);
+}
+.sys-need svg {
+  width: 17px;
+  height: 17px;
+  color: #b8a8ff;
+}
+
+.sys-label {
+  font-size: 18px;
+  font-weight: 450;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  color: rgba(222, 232, 255, 0.86);
+  text-shadow:
+    0 0 14px rgba(var(--c), 0.65),
+    0 1px 2px rgba(0, 0, 20, 0.8);
+  transform-origin: 50% 0;
+  opacity: 0;
+}
+
+.sys-cal {
+  width: 400px;
+  padding: 20px 24px 20px;
+  border-radius: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  opacity: 0;
+  background: linear-gradient(180deg, rgba(44, 46, 110, 0.92), rgba(24, 26, 70, 0.94));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 0 0 1px rgba(170, 160, 255, 0.36),
+    0 30px 60px -20px rgba(0, 0, 0, 0.8),
+    0 0 60px -10px rgba(130, 110, 255, 0.55);
+}
+.sys-cal b {
+  font-size: 21px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.sys-cal span {
+  font-size: 16px;
+  color: var(--ink-3);
+}
+.sys-cal em {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+  font-style: normal;
+  font-size: 15px;
+  color: var(--green);
+}
+.sys-cal em svg {
+  width: 16px;
+  height: 16px;
+}

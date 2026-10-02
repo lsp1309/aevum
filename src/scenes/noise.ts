@@ -7,7 +7,7 @@ import { icon, avatar } from "../core/icons";
 import { noise, type Noise } from "../data";
 import { T } from "../timing";
 import { toRaw } from "../core/film";
-import VO from "../narration.timing.json";
+import { TXT, listBeats } from "../i18n";
 import "./noise.css";
 
 /** Hand-composed depth layout: [cx, cy, z, rotY]. The centre band is kept
@@ -83,9 +83,9 @@ export function buildNoise(tl: gsap.core.Timeline) {
       ${noise.map(cardHTML).join("")}
     </div>
     <div class="noise-shade"></div>
-    <h2 class="noise-title t-a">Your work arrives from everywhere.</h2>
-    <h2 class="noise-title t-b">All at once.</h2>
-    <div class="noise-kin"><span>Emails.</span><span>Meetings.</span><span class="amber">Invoices.</span></div>
+    <h2 class="noise-title t-a">${TXT.titleA}</h2>
+    <h2 class="noise-title t-b">${TXT.titleB}</h2>
+    <div class="noise-kin"><span>${TXT.kin[0]}</span><span>${TXT.kin[1]}</span><span class="amber">${TXT.kin[2]}</span></div>
     <div class="noise-counter card soft">
       <span class="nc-ico">${icon.bell}</span>
       <span class="nc-label">Unread</span>
@@ -169,13 +169,13 @@ export function buildNoise(tl: gsap.core.Timeline) {
   const tb = q(".t-b");
   tl.fromTo(".noise-shade", { opacity: 0 }, { opacity: 1, duration: 1.2, ease: "sine.out" }, t0 + 0.5);
   tl.add(titleIn(ta, { stagger: 0.085, dur: 1.4, track: ["0.04em", "-0.025em"] }), t0 + 0.8);
-  const K = VO.atonce.phrases; // emails · (meetings) · invoices · all at once
+  const K = listBeats(); // emails · meetings · invoices · all at once
   tl.add(titleOut(ta, { stagger: 0.03, dur: 0.5 }), toRaw(K[0] - 0.45));
   // Emails. Meetings. Invoices. — each word lands on the voice, the previous one is knocked out
   const kin = Array.from(root.querySelectorAll<HTMLElement>(".noise-kin span"));
   gsap.set(".noise-kin", { xPercent: -50, yPercent: -50, x: CX, y: CY });
-  const ins = [K[0], (K[0] + K[1]) / 2 + 0.02, K[1]];
-  const outs = [ins[1] - 0.2, ins[2] - 0.2, K[2] - 0.22];
+  const ins = [K[0], K[1], K[2]];
+  const outs = [ins[1] - 0.2, ins[2] - 0.2, K[3] - 0.22];
   ins.forEach((f, i) => {
     const el = kin[i];
     const span = (g: number, d: number) => toRaw(g + d) - toRaw(g);
@@ -183,7 +183,7 @@ export function buildNoise(tl: gsap.core.Timeline) {
     tl.to(el, { opacity: 0, scale: 0.9, y: -16, filter: "blur(12px)", duration: span(outs[i], 0.17), ease: "exit" }, toRaw(outs[i]));
     cue("soft", toRaw(f), undefined, 0.35);
   });
-  tl.add(titleIn(tb, { stagger: 0.12, dur: 0.9, track: ["0.1em", "-0.03em"] }), toRaw(K[2] - 0.05));
+  tl.add(titleIn(tb, { stagger: 0.12, dur: 0.9, track: ["0.1em", "-0.03em"] }), toRaw(K[3] - 0.05));
 
   // unread counter: climbs with an accelerating ease
   const counter = q(".noise-counter");

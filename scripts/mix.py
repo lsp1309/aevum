@@ -3,30 +3,33 @@
 ASTRYA — final soundtrack: original score + voice-over + sound design, in film time.
 
     node scripts/render.mjs --dev --cues scripts/cues.json   # cue sheet (film time)
-    python3 scripts/voice.py                                 # narration lines
-    python3 scripts/mix.py                                   # → public/audio/astrya-mix.m4a
+    python3 scripts/voice.py [en|fr]                         # narration lines
+    python3 scripts/mix.py [en|fr]                           # → public/audio/astrya-mix-<lang>.m4a
 
 Score (120 BPM grid, downbeats every 2 s from 0.5 s, aligned with the edit):
-  0–7.9    INTRO     drone + air, a heartbeat that quickens as the noise grows
-  7.9–9.9  TURN      everything is inhaled (reverse swell)…
-  9.9      IGNITION  …impact + open chord as the halo ignites
-  12.5–29  GROOVE    pulse, bass, arps, light kit — the product at work
-  29–34.5  BUILD     toms, snare roll, rising filter
-  34.5–42  CLIMAX    full kit, big chords, octave lead — one intelligence
-  42–43.5  BREATH    light: only shimmer
-  43.5–47  CALM      piano-like plucks
-  47–56.5  RESOLVE   riser → impact on the halo → final chord, long tail
+  0–7.9      INTRO     drone + air, a heartbeat that quickens as the noise grows
+  7.9–9.9    TURN      everything is inhaled (reverse swell)…
+  9.9        IGNITION  …impact + open chord as the halo ignites
+  12.5–32.5  GROOVE    pulse, bass, arps, light kit — the product at work
+  32.5–36.4  BUILD     the core appears, work streams in: toms, roll, riser
+  36.4–45.5  CLIMAX    impact on the flash; held back under "One intelligence",
+                       full kit + lead for the push-in, lighter under "Connected…"
+  45.5–47.3  BREATH    the system recedes: shimmer, reverse swell
+  47.3–53.4  CALM      keys — morning, then focus
+  53.4–63.2  RESOLVE   riser → impact as the halo settles → final chord, long tail
 Music is ducked under the voice (sidechain from the narration envelope).
 """
 import json
 import os
 import subprocess
+import sys
 
 import numpy as np
 import soundfile as sf
 from scipy.signal import butter, lfilter, resample_poly, sosfilt
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+LANG = sys.argv[1] if len(sys.argv) > 1 else "en"
 SR = 44100
 rng = np.random.default_rng(11)
 sheet = json.load(open(os.path.join(ROOT, "scripts", "cues.json")))
@@ -227,83 +230,97 @@ place(music, R, 7.9, 1, 0.2)
 place(drums, boom(0.9), 9.9)
 pad(F_, 9.9, 12.5, 0.12, bright=3.5, a=0.05, r=1.6)
 pad(["F5", "A5", "C6"], 9.9, 12.5, 0.02, bright=1.0, a=0.8, r=1.2)
-# GROOVE 12.5–29
-prog = [(12.5, DM9), (16.5, BB), (20.5, F_), (24.5, C_), (28.5, DM9)]
-for (t0, ch), (t1, _) in zip(prog, prog[1:] + [(34.5, None)]):
-    pad(ch, t0, t1, 0.085, bright=2.6, a=0.6, r=0.8)
-bass_notes = {12.5: "D2", 16.5: "Bb1", 20.5: "F2", 24.5: "C2", 28.5: "D2"}
-for t in np.arange(12.5, 34.5, 0.25):
+# GROOVE 12.5–32.5 (thins out into the build)
+prog = [(12.5, DM9), (16.5, BB), (20.5, F_), (24.5, C_), (28.5, DM9), (32.5, BB)]
+for (t0, ch), (t1, _) in zip(prog, prog[1:] + [(36.4, None)]):
+    pad(ch, t0, t1, 0.085 if t0 < 32.5 else 0.07, bright=2.6, a=0.6, r=0.8)
+bass_notes = {12.5: "D2", 16.5: "Bb1", 20.5: "F2", 24.5: "C2", 28.5: "D2", 32.5: "Bb1"}
+for t in np.arange(12.5, 36.4, 0.25):
     root = [v for k, v in bass_notes.items() if k <= t][-1]
     n = int(0.22 * SR)
     tt = np.arange(n) / SR
     f = hz(root)
     b = (np.sin(2 * np.pi * f * tt) + 0.3 * np.sin(2 * np.pi * 2 * f * tt)) * np.exp(-tt * 9) * (1 - np.exp(-tt * 400))
-    place(music, b, t, 0.12 if t >= 14.5 else 0.07)
-for i, t in enumerate(np.arange(12.5, 34.5, 0.125)):
+    place(music, b, t, 0.12 if 14.5 <= t < 33.5 else 0.07)
+for i, t in enumerate(np.arange(12.5, 36.4, 0.125)):
     ch = [c for k, c in prog if k <= t][-1]
     f = hz(ch[[0, 2, 1, 3, 2, 1][i % 6] % len(ch)]) * 2
     place(music, pluck(f, 0.4, 0.8), t, 0.028 + (0.012 if t > 29 else 0), pan=0.4 * np.sin(i * 0.7))
-for t in np.arange(14.5, 34.5, 1.0):
+for t in np.arange(14.5, 33.5, 1.0):
     place(drums, kick(0.75), t)
-for t in np.arange(17.0, 34.5, 1.0):
+for t in np.arange(17.0, 33.5, 1.0):
     place(drums, clap(0.32), t)
-for t in np.arange(20.5, 34.5, 0.25):
+for t in np.arange(20.5, 33.5, 0.25):
     place(drums, hat(0.09 if (t * 4) % 2 else 0.14), t, pan=0.25)
-# BUILD 29–34.5: toms + snare roll + riser
-for k, t in enumerate([29.0, 29.75, 30.5, 31.0, 31.5, 32.0, 32.5, 32.75, 33.0, 33.25, 33.5, 33.75, 34.0, 34.25]):
-    place(drums, tom(110 - (k % 3) * 18, (0.18 if t < 32.7 else 0.4) + 0.015 * k), t, pan=[-0.4, 0, 0.4][k % 3])
-roll = np.concatenate([np.arange(32.5, 33.5, 0.125), np.arange(33.5, 34.5, 0.0625)])
+# BUILD 32.5–36.4: the core appears, work streams in — toms, roll, riser
+for k, t in enumerate([33.5, 34.0, 34.5, 34.75, 35.0, 35.25, 35.5, 35.75, 35.9, 36.0, 36.1, 36.2, 36.3]):
+    place(drums, tom(110 - (k % 3) * 18, (0.2 if t < 35.4 else 0.38) + 0.012 * k), t, pan=[-0.4, 0, 0.4][k % 3])
+roll = np.concatenate([np.arange(35.0, 35.8, 0.125), np.arange(35.8, 36.4, 0.0625)])
 for k, t in enumerate(roll):
-    place(drums, clap(0.12 + 0.012 * k), t)
-place(sfx, noise_sweep(3.4, 200, 6000, 0.12), 31.1)
-# CLIMAX 34.5–42
-place(drums, boom(1.0), 34.5)
-cl = [(34.5, DM9), (36.5, BB), (38.5, F_), (40.5, C_)]
-CL = 38.75
-for (t0, ch), (t1, _) in zip(cl, cl[1:] + [(42.0, None)]):
-    if t1 <= CL:  # under the narration: warm and low
+    place(drums, clap(0.1 + 0.012 * k), t)
+for t in np.arange(33.5, 36.4, 1.0):
+    place(drums, kick(0.55, deep=1.3), t)
+place(sfx, noise_sweep(3.0, 200, 6000, 0.12), 33.4)
+# CLIMAX 36.4–45.5
+FL = 36.4  # the core flashes
+place(drums, boom(1.0), FL)
+cl = [(FL, DM9), (38.5, BB), (40.5, F_), (42.5, C_), (44.5, DM9)]
+CL, CN = 38.5, 41.4  # full climax opens after "One intelligence."; lighter again under "Connected…"
+for (t0, ch), (t1, _) in zip(cl, cl[1:] + [(45.6, None)]):
+    if t0 < CL:  # under the narration: warm and low
         pad(ch, t0, t1, 0.07, bright=2.2, a=0.05, r=0.5)
     else:
-        pad(ch, t0, t1, 0.13, bright=5.0, a=0.05, r=0.5)
-        pad([c[:-1] + str(int(c[-1]) + 1) for c in ch[1:3]], max(t0, CL), t1, 0.045, bright=6.0, a=0.05, r=0.5)
-# the line "One intelligence…" is spoken over a held-back groove (kick only)…
-for t in np.arange(34.5, 38.9, 1.0):
+        pad(ch, t0, t1, 0.12, bright=5.0, a=0.05, r=0.5)
+        pad([c[:-1] + str(int(c[-1]) + 1) for c in ch[1:3]], t0, t1, 0.04, bright=6.0, a=0.05, r=0.5)
+for t in np.arange(36.5, CL, 1.0):  # held back: kick only
     place(drums, kick(0.7, deep=1.2), t)
-# …then the climax opens fully for the orbits
-for t in np.arange(CL, 41.9, 0.5):
+for t in np.arange(CL, CN, 0.5):  # push-in: full kit
     place(drums, kick(1.0, deep=1.2), t)
-for t in np.arange(CL + 0.5, 41.9, 1.0):
+for t in np.arange(CL + 0.5, CN, 1.0):
     place(drums, clap(0.45), t)
-for t in np.arange(CL, 41.9, 0.25):
+for t in np.arange(CL, CN, 0.25):
     place(drums, hat(0.13), t, pan=-0.2)
-for t in [CL, 40.5]:
-    place(drums, tom(70, 0.7), t)
-place(drums, boom(0.6), CL)
+place(drums, tom(70, 0.7), CL)
+place(drums, boom(0.55), CL)
+for t in np.arange(CN, 45.5, 1.0):  # tools light up: pulse + hats, room for the voice
+    place(drums, kick(0.75, deep=1.2), t)
+for t in np.arange(CN, 45.5, 0.25):
+    place(drums, hat(0.09), t, pan=-0.2)
+for t in np.arange(43.5, 45.5, 1.0):
+    place(drums, clap(0.3), t)
 lead = ["D5", "F5", "A5", "C6", "Bb5", "A5", "F5", "G5", "A5", "C6", "D6", "C6", "A5", "G5", "E5", "G5"]
-for i, t in enumerate(np.arange(34.5, 41.9, 0.5)):
-    lg = 0.02 if t < CL else 0.07
+for i, t in enumerate(np.arange(36.5, 45.5, 0.5)):
+    lg = 0.02 if t < CL else (0.07 if t < CN else (0.03 if t < 44.0 else 0.06))
     place(music, pluck(hz(lead[i % len(lead)]), 1.0, 1.2), t, lg, pan=0.15)
     place(music, pluck(hz(lead[i % len(lead)]) / 2, 1.0, 1.0), t, lg * 0.55, pan=-0.15)
-for i, t in enumerate(np.arange(CL, 41.9, 0.125)):
+for i, t in enumerate(np.arange(CL, 45.5, 0.125)):
     ch = [c for k, c in cl if k <= t][-1]
-    place(music, pluck(hz(ch[[0, 1, 2, 3][i % 4] % len(ch)]) * 2, 0.35, 1.0), t, 0.03, pan=0.5 * np.sin(i))
-place(sfx, noise_sweep(1.8, 300, 8000, 0.1), 40.2)
-# BREATH 42–43.5: only shimmer
-pad(["A4", "C5", "E5", "G5"], 41.9, 43.6, 0.03, bright=1.0, a=0.1, r=1.5)
-# CALM 43.5–47: keys
-pad(["F2", "C3", "A3"], 43.5, 47.0, 0.06, bright=1.5, a=0.8, r=0.6)
-for t, nt in zip(np.arange(43.5, 47.0, 0.5), ["F4", "A4", "C5", "E5", "C5", "A4", "G4"]):
-    place(music, keys(hz(nt)), t, 0.07, pan=0.2 * np.sin(t))
-# RESOLVE 47–56.5
-place(sfx, noise_sweep(1.5, 200, 7000, 0.11), 47.0)
-L, R = reverse_swell(1.5, ["D3", "A3", "D4", "F4"], 0.12)
-place(music, L, 47.0, 1, -0.2)
-place(music, R, 47.0, 1, 0.2)
-place(drums, boom(1.0), 48.5)
-pad(["F1", "F2", "C3"], 48.5, 55.0, 0.11, bright=2.0, a=0.02, r=2.5)
-pad(["A3", "C4", "E4", "G4"], 48.5, 55.0, 0.08, bright=3.0, a=0.3, r=2.5)
-pad(["C5", "E5", "G5"], 49.0, 55.0, 0.02, bright=1.0, a=1.5, r=2.5)
-for t, nt in zip(np.arange(50.5, 55.0, 0.5), ["C5", "F5", "A5", "G5", "E5", "F5", "C6", "A5", "G5"]):
+    place(music, pluck(hz(ch[[0, 1, 2, 3][i % 4] % len(ch)]) * 2, 0.35, 1.0), t, 0.03 if t < CN else 0.022, pan=0.5 * np.sin(i))
+place(sfx, noise_sweep(1.6, 300, 8000, 0.09), 39.9)
+# BREATH 45.5–47.3: the system recedes — only shimmer, inhaled into the morning
+pad(["A4", "C5", "E5", "G5"], 45.4, 47.5, 0.03, bright=1.0, a=0.2, r=1.5)
+L, R = reverse_swell(1.6, ["F3", "A3", "C4", "E4"], 0.1)
+place(music, L, 45.7, 1, -0.2)
+place(music, R, 45.7, 1, 0.2)
+place(drums, boom(0.3), 47.3)
+# CALM 47.3–53.4: keys — morning, then focus
+pad(["F2", "C3", "A3"], 47.3, 50.5, 0.06, bright=1.5, a=0.6, r=0.6)
+pad(["D2", "A2", "F3"], 50.5, 53.6, 0.055, bright=1.4, a=0.6, r=0.8)
+for t, nt in zip(np.arange(47.5, 53.4, 0.5), ["F4", "A4", "C5", "E5", "C5", "A4", "G4", "A4", "D5", "F5", "E5", "D5"]):
+    place(music, keys(hz(nt)), t, 0.065, pan=0.2 * np.sin(t))
+for t in np.arange(50.5, 53.4, 0.25):  # a soft pulse while you write
+    place(drums, hat(0.045), t, pan=0.3)
+# RESOLVE 53.4–63.2: the halo sweeps in and settles
+place(sfx, noise_sweep(1.2, 200, 7000, 0.11), 53.3)
+L, R = reverse_swell(1.1, ["D3", "A3", "D4", "F4"], 0.12)
+place(music, L, 53.4, 1, -0.2)
+place(music, R, 53.4, 1, 0.2)
+HIT = 54.5
+place(drums, boom(1.0), HIT)
+pad(["F1", "F2", "C3"], HIT, 61.5, 0.11, bright=2.0, a=0.02, r=2.5)
+pad(["A3", "C4", "E4", "G4"], HIT, 61.5, 0.08, bright=3.0, a=0.3, r=2.5)
+pad(["C5", "E5", "G5"], HIT + 0.5, 61.5, 0.02, bright=1.0, a=1.5, r=2.5)
+for t, nt in zip(np.arange(56.5, 61.5, 0.5), ["C5", "F5", "A5", "G5", "E5", "F5", "C6", "A5", "G5", "F5"]):
     place(music, keys(hz(nt), 3.0), t, 0.05, pan=0.25 * np.sin(t * 1.3))
 
 # ── sound design from the timeline's cues (film time) ─────────────────────
@@ -354,9 +371,9 @@ for k, c in enumerate(sheet["cues"]):
 
 # ── voice-over ───────────────────────────────────────────────────────────
 print("voice…")
-meta = json.load(open(os.path.join(ROOT, "scripts", ".vo", "meta.json")))
+meta = json.load(open(os.path.join(ROOT, "scripts", ".vo", LANG, "meta.json")))
 for m in meta:
-    s, sr = sf.read(os.path.join(ROOT, "scripts", ".vo", f"line_{m['i']:02d}.wav"))
+    s, sr = sf.read(os.path.join(ROOT, "scripts", ".vo", LANG, f"line_{m['i']:02d}.wav"))
     if sr != SR:
         s = resample_poly(s, SR, sr)
     s = hp(s, 85)
@@ -436,10 +453,10 @@ mix *= fade_out * 0.95
 mix = mix[:, : int((DUR + 0.05) * SR)]
 
 os.makedirs(os.path.join(ROOT, "public", "audio"), exist_ok=True)
-wav = os.path.join(ROOT, "scripts", ".mix.wav")
+wav = os.path.join(ROOT, "scripts", f".mix-{LANG}.wav")
 sf.write(wav, mix.T, SR)
 # loudness-normalise to −14 LUFS (social / web), true-peak −1 dBTP
-out = os.path.join(ROOT, "public", "audio", "astrya-mix.m4a")
+out = os.path.join(ROOT, "public", "audio", f"astrya-mix-{LANG}.m4a")
 subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", wav, "-af", "loudnorm=I=-14:TP=-1:LRA=9", "-ar", "48000", "-c:a", "aac", "-b:a", "192k", out], check=True)
 os.remove(wav)
 print("wrote", out, f"{DUR:.1f}s")

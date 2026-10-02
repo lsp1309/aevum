@@ -6,6 +6,7 @@ import { burst, shockwave, trail, orbitDust, type Pt } from "../core/fx";
 import { ringMark, ringPoint } from "../core/icons";
 import { BRAND } from "../data";
 import { T } from "../timing";
+import { TXT } from "../i18n";
 import "./brand.css";
 
 export const RING_Y = fmt(468, CY - 110);
@@ -36,7 +37,7 @@ export function buildBrand(tl: gsap.core.Timeline) {
   const root = html(`<section class="scene" id="s-brand">
     <div class="brand-ring"><div class="ring-tilt"><div class="ring-squash">${ringMark("brand", 0)}</div></div></div>
     <div class="brand-word">${BRAND.name}</div>
-    <div class="brand-line">The calm layer above all your work.</div>
+    <div class="brand-line">${TXT.brandLine}</div>
   </section>`);
   camera.appendChild(root);
   const ring = root.querySelector(".brand-ring") as HTMLElement;

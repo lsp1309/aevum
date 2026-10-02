@@ -29,7 +29,7 @@
    8.86
   ],
   "captions": [
-   "What if it could all\u2026",
+   "What if it could all…",
    "fall into place?"
   ]
  },
@@ -89,39 +89,60 @@
    31.43
   ],
   "captions": [
-   "Invoices, deliveries, documents\u2026",
+   "Invoices, deliveries, documents…",
    "handled, in parallel."
   ]
  },
  "one": {
-  "start": 35.5,
-  "end": 38.819,
+  "start": 36.7,
+  "end": 37.875,
   "phrases": [
-   35.5,
-   36.9
+   36.7
   ],
   "captions": [
-   "",
-   "connected to every tool you use."
+   "One intelligence."
+  ]
+ },
+ "connected": {
+  "start": 41.6,
+  "end": 43.467,
+  "phrases": [
+   41.6
+  ],
+  "captions": [
+   "Connected to every tool you use."
   ]
  },
  "morning": {
-  "start": 43.5,
-  "end": 45.476,
+  "start": 47.7,
+  "end": 49.676,
   "phrases": [
-   43.5
+   47.7
   ],
   "captions": [
    "So every morning starts with clarity."
   ]
  },
- "astrya": {
-  "start": 50.0,
-  "end": 52.458,
+ "focus": {
+  "start": 50.6,
+  "end": 52.634,
   "phrases": [
-   50.0,
-   50.8
+   50.6
   ],
-  "captions": []
+  "captions": [
+   "And your time goes back to what matters."
+  ]
+ },
+ "astrya": {
+  "start": 55.6,
+  "end": 58.058,
+  "phrases": [
+   55.6,
+   56.4
+  ],
+  "captions": [
+   "",
+   ""
+  ]
  }
 }

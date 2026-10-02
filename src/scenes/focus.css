@@ -1,0 +1,138 @@
+#s-focus {
+  transform-style: flat;
+}
+#s-focus > * {
+  position: absolute;
+}
+.fc-bg {
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 0 0 1px rgba(150, 180, 255, 0.22),
+    0 60px 120px -30px rgba(0, 0, 0, 0.9),
+    0 0 140px -40px rgba(70, 120, 255, 0.6);
+}
+.fc-bg > div {
+  position: absolute;
+  inset: 0;
+}
+.fc-surface {
+  background: linear-gradient(180deg, rgba(30, 43, 86, 0.95), rgba(14, 22, 50, 0.97));
+}
+.fc-blue {
+  background: linear-gradient(180deg, rgba(64, 104, 255, 0.85), rgba(44, 72, 200, 0.8));
+  box-shadow: inset 0 0 0 1.5px rgba(170, 205, 255, 0.9);
+}
+.fc-doc {
+  padding: 0 95px;
+}
+.fc-kind {
+  position: absolute;
+  left: 95px;
+  top: 78px;
+  font-size: 13px;
+  color: var(--ink-4);
+}
+.fc-title {
+  position: absolute;
+  left: 95px;
+  top: 128px;
+  margin: 0;
+  font-size: 52px;
+  font-weight: 520;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.fc-p {
+  position: absolute;
+  left: 95px;
+  top: 222px;
+  width: 860px;
+  margin: 0;
+  font-size: 26px;
+  line-height: 1.85;
+  color: var(--ink-3);
+}
+.fc-type {
+  position: absolute;
+  left: 95px;
+  top: 346px;
+  margin: 0;
+  font-size: 26px;
+  line-height: 1.85;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.fc-caret {
+  height: 32px;
+  margin-top: 8px;
+}
+.fc-toast {
+  left: 1196px;
+  top: 842px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 52px;
+  padding: 0 22px;
+  border-radius: 14px;
+  font-size: 17px;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+.ft-ico {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  color: #cfe0ff;
+  background: rgba(90, 130, 255, 0.3);
+}
+.ft-ico svg {
+  width: 15px;
+  height: 15px;
+}
+.ft-dim {
+  color: var(--ink-4);
+}
+
+/* ── 9:16 ── a taller page, larger type */
+.fmt-v .fc-kind {
+  left: 70px;
+  top: 76px;
+  font-size: 15px;
+}
+.fmt-v .fc-title {
+  left: 70px;
+  top: 126px;
+  font-size: 62px;
+}
+.fmt-v .fc-p {
+  left: 70px;
+  top: 236px;
+  width: 820px;
+  font-size: 32px;
+  line-height: 1.7;
+}
+.fmt-v .fc-type {
+  left: 70px;
+  top: 470px;
+  width: 820px;
+  font-size: 32px;
+  line-height: 1.7;
+  white-space: normal;
+}
+.fmt-v .fc-caret {
+  height: 38px;
+  margin-top: 8px;
+}
+.fmt-v .fc-toast {
+  left: 400px;
+  top: 1250px;
+  font-size: 20px;
+  height: 58px;
+}

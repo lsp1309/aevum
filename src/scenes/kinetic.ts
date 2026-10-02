@@ -1,7 +1,7 @@
 import { gsap } from "../core/gsap";
 import { overlay, html, W, fmt, VERTICAL } from "../core/stage";
 import { toRaw } from "../core/film";
-import VO from "../narration.timing.json";
+import { VO, TXT, voiceBeat } from "../i18n";
 import "./kinetic.css";
 
 /**
@@ -19,11 +19,12 @@ interface Word {
 }
 
 const R = VO.reads.phrases; // [reads, puts what matters first, and understands…]
+const [vIn, vOut] = voiceBeat();
 export const KINETIC: Word[] = [
-  { text: "Reads.", in: R[0] + 0.05, out: R[1] - 0.1, y: fmt(92, 330), size: fmt(54, 64) },
-  { text: "Prioritizes.", in: R[1] + 0.05, out: R[2] - 0.1, y: fmt(92, 330), size: fmt(54, 64) },
-  { text: "Understands.", in: R[2] + 0.1, out: VO.reads.end + 0.1, y: fmt(92, 330), size: fmt(54, 64), accent: true },
-  { text: "In your voice.", in: VO.voice.start + 1.1, out: VO.voice.phrases[1] + 0.6, y: fmt(92, 330), size: fmt(54, 64), accent: true },
+  { text: TXT.reads[0], in: R[0] + 0.05, out: R[1] - 0.1, y: fmt(92, 330), size: fmt(54, 64) },
+  { text: TXT.reads[1], in: R[1] + 0.05, out: R[2] - 0.1, y: fmt(92, 330), size: fmt(54, 64) },
+  { text: TXT.reads[2], in: R[2] + 0.1, out: VO.reads.end + 0.1, y: fmt(92, 330), size: fmt(54, 64), accent: true },
+  { text: TXT.voice, in: vIn, out: vOut, y: fmt(92, 330), size: fmt(54, 64), accent: true },
 ];
 
 export function buildKinetic(tl: gsap.core.Timeline) {
@@ -51,7 +52,7 @@ export function buildKinetic(tl: gsap.core.Timeline) {
 export function buildCaptions(tl: gsap.core.Timeline) {
   if (!VERTICAL) return;
   const d = (f: number, s: number) => toRaw(f + s) - toRaw(f);
-  for (const line of Object.values(VO) as Array<{ start: number; end: number; phrases: number[]; captions: string[] }>) {
+  for (const line of Object.values(VO)) {
     line.captions.forEach((text, i) => {
       if (!text) return; // already said on screen
       const fin = line.phrases[i];

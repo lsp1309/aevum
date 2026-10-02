@@ -6,6 +6,7 @@ import { trail, burst, flareSweep } from "../core/fx";
 import { icon } from "../core/icons";
 import { calendar, tasks } from "../data";
 import { T } from "../timing";
+import { TXT } from "../i18n";
 import "./work.css";
 
 const C = fmt({ x: 770, y: 150, w: 1000, h: 780 }, { x: 460, y: 250, w: 1000, h: 780 });
@@ -101,7 +102,7 @@ export function buildWork(tl: gsap.core.Timeline) {
       <div class="pill card soft p-log"><span class="pl-ico">${icon.truck}</span><div><b>Logistics agent</b><span>AT-8891 rerouted via Basel</span></div><i class="pl-ok">${icon.check}</i></div>
       <div class="pill card soft p-docs"><span class="pl-ico">${icon.doc}</span><div><b>Docs agent</b><span>Q4 brief drafted for Ziyad</span></div><i class="pl-ok">${icon.check}</i></div>
       <div class="pill card soft p-cal"><span class="pl-ico">${icon.calendar}</span><div><b>Calendar</b><span>3 conflicts resolved this week</span></div><i class="pl-ok">${icon.check}</i></div>
-      <h3 class="work-title">Handled. In parallel.</h3>
+      <h3 class="work-title">${TXT.work}</h3>
     </div>
   </section>`);
   camera.appendChild(root);

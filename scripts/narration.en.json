@@ -25,7 +25,7 @@
       "say": "What if it could all... fall into place?",
       "at": 7.7,
       "captions": [
-        "What if it could all\u2026",
+        "What if it could all…",
         "fall into place?"
       ]
     },
@@ -76,27 +76,44 @@
       "say": "Invoices, deliveries, documents... handled, in parallel.",
       "at": 29.0,
       "captions": [
-        "Invoices, deliveries, documents\u2026",
+        "Invoices, deliveries, documents…",
         "handled, in parallel."
       ]
     },
     {
       "id": "one",
-      "text": "One intelligence, connected to every tool you use.",
-      "say": "One intelligence... connected to every tool you use.",
-      "at": 35.5,
+      "text": "One intelligence.",
+      "say": "One intelligence.",
+      "at": 36.7,
       "captions": [
-        "",
-        "connected to every tool you use."
+        "One intelligence."
+      ]
+    },
+    {
+      "id": "connected",
+      "text": "Connected to every tool you use.",
+      "say": "Connected to every tool you use.",
+      "at": 41.6,
+      "captions": [
+        "Connected to every tool you use."
       ]
     },
     {
       "id": "morning",
       "text": "So every morning starts with clarity.",
       "say": "So every morning starts with clarity.",
-      "at": 43.5,
+      "at": 47.7,
       "captions": [
         "So every morning starts with clarity."
+      ]
+    },
+    {
+      "id": "focus",
+      "text": "And your time goes back to what matters.",
+      "say": "And your time goes back to what matters.",
+      "at": 50.6,
+      "captions": [
+        "And your time goes back to what matters."
       ]
     },
     {
@@ -104,7 +121,11 @@
       "text": "ASTRYA. Intelligence that works with you.",
       "say": "Astria. Intelligence that works with you.",
       "speed": 0.9,
-      "at": 50.0
+      "at": 55.6,
+      "captions": [
+        "",
+        ""
+      ]
     }
   ]
 }

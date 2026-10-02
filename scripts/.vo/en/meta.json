@@ -54,7 +54,7 @@
  {
   "i": 4,
   "id": "reads",
-  "at": 14.35,
+  "at": 13.85,
   "dur": 4.924,
   "sr": 24000,
   "text": "It reads every message. Puts what matters first. And understands every detail.",
@@ -68,7 +68,7 @@
  {
   "i": 5,
   "id": "voice",
-  "at": 20.55,
+  "at": 20.05,
   "dur": 3.07,
   "sr": 24000,
   "text": "It drafts your reply, in your voice. You just approve.",
@@ -81,7 +81,7 @@
  {
   "i": 6,
   "id": "calendar",
-  "at": 25.3,
+  "at": 24.8,
   "dur": 2.835,
   "sr": 24000,
   "text": "A call is mentioned? It's already in your calendar.",
@@ -94,7 +94,7 @@
  {
   "i": 7,
   "id": "parallel",
-  "at": 29.0,
+  "at": 28.5,
   "dur": 3.716,
   "sr": 24000,
   "text": "Invoices, deliveries, documents: handled in parallel.",
@@ -107,7 +107,7 @@
  {
   "i": 8,
   "id": "one",
-  "at": 36.7,
+  "at": 35.2,
   "dur": 1.175,
   "sr": 24000,
   "text": "One intelligence.",
@@ -119,7 +119,7 @@
  {
   "i": 9,
   "id": "connected",
-  "at": 41.6,
+  "at": 39.6,
   "dur": 1.867,
   "sr": 24000,
   "text": "Connected to every tool you use.",
@@ -131,7 +131,7 @@
  {
   "i": 10,
   "id": "morning",
-  "at": 47.7,
+  "at": 45.2,
   "dur": 1.976,
   "sr": 24000,
   "text": "So every morning starts with clarity.",
@@ -143,7 +143,7 @@
  {
   "i": 11,
   "id": "focus",
-  "at": 50.6,
+  "at": 48.1,
   "dur": 2.034,
   "sr": 24000,
   "text": "And your time goes back to what matters.",
@@ -155,7 +155,7 @@
  {
   "i": 12,
   "id": "astrya",
-  "at": 55.6,
+  "at": 53.1,
   "dur": 2.458,
   "sr": 24000,
   "text": "ASTRYA. Intelligence that works with you.",

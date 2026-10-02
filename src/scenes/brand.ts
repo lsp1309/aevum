@@ -3,18 +3,19 @@ import { cue } from "../core/clock";
 import { camera, html, atmos, CX, CY, fmt } from "../core/stage";
 import { chars, titleIn } from "../core/text";
 import { burst, shockwave, trail, orbitDust, type Pt } from "../core/fx";
-import { ringMark, ringPoint } from "../core/icons";
+import { ringMark, ringPoint, RING_A, RING_B, RING_TILT } from "../core/icons";
 import { BRAND } from "../data";
 import { T } from "../timing";
 import { TXT } from "../i18n";
 import "./brand.css";
 
-export const RING_Y = fmt(468, CY - 110);
+export const RING_Y = fmt(452, CY - 110);
+const SIZE = 760; // mark box (px): the ring is ~570 px across, as in the original
 
-/** Draws the halo: main stroke unfolds both ways from one point, the hairline
- *  echo follows, and a glint travels once around it. Reused by the finale. */
+/** Draws the halo: the band unfolds both ways from one point, a hairline
+ *  echo breathes out, and a glint travels once around it. */
 export function igniteRing(tl: gsap.core.Timeline, svg: Element, at: number, dur = 1.6) {
-  const main = svg.querySelector(".ring-main");
+  const main = svg.querySelector(".ring-reveal");
   const echo = svg.querySelector(".ring-echo");
   const glow = svg.querySelector(".ring-glow");
   const glint = svg.querySelector(".ring-glint");
@@ -22,6 +23,7 @@ export function igniteRing(tl: gsap.core.Timeline, svg: Element, at: number, dur
   tl.fromTo(glow, { opacity: 0 }, { opacity: 0.9, duration: dur * 0.6, ease: "sine.out" }, at + dur * 0.35);
   tl.to(glow, { opacity: 0.5, duration: 1.4, ease: "sine.inOut" }, at + dur * 0.95);
   tl.fromTo(echo, { drawSVG: "62% 62%", opacity: 0 }, { drawSVG: "0% 100%", opacity: 0.35, duration: dur * 1.2, ease: "cineInOut" }, at + 0.25);
+  tl.to(echo, { opacity: 0, duration: 1.2, ease: "sine.inOut" }, at + dur * 1.3);
   tl.fromTo(glint, { drawSVG: "62% 62%", opacity: 0 }, { drawSVG: "0% 100%", opacity: 1, duration: dur, ease: "cineInOut" }, at);
   tl.to(glint, { drawSVG: "100% 100%", opacity: 0, duration: 0.9, ease: "cine" }, at + dur * 0.85);
 }
@@ -44,7 +46,7 @@ export function buildBrand(tl: gsap.core.Timeline) {
   const svg = ring.querySelector("svg")!;
   const tilt = ring.querySelector(".ring-tilt") as HTMLElement;
   const squash = ring.querySelector(".ring-squash") as HTMLElement;
-  gsap.set(tilt, { rotation: -28 });
+  gsap.set(tilt, { rotation: RING_TILT });
   const word = root.querySelector(".brand-word") as HTMLElement;
   const line = root.querySelector(".brand-line") as HTMLElement;
   const cs = chars(word);
@@ -52,8 +54,8 @@ export function buildBrand(tl: gsap.core.Timeline) {
   const t0 = T.brand - 0.3;
   gsap.set([ring, word, line], { xPercent: -50, yPercent: -50, x: CX });
   gsap.set(ring, { y: RING_Y });
-  gsap.set(word, { y: fmt(690, CY + 150) });
-  gsap.set(line, { y: fmt(760, CY + 228) });
+  gsap.set(word, { y: fmt(703, CY + 150) });
+  gsap.set(line, { y: fmt(778, CY + 228) });
   tl.set(root, { autoAlpha: 1 }, t0 - 0.1);
 
   // ── the point unfolds into a halo ─────────────────────────────────────
@@ -64,8 +66,8 @@ export function buildBrand(tl: gsap.core.Timeline) {
   // two comets trace the halo as it unfolds (same curves as the tweens above)
   const eT = gsap.parseEase("cine");
   const eD = gsap.parseEase("cineInOut");
-  const tiltR = (-28 * Math.PI) / 180;
-  const k = 560 / 400;
+  const tiltR = (RING_TILT * Math.PI) / 180;
+  const k = SIZE / 400;
   const head = (sOf: (d: number) => number) => (p: number): Pt => {
     const tau = 0.05 + 1.7 * p;
     const e = eT(Math.min(1, tau / 2.0));
@@ -94,7 +96,7 @@ export function buildBrand(tl: gsap.core.Timeline) {
     { opacity: 1, filter: "blur(0px)", y: 0, scaleY: 1, duration: 1.8, ease: "cine", stagger: { each: 0.075, from: "center" } },
     wAt,
   );
-  tl.fromTo(word, { letterSpacing: "1.5em", paddingLeft: "1.5em" }, { letterSpacing: "0.62em", paddingLeft: "0.62em", duration: 2.4, ease: "cine" }, wAt);
+  tl.fromTo(word, { letterSpacing: "1.6em", paddingLeft: "1.6em" }, { letterSpacing: "0.9em", paddingLeft: "0.9em", duration: 2.4, ease: "cine" }, wAt);
   tl.add(titleIn(line, { stagger: 0.06, dur: 1.2, blur: 10, y: 14, glow: false }), wAt + 0.9);
   glintRing(tl, svg, wAt + 1.6);
 
@@ -105,7 +107,7 @@ export function buildBrand(tl: gsap.core.Timeline) {
   tl.to(line, { y: "+=60", opacity: 0, filter: "blur(10px)", duration: 0.7, ease: "exit" }, z - 0.2);
   // the halo turns to face us…
   tl.to(tilt, { rotation: 0, duration: 0.9, ease: "cineInOut" }, z);
-  tl.to(squash, { scaleY: 150 / 78, duration: 0.9, ease: "cineInOut" }, z);
+  tl.to(squash, { scaleY: RING_A / RING_B, duration: 0.9, ease: "cineInOut" }, z);
   tl.to(ring, { y: CY, duration: 0.9, ease: "cineInOut" }, z);
   // …and we pass through it
   tl.to(ring, { scale: 9, duration: 1.15, ease: "expo.in" }, z + 0.55);

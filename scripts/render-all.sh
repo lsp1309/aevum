@@ -23,7 +23,7 @@ N=$(python3 -c "import math; print(math.ceil($DUR/$SEG))")
 # 16:9 segments with no localised text on screen (product UI only, no captions)
 # are identical in every language: reuse the English ones (5 s segments).
 SHARED=""
-[ "$CUT" != en ] && [ "$FORMAT" != vertical ] && [ "$SEG" = 5 ] && SHARED=" 5 7 8 9 10 "
+[ "$CUT" != en ] && [ "$FORMAT" != vertical ] && [ "$SEG" = 5 ] && SHARED=" 5 7 8 9 "
 EN_DIR=out/seg-$([ "$FORMAT" = vertical ] && echo 9x16 || echo 16x9)-en
 export DUR FPS SEG FORMAT DIR CUT SHARED EN_DIR
 seq 0 $((N-1)) | xargs -P "$JOBS" -I{} bash -c '

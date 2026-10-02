@@ -191,18 +191,21 @@
   overflow: visible;
 }
 .ring-mark .ring-glow {
-  filter: blur(14px);
-  opacity: 0.55;
+  filter: blur(5px);
+  opacity: 0.42;
 }
 .ring-mark .ring-echo {
-  opacity: 0.35;
+  opacity: 0;
 }
 .ring-mark .ring-main {
-  filter: drop-shadow(0 0 6px rgba(150, 190, 255, 0.95));
+  filter: drop-shadow(0 0 2px rgba(225, 236, 255, 0.8)) drop-shadow(0 0 9px rgba(150, 190, 255, 0.38));
 }
 .ring-mark .ring-glint {
-  opacity: 0.95;
-  filter: blur(1.5px) drop-shadow(0 0 10px #fff);
+  opacity: 0;
+  filter: blur(2px);
+}
+.mini-ring .ring-glow {
+  display: none;
 }
 
 /* ── Adaptive cursor ──────────────────────────────────────────────── */

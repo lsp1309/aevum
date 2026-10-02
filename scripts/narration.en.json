@@ -43,7 +43,7 @@
       "id": "reads",
       "text": "It reads every message. Puts what matters first. And understands every detail.",
       "say": "It reads every message... puts what matters first... and understands every detail.",
-      "at": 14.35,
+      "at": 13.85,
       "captions": [
         "It reads every message.",
         "Puts what matters first.",
@@ -54,7 +54,7 @@
       "id": "voice",
       "text": "It drafts your reply, in your voice. You just approve.",
       "say": "It drafts your reply, in your voice. You just approve.",
-      "at": 20.55,
+      "at": 20.05,
       "captions": [
         "It drafts your reply, in your voice.",
         "You just approve."
@@ -64,7 +64,7 @@
       "id": "calendar",
       "text": "A call is mentioned? It's already in your calendar.",
       "say": "A call is mentioned? It's already in your calendar.",
-      "at": 25.3,
+      "at": 24.8,
       "captions": [
         "A call is mentioned?",
         "It's already in your calendar."
@@ -74,7 +74,7 @@
       "id": "parallel",
       "text": "Invoices, deliveries, documents: handled in parallel.",
       "say": "Invoices, deliveries, documents... handled, in parallel.",
-      "at": 29.0,
+      "at": 28.5,
       "captions": [
         "Invoices, deliveries, documents…",
         "handled, in parallel."
@@ -84,7 +84,7 @@
       "id": "one",
       "text": "One intelligence.",
       "say": "One intelligence.",
-      "at": 36.7,
+      "at": 35.2,
       "captions": [
         "One intelligence."
       ]
@@ -93,7 +93,7 @@
       "id": "connected",
       "text": "Connected to every tool you use.",
       "say": "Connected to every tool you use.",
-      "at": 41.6,
+      "at": 39.6,
       "captions": [
         "Connected to every tool you use."
       ]
@@ -102,7 +102,7 @@
       "id": "morning",
       "text": "So every morning starts with clarity.",
       "say": "So every morning starts with clarity.",
-      "at": 47.7,
+      "at": 45.2,
       "captions": [
         "So every morning starts with clarity."
       ]
@@ -111,7 +111,7 @@
       "id": "focus",
       "text": "And your time goes back to what matters.",
       "say": "And your time goes back to what matters.",
-      "at": 50.6,
+      "at": 48.1,
       "captions": [
         "And your time goes back to what matters."
       ]
@@ -121,7 +121,7 @@
       "text": "ASTRYA. Intelligence that works with you.",
       "say": "Astria. Intelligence that works with you.",
       "speed": 0.9,
-      "at": 55.6,
+      "at": 53.1,
       "captions": [
         "",
         ""

@@ -7,8 +7,8 @@
   position: absolute;
   left: 0;
   top: 0;
-  width: 616px;
-  height: 344px;
+  width: 640px;
+  height: 222px;
   border-radius: 50%;
   box-shadow:
     0 0 0 1px rgba(170, 200, 255, 0.75),
@@ -31,8 +31,8 @@
   position: absolute;
   left: 0;
   top: 0;
-  width: 670px;
-  height: 670px;
+  width: 760px;
+  height: 760px;
   opacity: 0;
 }
 #s-finale .fin-ring svg {
@@ -43,21 +43,18 @@
   position: absolute;
   left: 0;
   top: 606px;
-  font-size: 60px;
-  font-weight: 440;
-  letter-spacing: 0.62em;
-  padding-left: 0.62em;
+  font-size: 55px;
+  font-weight: 400;
+  letter-spacing: 0.9em;
+  padding-left: 0.9em;
   font-kerning: none;
   white-space: nowrap;
   line-height: 1;
 }
 #s-finale .fw-text {
   display: inline-block;
-  background: linear-gradient(180deg, #ffffff 20%, #c8d8ff 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  filter: drop-shadow(0 0 22px rgba(110, 150, 255, 0.45));
+  color: #ffffff;
+  filter: drop-shadow(0 0 18px rgba(130, 165, 255, 0.35));
   padding: 0.06em 0;
 }
 #s-finale .fw-blade {
@@ -73,7 +70,7 @@
 #s-finale .fin-tag {
   position: absolute;
   left: 0;
-  top: 712px;
+  top: 703px;
   font-size: 27px;
   font-weight: 420;
   color: var(--ink-2);

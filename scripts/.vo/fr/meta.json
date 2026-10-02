@@ -55,7 +55,7 @@
  {
   "i": 4,
   "id": "reads",
-  "at": 14.35,
+  "at": 13.85,
   "dur": 4.984,
   "sr": 24000,
   "text": "Elle lit chaque message. Fait passer l'essentiel en premier. Et comprend chaque détail.",
@@ -69,7 +69,7 @@
  {
   "i": 5,
   "id": "voice",
-  "at": 20.55,
+  "at": 20.05,
   "dur": 4.16,
   "sr": 24000,
   "text": "Elle rédige votre réponse, avec vos mots. Vous n'avez plus qu'à valider.",
@@ -83,7 +83,7 @@
  {
   "i": 6,
   "id": "calendar",
-  "at": 25.3,
+  "at": 24.8,
   "dur": 3.201,
   "sr": 24000,
   "text": "Un appel est évoqué ? Il est déjà dans votre agenda.",
@@ -96,7 +96,7 @@
  {
   "i": 7,
   "id": "parallel",
-  "at": 29.0,
+  "at": 28.5,
   "dur": 3.506,
   "sr": 24000,
   "text": "Factures, livraisons, documents : tout est géré, en parallèle.",
@@ -109,7 +109,7 @@
  {
   "i": 8,
   "id": "one",
-  "at": 36.7,
+  "at": 35.2,
   "dur": 1.457,
   "sr": 24000,
   "text": "Une seule intelligence.",
@@ -121,7 +121,7 @@
  {
   "i": 9,
   "id": "connected",
-  "at": 41.6,
+  "at": 39.6,
   "dur": 1.481,
   "sr": 24000,
   "text": "Connectée à tous vos outils.",
@@ -133,7 +133,7 @@
  {
   "i": 10,
   "id": "morning",
-  "at": 47.7,
+  "at": 45.2,
   "dur": 2.084,
   "sr": 24000,
   "text": "Et chaque matin commence dans la clarté.",
@@ -145,7 +145,7 @@
  {
   "i": 11,
   "id": "focus",
-  "at": 50.6,
+  "at": 48.1,
   "dur": 2.198,
   "sr": 24000,
   "text": "Votre temps revient enfin à l'essentiel.",
@@ -157,7 +157,7 @@
  {
   "i": 12,
   "id": "astrya",
-  "at": 55.6,
+  "at": 53.1,
   "dur": 3.235,
   "sr": 24000,
   "text": "ASTRYA. L'intelligence qui travaille avec vous.",

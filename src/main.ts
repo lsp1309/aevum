@@ -8,7 +8,7 @@ import { master, renderFrame, invalidate, cues } from "./core/clock";
 import { fit } from "./core/stage";
 import { initBackground } from "./core/background";
 import { initFx } from "./core/fx";
-import { T, EDIT } from "./timing";
+import { T, CUT } from "./timing";
 import { film, setAnchors, toFilm } from "./core/film";
 import { buildNoise } from "./scenes/noise";
 import { buildBrand } from "./scenes/brand";
@@ -48,7 +48,7 @@ async function boot() {
   ]);
   await document.fonts.ready;
 
-  setAnchors(EDIT);
+  setAnchors(CUT);
   initBackground();
   initFx();
 
@@ -73,7 +73,7 @@ async function boot() {
 
   gsap.ticker.add(() => renderFrame());
 
-  film.duration = EDIT[EDIT.length - 1].film;
+  film.duration = CUT[CUT.length - 1].film;
   const start = Number(params.get("t") || 0);
   film.seek(start);
 

@@ -45,12 +45,12 @@
   ]
  },
  "reads": {
-  "start": 14.35,
-  "end": 19.334,
+  "start": 13.85,
+  "end": 18.834,
   "phrases": [
-   14.35,
-   15.889,
-   17.906
+   13.85,
+   15.389,
+   17.406
   ],
   "captions": [
    "Elle lit chaque message.",
@@ -59,12 +59,12 @@
   ]
  },
  "voice": {
-  "start": 20.55,
-  "end": 24.71,
+  "start": 20.05,
+  "end": 24.21,
   "phrases": [
-   20.55,
-   22.296,
-   23.255
+   20.05,
+   21.796,
+   22.755
   ],
   "captions": [
    "Elle rédige votre réponse,",
@@ -73,11 +73,11 @@
   ]
  },
  "calendar": {
-  "start": 25.3,
-  "end": 28.501,
+  "start": 24.8,
+  "end": 28.001,
   "phrases": [
-   25.3,
-   26.819
+   24.8,
+   26.319
   ],
   "captions": [
    "Un appel est évoqué ?",
@@ -85,11 +85,11 @@
   ]
  },
  "parallel": {
-  "start": 29.0,
-  "end": 32.506,
+  "start": 28.5,
+  "end": 32.006,
   "phrases": [
-   29.0,
-   31.021
+   28.5,
+   30.521
   ],
   "captions": [
    "Factures, livraisons, documents…",
@@ -97,51 +97,51 @@
   ]
  },
  "one": {
-  "start": 36.7,
-  "end": 38.157,
+  "start": 35.2,
+  "end": 36.657,
   "phrases": [
-   36.7
+   35.2
   ],
   "captions": [
    "Une seule intelligence."
   ]
  },
  "connected": {
-  "start": 41.6,
-  "end": 43.081,
+  "start": 39.6,
+  "end": 41.081,
   "phrases": [
-   41.6
+   39.6
   ],
   "captions": [
    "Connectée à tous vos outils."
   ]
  },
  "morning": {
-  "start": 47.7,
-  "end": 49.784,
+  "start": 45.2,
+  "end": 47.284,
   "phrases": [
-   47.7
+   45.2
   ],
   "captions": [
    "Et chaque matin commence dans la clarté."
   ]
  },
  "focus": {
-  "start": 50.6,
-  "end": 52.798,
+  "start": 48.1,
+  "end": 50.298,
   "phrases": [
-   50.6
+   48.1
   ],
   "captions": [
    "Votre temps revient enfin à l'essentiel."
   ]
  },
  "astrya": {
-  "start": 55.6,
-  "end": 58.835,
+  "start": 53.1,
+  "end": 56.335,
   "phrases": [
-   55.6,
-   56.791
+   53.1,
+   54.291
   ],
   "captions": [
    "",

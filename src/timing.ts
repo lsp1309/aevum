@@ -1,4 +1,5 @@
-import type { Anchor } from "./core/film";
+import { tighten, trimMap, type Anchor } from "./core/film";
+import TRIMS from "./trims.json";
 
 /**
  * AUTHORED (raw) structure, in seconds. Scenes are written against these
@@ -58,8 +59,13 @@ export const EDIT: Anchor[] = [
   { raw: T.end, film: 63.2 }, // 1:1 to the end
 ];
 
+/** The edit as played: tightened to run under a minute (src/trims.json). */
+export const CUT = tighten(EDIT, TRIMS.spans);
+const M = trimMap(TRIMS.spans);
+
 /** Player chapters, in film time. */
-export const chapters: Array<{ t: number; label: string }> = [
+export const chapters: Array<{ t: number; label: string }> = (
+  [
   { t: 0, label: "Noise" },
   { t: 9.9, label: "ASTRYA" },
   { t: 12.5, label: "Inbox" },
@@ -68,4 +74,5 @@ export const chapters: Array<{ t: number; label: string }> = [
   { t: 33.5, label: "Core" },
   { t: 47.4, label: "Morning" },
   { t: 53.6, label: "Finale" },
-];
+] as Array<{ t: number; label: string }>
+).map((c) => ({ ...c, t: M(c.t) }));

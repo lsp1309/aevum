@@ -89,7 +89,7 @@
         }
       ],
       "pause": 0.22,
-      "at": 14.35,
+      "at": 13.85,
       "captions": [
         "Elle lit chaque message.",
         "Fait passer l'essentiel en premier.",
@@ -111,7 +111,7 @@
         }
       ],
       "pause": 0.1,
-      "at": 20.55,
+      "at": 20.05,
       "captions": [
         "Elle rédige votre réponse,",
         "avec vos mots.",
@@ -130,7 +130,7 @@
         }
       ],
       "pause": 0.2,
-      "at": 25.3,
+      "at": 24.8,
       "captions": [
         "Un appel est évoqué ?",
         "Il est déjà dans votre agenda."
@@ -148,7 +148,7 @@
         }
       ],
       "pause": 0.22,
-      "at": 29.0,
+      "at": 28.5,
       "captions": [
         "Factures, livraisons, documents…",
         "tout est géré, en parallèle."
@@ -162,7 +162,7 @@
           "say": "Une seule intelligence."
         }
       ],
-      "at": 36.7,
+      "at": 35.2,
       "captions": [
         "Une seule intelligence."
       ]
@@ -175,7 +175,7 @@
           "say": "Connectée à tous vos outils."
         }
       ],
-      "at": 41.6,
+      "at": 39.6,
       "captions": [
         "Connectée à tous vos outils."
       ]
@@ -188,7 +188,7 @@
           "say": "Et chaque matin commence dans la clarté."
         }
       ],
-      "at": 47.7,
+      "at": 45.2,
       "captions": [
         "Et chaque matin commence dans la clarté."
       ]
@@ -201,7 +201,7 @@
           "say": "Votre temps revient enfin à l'essentiel."
         }
       ],
-      "at": 50.6,
+      "at": 48.1,
       "captions": [
         "Votre temps revient enfin à l'essentiel."
       ]
@@ -219,7 +219,7 @@
       ],
       "pause": 0.35,
       "speed": 0.9,
-      "at": 55.6,
+      "at": 53.1,
       "captions": [
         "",
         ""

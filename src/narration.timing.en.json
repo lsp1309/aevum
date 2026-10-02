@@ -44,12 +44,12 @@
   ]
  },
  "reads": {
-  "start": 14.35,
-  "end": 19.274,
+  "start": 13.85,
+  "end": 18.774,
   "phrases": [
-   14.35,
-   16.04,
-   17.58
+   13.85,
+   15.54,
+   17.08
   ],
   "captions": [
    "It reads every message.",
@@ -58,11 +58,11 @@
   ]
  },
  "voice": {
-  "start": 20.55,
-  "end": 23.62,
+  "start": 20.05,
+  "end": 23.12,
   "phrases": [
-   20.55,
-   22.66
+   20.05,
+   22.16
   ],
   "captions": [
    "It drafts your reply, in your voice.",
@@ -70,11 +70,11 @@
   ]
  },
  "calendar": {
-  "start": 25.3,
-  "end": 28.135,
+  "start": 24.8,
+  "end": 27.635,
   "phrases": [
-   25.3,
-   26.8
+   24.8,
+   26.3
   ],
   "captions": [
    "A call is mentioned?",
@@ -82,11 +82,11 @@
   ]
  },
  "parallel": {
-  "start": 29.0,
-  "end": 32.716,
+  "start": 28.5,
+  "end": 32.216,
   "phrases": [
-   29.0,
-   31.43
+   28.5,
+   30.93
   ],
   "captions": [
    "Invoices, deliveries, documents…",
@@ -94,51 +94,51 @@
   ]
  },
  "one": {
-  "start": 36.7,
-  "end": 37.875,
+  "start": 35.2,
+  "end": 36.375,
   "phrases": [
-   36.7
+   35.2
   ],
   "captions": [
    "One intelligence."
   ]
  },
  "connected": {
-  "start": 41.6,
-  "end": 43.467,
+  "start": 39.6,
+  "end": 41.467,
   "phrases": [
-   41.6
+   39.6
   ],
   "captions": [
    "Connected to every tool you use."
   ]
  },
  "morning": {
-  "start": 47.7,
-  "end": 49.676,
+  "start": 45.2,
+  "end": 47.176,
   "phrases": [
-   47.7
+   45.2
   ],
   "captions": [
    "So every morning starts with clarity."
   ]
  },
  "focus": {
-  "start": 50.6,
-  "end": 52.634,
+  "start": 48.1,
+  "end": 50.134,
   "phrases": [
-   50.6
+   48.1
   ],
   "captions": [
    "And your time goes back to what matters."
   ]
  },
  "astrya": {
-  "start": 55.6,
-  "end": 58.058,
+  "start": 53.1,
+  "end": 55.558,
   "phrases": [
-   55.6,
-   56.4
+   53.1,
+   53.9
   ],
   "captions": [
    "",

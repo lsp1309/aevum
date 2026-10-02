@@ -3,14 +3,14 @@ import { cue } from "../core/clock";
 import { camera, overlay, html, atmos, CX, fmt } from "../core/stage";
 import { titleIn } from "../core/text";
 import { orbitDust, trail, type Pt } from "../core/fx";
-import { icon, ringMark, ringPoint } from "../core/icons";
+import { icon, ringMark, ringPoint, RING_TILT } from "../core/icons";
 import { glintRing } from "./brand";
 import { BRAND } from "../data";
 import { TXT } from "../i18n";
 import { T } from "../timing";
 import "./finale.css";
 
-const RING = { y: fmt(404, 760), size: 670 };
+const RING = { y: fmt(404, 760), size: 760 };
 
 /**
  * CONCLUSION. As the draft lets go, the ASTRYA halo sweeps in over it and
@@ -22,7 +22,7 @@ export function buildFinale(tl: gsap.core.Timeline) {
     <div class="fin-cam">
       <div class="fin-flash"></div>
       <div class="fin-echo"></div>
-      <div class="fin-ring">${ringMark("fin", -28)}</div>
+      <div class="fin-ring">${ringMark("fin")}</div>
       <div class="fin-word"><span class="fw-text">${BRAND.name}</span><i class="fw-blade"></i></div>
       <div class="fin-tag">${TXT.tagline}</div>
       <div class="fin-cta-wrap">
@@ -45,7 +45,7 @@ export function buildFinale(tl: gsap.core.Timeline) {
   const svg = ring.querySelector("svg")!;
   gsap.set(ring, { xPercent: -50, yPercent: -50, x: CX, y: RING.y });
   gsap.set(".fin-flash", { xPercent: -50, yPercent: -50, x: CX, y: RING.y });
-  gsap.set(".fin-echo", { xPercent: -50, yPercent: -50, x: CX, y: RING.y, rotation: -28 });
+  gsap.set(".fin-echo", { xPercent: -50, yPercent: -50, x: CX, y: RING.y, rotation: RING_TILT });
   const s0 = at(53.45);
   const hit = at(54.5);
   cue("riser", s0 - 0.5, 1.05, 0.7);
@@ -55,14 +55,14 @@ export function buildFinale(tl: gsap.core.Timeline) {
   tl.to(svg.querySelector(".ring-glow"), { opacity: 0.6, duration: 1.8, ease: "sine.inOut" }, hit + 0.4);
   tl.set(svg.querySelector(".ring-glint"), { opacity: 0 }, s0);
   tl.fromTo(".fin-flash", { scale: 0.5, opacity: 0 }, { scale: 1.1, opacity: 0.75, duration: 0.25, ease: "sine.out" }, hit - 0.15);
-  tl.to(".fin-flash", { scale: 0.75, opacity: 0.35, duration: 1.6, ease: "cine" }, hit + 0.1);
+  tl.to(".fin-flash", { scale: 0.75, opacity: 0, duration: 1.6, ease: "cine" }, hit + 0.1);
   tl.fromTo(".fin-echo", { scale: 0.92, opacity: 0 }, { scale: 1.0, opacity: 0.55, duration: 0.5, ease: "sine.out" }, hit - 0.1);
   tl.to(".fin-echo", { scale: 1.32, opacity: 0, duration: 1.8, ease: "cine" }, hit + 0.4);
   cue("hit", hit, undefined, 0.9);
   cue("chime", hit + 0.2, undefined, 0.55);
 
   // two glints run once around the halo as it settles
-  const tilt = (-28 * Math.PI) / 180;
+  const tilt = (RING_TILT * Math.PI) / 180;
   const kk = RING.size / 400;
   const onRing = (sPath: number): Pt => {
     const o = ringPoint(((sPath % 1) + 1) % 1);
@@ -82,7 +82,7 @@ export function buildFinale(tl: gsap.core.Timeline) {
   tl.fromTo(".fw-text", { clipPath: "inset(-30% 100% -30% 0%)" }, { clipPath: "inset(-30% 0% -30% 0%)", duration: 1.4, ease: "cineInOut" }, w0);
   tl.fromTo(".fw-blade", { left: "0%", opacity: 0 }, { left: "100%", opacity: 1, duration: 1.4, ease: "cineInOut" }, w0);
   tl.to(".fw-blade", { opacity: 0, duration: 0.35, ease: "sine.out" }, w0 + 1.2);
-  tl.fromTo(".fin-word", { letterSpacing: "0.95em", paddingLeft: "0.95em", filter: "blur(6px)" }, { letterSpacing: "0.62em", paddingLeft: "0.62em", filter: "blur(0px)", duration: 2.2, ease: "cine" }, w0);
+  tl.fromTo(".fin-word", { letterSpacing: "1.25em", paddingLeft: "1.25em", filter: "blur(6px)" }, { letterSpacing: "0.9em", paddingLeft: "0.9em", filter: "blur(0px)", duration: 2.2, ease: "cine" }, w0);
   cue("sweep", w0, 1.4, 0.5);
   tl.add(titleIn(q(".fin-tag"), { stagger: 0.08, dur: 1.3, blur: 12, y: 16, track: ["0.08em", "0em"] }), at(56.45));
 

@@ -73,6 +73,43 @@ export function toFilm(r: number) {
   return (lo + hi) / 2;
 }
 
+/** A tightening of the edit: span [from, to] (film s) plays `cut` s shorter. */
+export interface Trim {
+  from: number;
+  to: number;
+  cut: number;
+}
+/** Pre-trim film time → trimmed film time (piecewise linear). */
+export function trimMap(trims: Trim[]) {
+  return (f: number) => {
+    let out = f;
+    for (const s of trims) {
+      if (f >= s.to) out -= s.cut;
+      else if (f > s.from) out -= ((f - s.from) * s.cut) / (s.to - s.from);
+    }
+    return out;
+  };
+}
+/**
+ * Re-time an edit: sample the original raw↔film curve at its anchors and
+ * around every span (guards 0.4 s outside, so the ramps stay local), then move
+ * each sample to its trimmed film time. Nothing in the scenes changes — the
+ * same animation simply plays faster through the spans.
+ */
+export function tighten(anchors: Anchor[], trims: Trim[]): Anchor[] {
+  setAnchors(anchors);
+  const end = anchors[anchors.length - 1].film;
+  const M = trimMap(trims);
+  const pts = new Map<number, number>();
+  for (const a of anchors) pts.set(a.film, a.raw);
+  for (const s of trims)
+    for (const f of [s.from - 0.4, s.from, s.to, s.to + 0.4]) {
+      const g = Math.round(f * 1000) / 1000;
+      if (g > 0 && g < end && !pts.has(g)) pts.set(g, toRaw(g));
+    }
+  return [...pts].sort((p, q) => p[0] - q[0]).map(([f, raw]) => ({ raw, film: M(f) }));
+}
+
 /** Playback controller in film time. */
 export const film = {
   time: 0,

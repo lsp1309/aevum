@@ -42,6 +42,28 @@ drums = np.zeros((2, N))
 sfx = np.zeros((2, N))
 vo = np.zeros((2, N))
 
+# The score is written on the pre-trim timeline; the edit drops whole beats at
+# the points listed in src/trims.json (`music`), so every loop stays on the grid.
+TRIMS = json.load(open(os.path.join(ROOT, "src", "trims.json")))["spans"]
+DROPS = sorted((float(t), float(n)) for sp in TRIMS for t, n in sp["music"])
+WARP = False  # True while writing the score
+
+
+def W(t):
+    """Pre-trim time → trimmed time (inside a dropped beat: its start)."""
+    out = t
+    for d0, n in DROPS:
+        if t >= d0 + n:
+            out -= n
+        elif t > d0:
+            out -= t - d0
+    return out
+
+
+def dropped(t):
+    return any(d0 <= t < d0 + n for d0, n in DROPS)
+
+
 BEAT = 0.5
 bar0 = 0.5  # first downbeat
 
@@ -53,6 +75,10 @@ def hz(note):
 
 
 def place(buf, sig, t0, gain=1.0, pan=0.0):
+    if WARP:
+        if dropped(t0):
+            return
+        t0 = W(t0)
     i = int(round(t0 * SR))
     if i >= N or gain == 0:
         return
@@ -109,6 +135,8 @@ def saw_pad(freqs, dur, bright=3.0, detune=0.08):
 
 
 def pad(notes, t0, t1, gain, bright=3.0, a=1.2, r=1.4):
+    if WARP:
+        t0, t1 = W(t0), W(t1)
     n = int((t1 - t0 + r) * SR)
     L, R = saw_pad([hz(x) for x in notes], (t1 - t0 + r), bright)
     e = env(n, a, r)
@@ -212,6 +240,7 @@ F_ = ["F2", "C3", "A3", "C4", "G4"]
 C_ = ["C3", "G3", "E4", "G4"]
 
 print("score…")
+WARP = True
 # INTRO: drone + air
 pad(["D2", "A2"], 0.0, 7.9, 0.09, bright=1.2, a=2.0, r=0.6)
 pad(["A4", "D5", "E5"], 1.0, 7.9, 0.022, bright=1.0, a=3.0, r=0.4)
@@ -260,7 +289,7 @@ for k, t in enumerate(roll):
     place(drums, clap(0.1 + 0.012 * k), t)
 for t in np.arange(33.5, 36.4, 1.0):
     place(drums, kick(0.55, deep=1.3), t)
-place(sfx, noise_sweep(3.0, 200, 6000, 0.12), 33.4)
+place(sfx, noise_sweep(W(36.4) - W(33.4), 200, 6000, 0.12), 33.4)
 # CLIMAX 36.4–45.5
 FL = 36.4  # the core flashes
 place(drums, boom(1.0), FL)
@@ -299,7 +328,7 @@ for i, t in enumerate(np.arange(CL, 45.5, 0.125)):
 place(sfx, noise_sweep(1.6, 300, 8000, 0.09), 39.9)
 # BREATH 45.5–47.3: the system recedes — only shimmer, inhaled into the morning
 pad(["A4", "C5", "E5", "G5"], 45.4, 47.5, 0.03, bright=1.0, a=0.2, r=1.5)
-L, R = reverse_swell(1.6, ["F3", "A3", "C4", "E4"], 0.1)
+L, R = reverse_swell(W(47.3) - W(45.7), ["F3", "A3", "C4", "E4"], 0.1)
 place(music, L, 45.7, 1, -0.2)
 place(music, R, 45.7, 1, 0.2)
 place(drums, boom(0.3), 47.3)
@@ -322,6 +351,8 @@ pad(["A3", "C4", "E4", "G4"], HIT, 61.5, 0.08, bright=3.0, a=0.3, r=2.5)
 pad(["C5", "E5", "G5"], HIT + 0.5, 61.5, 0.02, bright=1.0, a=1.5, r=2.5)
 for t, nt in zip(np.arange(56.5, 61.5, 0.5), ["C5", "F5", "A5", "G5", "E5", "F5", "C6", "A5", "G5", "F5"]):
     place(music, keys(hz(nt), 3.0), t, 0.05, pan=0.25 * np.sin(t * 1.3))
+
+WARP = False
 
 # ── sound design from the timeline's cues (film time) ─────────────────────
 print("sfx…")

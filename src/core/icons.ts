@@ -23,21 +23,38 @@ export const icon = {
   paperclip: s(`<path d="m20 11.5-7.8 7.8a4.6 4.6 0 0 1-6.5-6.5l8.3-8.3a3 3 0 0 1 4.3 4.3l-8.3 8.3a1.5 1.5 0 0 1-2.1-2.1l7.6-7.6"/>`),
 };
 
-/** The ASTRYA mark: a tilted halo. Two strokes: the ring and a hairline echo. */
-export function ringMark(cls = "", tilt = -28) {
+/**
+ * The ASTRYA mark, as in the original film: a flat ring of light seen in
+ * perspective — a white band, full width at the ends of its long axis and a
+ * thin line along its sides — tilted −31°. In the mark's own units (viewBox
+ * −200…200): outer ellipse RING_A × RING_B, band RING_W wide at the ends.
+ */
+export const RING_A = 146;
+export const RING_B = 48.5;
+export const RING_W = 17.5;
+export const RING_TILT = -31;
+const ell = (a: number, b: number) => `M${-a} 0a${a} ${b} 0 1 0 ${2 * a} 0a${a} ${b} 0 1 0 ${-2 * a} 0`;
+const MID_A = RING_A - RING_W / 2;
+const MID_B = (MID_A * RING_B) / RING_A;
+let uid = 0;
+export function ringMark(cls = "", tilt = RING_TILT) {
+  const id = `rk${uid++}`;
+  const ia = RING_A - RING_W;
+  const ib = (ia * RING_B) / RING_A;
+  const band = `${ell(RING_A, RING_B)}${ell(ia, ib)}`;
   return `<svg class="ring-mark ${cls}" viewBox="-200 -200 400 400" fill="none" aria-hidden="true">
     <defs>
-      <linearGradient id="rg-${cls || "m"}" x1="-160" y1="-60" x2="160" y2="60" gradientUnits="userSpaceOnUse">
-        <stop offset="0" stop-color="#ffffff"/>
-        <stop offset=".5" stop-color="#cfe0ff"/>
-        <stop offset="1" stop-color="#ffffff"/>
-      </linearGradient>
+      <mask id="${id}" maskUnits="userSpaceOnUse" x="-200" y="-200" width="400" height="400">
+        <path class="ring-reveal" d="${ell(MID_A, MID_B)}" stroke="#fff" stroke-width="52" stroke-linecap="round"/>
+      </mask>
     </defs>
     <g transform="rotate(${tilt})">
-      <path class="ring-glow" d="M-150 0a150 78 0 1 0 300 0a150 78 0 1 0 -300 0" stroke="#5d8cff" stroke-width="22"/>
-      <path class="ring-echo" d="M-168 0a168 90 0 1 0 336 0a168 90 0 1 0 -336 0" stroke="#9db8ff" stroke-width="1"/>
-      <path class="ring-main" d="M-150 0a150 78 0 1 0 300 0a150 78 0 1 0 -300 0" stroke="url(#rg-${cls || "m"})" stroke-width="7" stroke-linecap="round"/>
-      <path class="ring-glint" d="M-150 0a150 78 0 1 0 300 0a150 78 0 1 0 -300 0" stroke="#ffffff" stroke-width="9" stroke-linecap="round"/>
+      <g mask="url(#${id})">
+        <path class="ring-glow" d="${band}" fill="#cfe0ff" fill-rule="evenodd"/>
+        <path class="ring-main" d="${band}" fill="#ffffff" fill-rule="evenodd"/>
+      </g>
+      <path class="ring-echo" d="${ell(RING_A * 1.12, RING_B * 1.12 + 6)}" stroke="#9db8ff" stroke-width="1"/>
+      <path class="ring-glint" d="${ell(MID_A, MID_B)}" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/>
     </g>
   </svg>`;
 }
@@ -46,15 +63,14 @@ export function avatar(initials: string, hue: number) {
   return `<span class="avatar${initials.length === 1 ? " solo" : ""}" style="--h:${hue}">${initials}</span>`;
 }
 
-/** Point on the halo path (SVG ellipse 150×78, drawn from the left, through
+/** Point on the halo's centre line (an ellipse, drawn from the left, through
  *  the bottom, then the top) at path fraction s ∈ [0,1], in the mark's own
- *  units, before the −28° tilt. */
+ *  units, before the tilt. */
 export function ringPoint(s: number) {
   if (s <= 0.5) {
     const a = Math.PI * (s * 2);
-    return { x: -150 * Math.cos(a), y: 78 * Math.sin(a) };
+    return { x: -MID_A * Math.cos(a), y: MID_B * Math.sin(a) };
   }
   const a = Math.PI * (s * 2 - 1);
-  return { x: 150 * Math.cos(a), y: -78 * Math.sin(a) };
+  return { x: MID_A * Math.cos(a), y: -MID_B * Math.sin(a) };
 }
-

@@ -2,8 +2,8 @@
   position: absolute;
   left: 0;
   top: 0;
-  width: 560px;
-  height: 560px;
+  width: 760px;
+  height: 760px;
 }
 #s-brand .ring-tilt,
 #s-brand .ring-squash {
@@ -18,14 +18,14 @@
   position: absolute;
   left: 0;
   top: 0;
-  font-size: 56px;
-  font-weight: 430;
-  letter-spacing: 0.62em;
-  padding-left: 0.62em;
+  font-size: 50px;
+  font-weight: 400;
+  letter-spacing: 0.9em;
+  padding-left: 0.9em;
   white-space: nowrap;
   font-kerning: none;
-  color: #eef3ff;
-  text-shadow: 0 0 30px rgba(120, 160, 255, 0.35);
+  color: #ffffff;
+  text-shadow: 0 0 22px rgba(140, 175, 255, 0.3);
 }
 #s-brand .brand-line {
   position: absolute;

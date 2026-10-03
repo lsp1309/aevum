@@ -4,7 +4,7 @@ Voice-over: renders each narration line with Kokoro (ONNX, offline) and
 writes per-line WAVs + durations. Lines are placed on the film timeline by
 scripts/mix.py using the anchors in scripts/narration.<lang>.json.
 
-    python3 scripts/voice.py [en|fr]     # needs ~/tts/kokoro-v1.0.onnx + voices-v1.0.bin
+    python3 scripts/voice.py [en|fr|short]   # needs ~/tts/kokoro-v1.0.onnx + voices-v1.0.bin
 
 A line is either one utterance (`say`, phrases found from pauses in the
 waveform) or a list of `chunks` joined by short pauses (phrase starts are then
@@ -69,9 +69,13 @@ def synth(line, speed):
 
 meta = []
 lines = spec["lines"]
+spoken = [l for l in lines if not l.get("silent")]
 for i, line in enumerate(lines):
+    if line.get("silent"):
+        continue
     speed = line.get("speed", spec["speed"])
-    limit = (lines[i + 1]["at"] - line["at"] - 0.3) if i + 1 < len(lines) else 6.0
+    nxt = [l for l in spoken if l["at"] > line["at"]]
+    limit = (nxt[0]["at"] - line["at"] - 0.3) if nxt else 6.0
     s, sr, ph = synth(line, speed)
     tries = 0
     while len(s) / sr > limit and tries < 4 and speed < 1.2:
@@ -85,13 +89,17 @@ for i, line in enumerate(lines):
 json.dump(meta, open(os.path.join(out, "meta.json"), "w"), indent=1, ensure_ascii=False)
 # film-time timing for the animation (captions / kinetic words)
 timing = {}
-for m, line in zip(meta, lines):
+for line in lines:  # silent lines: timing for on-screen words only, no audio
+    if line.get("silent"):
+        timing[line["id"]] = {"start": line["at"], "end": line["end"], "phrases": line["phrases"], "captions": line.get("captions", [])}
+for m, line in zip(meta, spoken):
     ph = [round(m["at"] + p, 3) for p in m["phrases"]]
     caps = line.get("captions", [])
     # caption chunks follow the phrases; if counts differ, split time evenly
     if caps and len(caps) != len(ph):
         ph = [round(m["at"] + m["dur"] * j / len(caps), 3) for j in range(len(caps))]
     timing[m["id"]] = {"start": m["at"], "end": round(m["at"] + m["dur"], 3), "phrases": ph, "captions": caps}
+timing = {l["id"]: timing[l["id"]] for l in lines}
 json.dump(timing, open(os.path.join(ROOT, "src", f"narration.timing.{LANG}.json"), "w"), indent=1, ensure_ascii=False)
 for a, b in zip(meta, meta[1:]):
     if a["at"] + a["dur"] > b["at"] - 0.25:

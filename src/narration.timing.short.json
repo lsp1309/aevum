@@ -1,0 +1,129 @@
+{
+ "everywhere": {
+  "start": 0.9,
+  "end": 2.637,
+  "phrases": [
+   0.9
+  ],
+  "captions": []
+ },
+ "atonce": {
+  "start": 3.3,
+  "end": 5.0,
+  "phrases": [
+   3.3,
+   3.8,
+   4.3,
+   4.8
+  ],
+  "captions": []
+ },
+ "place": {
+  "start": 5.0,
+  "end": 5.5,
+  "phrases": [
+   5.0
+  ],
+  "captions": []
+ },
+ "meet": {
+  "start": 6.25,
+  "end": 7.297,
+  "phrases": [
+   6.25
+  ],
+  "captions": [
+   "Meet ASTRYA."
+  ]
+ },
+ "reads": {
+  "start": 8.5,
+  "end": 11.368,
+  "phrases": [
+   8.5,
+   9.355,
+   10.519
+  ],
+  "captions": [
+   "It reads,",
+   "prioritizes,",
+   "understands…"
+  ]
+ },
+ "voice": {
+  "start": 11.85,
+  "end": 13.745,
+  "phrases": [
+   11.85,
+   12.91
+  ],
+  "captions": [
+   "and replies,",
+   "in your voice."
+  ]
+ },
+ "calendar": {
+  "start": 13.6,
+  "end": 13.8,
+  "phrases": [
+   13.6
+  ],
+  "captions": []
+ },
+ "parallel": {
+  "start": 13.9,
+  "end": 14.0,
+  "phrases": [
+   13.9
+  ],
+  "captions": []
+ },
+ "one": {
+  "start": 15.95,
+  "end": 17.094,
+  "phrases": [
+   15.95
+  ],
+  "captions": [
+   "One intelligence."
+  ]
+ },
+ "connected": {
+  "start": 17.55,
+  "end": 19.395,
+  "phrases": [
+   17.55
+  ],
+  "captions": [
+   "Connected to every tool you use."
+  ]
+ },
+ "morning": {
+  "start": 20.0,
+  "end": 20.1,
+  "phrases": [
+   20.0
+  ],
+  "captions": []
+ },
+ "focus": {
+  "start": 20.2,
+  "end": 20.3,
+  "phrases": [
+   20.2
+  ],
+  "captions": []
+ },
+ "astrya": {
+  "start": 23.3,
+  "end": 26.046,
+  "phrases": [
+   23.3,
+   24.324
+  ],
+  "captions": [
+   "",
+   ""
+  ]
+ }
+}

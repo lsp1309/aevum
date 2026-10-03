@@ -1,0 +1,90 @@
+[
+ {
+  "i": 0,
+  "id": "everywhere",
+  "at": 0.9,
+  "dur": 1.737,
+  "sr": 24000,
+  "text": "Your work arrives from everywhere.",
+  "phrases": [
+   0.0
+  ],
+  "speed": 0.96
+ },
+ {
+  "i": 3,
+  "id": "meet",
+  "at": 6.25,
+  "dur": 1.047,
+  "sr": 24000,
+  "text": "Meet ASTRYA.",
+  "phrases": [
+   0.0
+  ],
+  "speed": 0.9
+ },
+ {
+  "i": 4,
+  "id": "reads",
+  "at": 8.5,
+  "dur": 2.868,
+  "sr": 24000,
+  "text": "It reads, prioritizes, understands…",
+  "phrases": [
+   0.0,
+   0.855,
+   2.019
+  ],
+  "speed": 0.96
+ },
+ {
+  "i": 5,
+  "id": "voice",
+  "at": 11.85,
+  "dur": 1.895,
+  "sr": 24000,
+  "text": "and replies, in your voice.",
+  "phrases": [
+   0.0,
+   1.06
+  ],
+  "speed": 0.96
+ },
+ {
+  "i": 8,
+  "id": "one",
+  "at": 15.95,
+  "dur": 1.144,
+  "sr": 24000,
+  "text": "One intelligence.",
+  "phrases": [
+   0.0
+  ],
+  "speed": 0.96
+ },
+ {
+  "i": 9,
+  "id": "connected",
+  "at": 17.55,
+  "dur": 1.845,
+  "sr": 24000,
+  "text": "Connected to every tool you use.",
+  "phrases": [
+   0.0
+  ],
+  "speed": 0.96
+ },
+ {
+  "i": 12,
+  "id": "astrya",
+  "at": 23.3,
+  "dur": 2.746,
+  "sr": 24000,
+  "text": "ASTRYA. Intelligence that works with you.",
+  "phrases": [
+   0.0,
+   1.024
+  ],
+  "speed": 0.92
+ }
+]

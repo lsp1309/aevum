@@ -1,0 +1,166 @@
+{
+  "voice": "af_heart",
+  "lang": "en-us",
+  "speed": 0.96,
+  "pause": 0.15,
+  "note": "30-second cut (?cut=short). Silent lines only carry timing for on-screen words.",
+  "lines": [
+    {
+      "id": "everywhere",
+      "text": "Your work arrives from everywhere.",
+      "say": "Your work arrives from everywhere.",
+      "at": 0.9,
+      "captions": []
+    },
+    {
+      "id": "atonce",
+      "silent": true,
+      "at": 3.3,
+      "end": 5.0,
+      "phrases": [
+        3.3,
+        3.8,
+        4.3,
+        4.8
+      ],
+      "captions": []
+    },
+    {
+      "id": "place",
+      "silent": true,
+      "at": 5.0,
+      "end": 5.5,
+      "phrases": [
+        5.0
+      ],
+      "captions": []
+    },
+    {
+      "id": "meet",
+      "text": "Meet ASTRYA.",
+      "say": "Meet Astria.",
+      "speed": 0.9,
+      "at": 6.25,
+      "captions": [
+        "Meet ASTRYA."
+      ]
+    },
+    {
+      "id": "reads",
+      "text": "It reads, prioritizes, understands…",
+      "chunks": [
+        {
+          "say": "It reads,"
+        },
+        {
+          "say": "prioritizes,"
+        },
+        {
+          "say": "understands…"
+        }
+      ],
+      "at": 8.5,
+      "captions": [
+        "It reads,",
+        "prioritizes,",
+        "understands…"
+      ],
+      "pause": 0.1
+    },
+    {
+      "id": "voice",
+      "text": "and replies, in your voice.",
+      "chunks": [
+        {
+          "say": "and replies,"
+        },
+        {
+          "say": "in your voice."
+        }
+      ],
+      "at": 11.85,
+      "captions": [
+        "and replies,",
+        "in your voice."
+      ],
+      "pause": 0.12
+    },
+    {
+      "id": "calendar",
+      "silent": true,
+      "at": 13.6,
+      "end": 13.8,
+      "phrases": [
+        13.6
+      ],
+      "captions": []
+    },
+    {
+      "id": "parallel",
+      "silent": true,
+      "at": 13.9,
+      "end": 14.0,
+      "phrases": [
+        13.9
+      ],
+      "captions": []
+    },
+    {
+      "id": "one",
+      "text": "One intelligence.",
+      "say": "One intelligence.",
+      "at": 15.95,
+      "captions": [
+        "One intelligence."
+      ]
+    },
+    {
+      "id": "connected",
+      "text": "Connected to every tool you use.",
+      "say": "Connected to every tool you use.",
+      "at": 17.55,
+      "captions": [
+        "Connected to every tool you use."
+      ]
+    },
+    {
+      "id": "morning",
+      "silent": true,
+      "at": 20.0,
+      "end": 20.1,
+      "phrases": [
+        20.0
+      ],
+      "captions": []
+    },
+    {
+      "id": "focus",
+      "silent": true,
+      "at": 20.2,
+      "end": 20.3,
+      "phrases": [
+        20.2
+      ],
+      "captions": []
+    },
+    {
+      "id": "astrya",
+      "text": "ASTRYA. Intelligence that works with you.",
+      "chunks": [
+        {
+          "say": "Astria."
+        },
+        {
+          "say": "Intelligence that works with you."
+        }
+      ],
+      "pause": 0.3,
+      "speed": 0.92,
+      "at": 23.3,
+      "captions": [
+        "",
+        ""
+      ]
+    }
+  ]
+}

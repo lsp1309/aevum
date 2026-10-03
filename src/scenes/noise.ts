@@ -1,6 +1,6 @@
 import { gsap } from "../core/gsap";
 import { cue } from "../core/clock";
-import { camera, html, atmos, CX, CY, fmt, W } from "../core/stage";
+import { camera, html, atmos, CX, CY, fmt, W, SHORT } from "../core/stage";
 import { titleIn, titleOut } from "../core/text";
 import { burst, implode, shockwave, mote } from "../core/fx";
 import { icon, avatar } from "../core/icons";
@@ -170,7 +170,7 @@ export function buildNoise(tl: gsap.core.Timeline) {
   tl.fromTo(".noise-shade", { opacity: 0 }, { opacity: 1, duration: 1.2, ease: "sine.out" }, t0 + 0.5);
   tl.add(titleIn(ta, { stagger: 0.085, dur: 1.4, track: ["0.04em", "-0.025em"] }), t0 + 0.8);
   const K = listBeats(); // emails · meetings · invoices · all at once
-  tl.add(titleOut(ta, { stagger: 0.03, dur: 0.5 }), toRaw(K[0] - 0.45));
+  tl.add(titleOut(ta, { stagger: 0.03, dur: 0.5 }), toRaw(K[0] - (SHORT ? 0.7 : 0.45)));
   // Emails. Meetings. Invoices. — each word lands on the voice, the previous one is knocked out
   const kin = Array.from(root.querySelectorAll<HTMLElement>(".noise-kin span"));
   gsap.set(".noise-kin", { xPercent: -50, yPercent: -50, x: CX, y: CY });
@@ -183,7 +183,9 @@ export function buildNoise(tl: gsap.core.Timeline) {
     tl.to(el, { opacity: 0, scale: 0.9, y: -16, filter: "blur(12px)", duration: span(outs[i], 0.17), ease: "exit" }, toRaw(outs[i]));
     cue("soft", toRaw(f), undefined, 0.35);
   });
-  tl.add(titleIn(tb, { stagger: 0.12, dur: 0.9, track: ["0.1em", "-0.03em"] }), toRaw(K[3] - 0.05));
+  // (the 30-second cut runs straight from the three words into the vortex)
+  if (SHORT) gsap.set(tb, { autoAlpha: 0 });
+  else tl.add(titleIn(tb, { stagger: 0.12, dur: 0.9, track: ["0.1em", "-0.03em"] }), toRaw(K[3] - 0.05));
 
   // unread counter: climbs with an accelerating ease
   const counter = q(".noise-counter");

@@ -10,6 +10,7 @@
  *   npm run render -- --shots 3,12.5,40 --dir out/shots   (stills only)
  *   npm run render -- --format vertical               (9:16, 1080×1920)
  *   npm run render -- --lang fr                       (French cut)
+ *   npm run render -- --cut short                     (the 30-second film)
  *   npm run render -- --cues scripts/cues.json             (sound cue sheet for scripts/score.py)
  */
 import { spawn } from "node:child_process";
@@ -39,6 +40,7 @@ const width = vertical ? 1080 : 1920;
 const height = vertical ? 1920 : 1080;
 const useDev = Boolean(args.dev);
 const lang = args.lang === "fr" ? "fr" : "en";
+const short = args.cut === "short";
 
 async function startServer() {
   if (useDev) {
@@ -59,7 +61,7 @@ const browser = await chromium.launch({
 const page = await browser.newPage({ viewport: { width, height }, deviceScaleFactor: 1 });
 page.on("console", (m) => (m.type() === "error" || m.type() === "warning") && console.log(`[page:${m.type()}]`, m.text()));
 page.on("pageerror", (e) => console.log("[pageerror]", e.message));
-await page.goto(`${server.url}/?render=1${vertical ? "&format=vertical" : ""}&lang=${lang}`, { waitUntil: "load" });
+await page.goto(`${server.url}/?render=1${vertical ? "&format=vertical" : ""}&lang=${lang}${short ? "&cut=short" : ""}`, { waitUntil: "load" });
 await page.waitForFunction(() => window.__film && window.__film.duration > 0, null, { timeout: 60000 });
 const duration = await page.evaluate(() => window.__film.duration);
 

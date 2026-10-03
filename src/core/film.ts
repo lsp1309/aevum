@@ -15,19 +15,23 @@ export interface Anchor {
   film: number;
 }
 
-let F: number[] = [];
-let R: number[] = [];
-let M: number[] = []; // dR/dF slopes at anchors (monotone cubic)
+/** One continuous reel: anchors sorted by film time, monotone cubic between. */
+interface Reel {
+  F: number[];
+  R: number[];
+  M: number[]; // dR/dF slopes at anchors (monotone cubic)
+}
+let reels: Reel[] = [];
 
-export function setAnchors(anchors: Anchor[]) {
+function makeReel(anchors: Anchor[]): Reel {
   const a = [...anchors].sort((p, q) => p.film - q.film);
-  F = a.map((p) => p.film);
-  R = a.map((p) => p.raw);
+  const F = a.map((p) => p.film);
+  const R = a.map((p) => p.raw);
   const n = a.length;
   const d: number[] = [];
   for (let i = 0; i < n - 1; i++) d.push((R[i + 1] - R[i]) / (F[i + 1] - F[i]));
   // Fritsch–Carlson monotone tangents → no overshoot, no time running backwards
-  M = new Array(n);
+  const M: number[] = new Array(n);
   M[0] = d[0];
   M[n - 1] = d[n - 2];
   for (let i = 1; i < n - 1; i++) M[i] = d[i - 1] * d[i] <= 0 ? 0 : (2 * d[i - 1] * d[i]) / (d[i - 1] + d[i]);
@@ -45,10 +49,25 @@ export function setAnchors(anchors: Anchor[]) {
       M[i + 1] = tau * be * d[i];
     }
   }
+  return { F, R, M };
 }
 
-/** Film seconds → raw (authored) seconds. */
-export function toRaw(f: number) {
+/** A continuous edit (speed ramps only). */
+export function setAnchors(anchors: Anchor[]) {
+  reels = [makeReel(anchors)];
+}
+
+/**
+ * An edit made of several reels joined by hard cuts: each reel is its own
+ * anchor list (raw ranges must increase from reel to reel); film time runs
+ * on, raw time jumps. Transitions mask the joins (core/transitions.ts).
+ */
+export function setReels(list: Anchor[][]) {
+  reels = list.map(makeReel);
+}
+
+function rawIn(r: Reel, f: number) {
+  const { F, R, M } = r;
   if (f <= F[0]) return R[0] + (f - F[0]) * M[0];
   const n = F.length;
   if (f >= F[n - 1]) return R[n - 1] + (f - F[n - 1]) * M[n - 1];
@@ -61,13 +80,30 @@ export function toRaw(f: number) {
   return (2 * t3 - 3 * t2 + 1) * R[i] + (t3 - 2 * t2 + t) * h * M[i] + (-2 * t3 + 3 * t2) * R[i + 1] + (t3 - t2) * h * M[i + 1];
 }
 
-/** Raw seconds → film seconds (numeric inverse; the map is monotone). */
+/** Film seconds → raw (authored) seconds. */
+export function toRaw(f: number) {
+  let k = 0;
+  while (k + 1 < reels.length && f >= reels[k + 1].F[0]) k++;
+  return rawIn(reels[k], f);
+}
+
+/** Raw seconds → film seconds (numeric inverse). NaN for raw time cut out of the edit. */
 export function toFilm(r: number) {
-  let lo = F[0] - 5;
+  let reel = reels[0];
+  if (reels.length > 1) {
+    const hit = reels.find((x) => r >= x.R[0] - 1e-6 && r <= x.R[x.R.length - 1] + 1e-6);
+    if (!hit) {
+      if (r < reels[0].R[0]) reel = reels[0];
+      else if (r > reels[reels.length - 1].R[reels[reels.length - 1].R.length - 1]) reel = reels[reels.length - 1];
+      else return NaN;
+    } else reel = hit;
+  }
+  const { F } = reel;
+  let lo = F[0] - (reels.length > 1 ? 0 : 5);
   let hi = F[F.length - 1] + 5;
   for (let k = 0; k < 50; k++) {
     const mid = (lo + hi) / 2;
-    if (toRaw(mid) < r) lo = mid;
+    if (rawIn(reel, mid) < r) lo = mid;
     else hi = mid;
   }
   return (lo + hi) / 2;
@@ -111,6 +147,12 @@ export function tighten(anchors: Anchor[], trims: Trim[]): Anchor[] {
 }
 
 /** Playback controller in film time. */
+/** Layers that live in film time (cut transitions) rather than on the master timeline. */
+const filmFns: Array<(f: number) => void> = [];
+export function onFilmFrame(fn: (f: number) => void) {
+  filmFns.push(fn);
+}
+
 export const film = {
   time: 0,
   duration: 0,
@@ -119,6 +161,7 @@ export const film = {
     this.time = Math.max(0, Math.min(this.duration, f));
     master.seek(Math.max(0, toRaw(this.time)), false);
     renderFrame(true);
+    for (const fn of filmFns) fn(this.time);
   },
   play() {
     if (this.time >= this.duration) this.seek(0);
@@ -140,4 +183,5 @@ gsap.ticker.add((_t, dt) => {
     film.paused = true;
   }
   master.seek(Math.max(0, toRaw(film.time)), false);
+  for (const fn of filmFns) fn(film.time);
 });

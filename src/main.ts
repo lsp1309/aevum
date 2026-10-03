@@ -8,8 +8,10 @@ import { master, renderFrame, invalidate, cues } from "./core/clock";
 import { fit } from "./core/stage";
 import { initBackground } from "./core/background";
 import { initFx } from "./core/fx";
-import { T, CUT } from "./timing";
-import { film, setAnchors, toFilm } from "./core/film";
+import { T, CUT, SHORT_REELS } from "./timing";
+import { SHORT } from "./core/stage";
+import { initTransitions } from "./core/transitions";
+import { film, setAnchors, setReels, toFilm } from "./core/film";
 import { buildNoise } from "./scenes/noise";
 import { buildBrand } from "./scenes/brand";
 import { buildInbox } from "./scenes/inbox";
@@ -48,7 +50,8 @@ async function boot() {
   ]);
   await document.fonts.ready;
 
-  setAnchors(CUT);
+  if (SHORT) setReels(SHORT_REELS);
+  else setAnchors(CUT);
   initBackground();
   initFx();
 
@@ -57,8 +60,11 @@ async function boot() {
   buildInbox(master);
   buildWork(master);
   buildSystem(master);
-  buildMorning(master);
-  buildFocus(master);
+  if (!SHORT) {
+    // the 30-second cut goes straight from the core to the halo
+    buildMorning(master);
+    buildFocus(master);
+  }
   buildFinale(master);
   buildKinetic(master);
   buildCaptions(master);
@@ -73,7 +79,8 @@ async function boot() {
 
   gsap.ticker.add(() => renderFrame());
 
-  film.duration = CUT[CUT.length - 1].film;
+  film.duration = SHORT ? 30 : CUT[CUT.length - 1].film;
+  if (SHORT) initTransitions();
   const start = Number(params.get("t") || 0);
   film.seek(start);
 
@@ -82,7 +89,13 @@ async function boot() {
     fps: 60,
     // sound cues, converted from authored time to film time
     cues: [...cues]
-      .map((c) => ({ ...c, t: toFilm(c.t), dur: c.dur ? toFilm(c.t + c.dur) - toFilm(c.t) : undefined }))
+      .map((c) => {
+        const t = toFilm(c.t);
+        const e = c.dur ? toFilm(c.t + c.dur) : NaN;
+        // a sound whose end was cut out of the edit keeps its authored length
+        return { ...c, t, dur: c.dur ? (Number.isFinite(e) ? e - t : c.dur) : undefined };
+      })
+      .filter((c) => Number.isFinite(c.t)) // cues inside cut-out stretches are dropped
       .sort((a, b) => a.t - b.t),
     chapters: T,
     seek(t: number) {

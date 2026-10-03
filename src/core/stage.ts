@@ -3,6 +3,8 @@ import { gsap } from "./gsap";
  *  vertical (9:16) cut — and uniformly scaled to fit any viewport: no reflow,
  *  no layout shift, identical framing everywhere. `?format=vertical` selects 9:16. */
 export const VERTICAL = new URLSearchParams(location.search).get("format") === "vertical";
+/** `?cut=short`: the 30-second film (see SHORT_REELS in timing.ts). */
+export const SHORT = new URLSearchParams(location.search).get("cut") === "short";
 export const W = VERTICAL ? 1080 : 1920;
 export const H = VERTICAL ? 1920 : 1080;
 /** pick a value per format */

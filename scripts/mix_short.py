@@ -97,7 +97,8 @@ for t in grid(3.3, 5.3, B):
 for i, t in enumerate(grid(1.3, 5.3, 0.25)):
     f = hz(["D4", "A4", "F4", "A4"][i % 4]) * (2 if t >= 3.3 else 1)
     place(music, pluck(f, 0.5), t, 0.035 + 0.012 * (t - 1.3), pan=0.35 * np.sin(i))
-for t in [3.3, 3.8, 4.3]:  # Emails / Meetings / Invoices
+VOT = json.load(open(os.path.join(ROOT, "src", "narration.timing.short.json")))
+for t in VOT["atonce"]["phrases"][:3]:  # Emails / Meetings / Invoices, on the spoken words
     place(drums, tom(95, 0.55), t, pan=0.0)
     place(drums, clap(0.35), t)
     place(music, pluck(hz("D6"), 1.2, 1.3), t, 0.06)
@@ -123,7 +124,8 @@ for t in grid(8.3, 14.3, 0.25):
     bass(root, t, 0.12)
 for i, t in enumerate(grid(8.3, 14.3, 0.125)):
     ch = [c for k, c, _ in prog if k <= t + 1e-6][-1]
-    place(music, pluck(hz(ch[[0, 2, 1, 3, 2, 1][i % 6] % len(ch)]) * 2, 0.4, 0.8), t, 0.03, pan=0.4 * np.sin(i * 0.7))
+    under = 0.6 if 8.1 <= t < 11.3 else 1.0  # room for "It reads every email…"
+    place(music, pluck(hz(ch[[0, 2, 1, 3, 2, 1][i % 6] % len(ch)]) * 2, 0.4, 0.8), t, 0.03 * under, pan=0.4 * np.sin(i * 0.7))
 for t in grid(8.3, 14.3, B):
     place(drums, kick(0.8), t)
 for t in grid(8.8, 14.3, 1.0):
@@ -139,7 +141,7 @@ pad(BB, 14.3, 15.8, 0.06, bright=2.0, a=0.3, r=0.3)
 place(sfx, noise_sweep(1.5, 200, 8000, 0.13), 14.3)
 # 15.8–21.8: CLIMAX — held back under "One intelligence." and "Connected…"
 def room(t):
-    return 0.45 if (15.9 <= t < 17.2 or 17.5 <= t < 19.5) else 1.0
+    return 0.45 if (15.9 <= t < 17.5 or 17.7 <= t < 21.6) else 1.0
 
 
 place(drums, boom(1.0), 15.8)
@@ -211,12 +213,13 @@ for m in meta:
     s, sr = sf.read(os.path.join(ROOT, "scripts", ".vo", "short", f"line_{m['i']:02d}.wav"))
     if sr != SR:
         s = resample_poly(s, SR, sr)
-    s = hp(s, 85)
-    s = s + 0.25 * bp(s, 2500, 6000)  # presence
+    # a warm, close voice: low cut, a touch of chest, a soft air lift, no harsh presence peak
+    s = hp(s, 75)
+    s = s + 0.14 * bp(s, 140, 380) + 0.08 * bp(s, 5000, 10000) + 0.06 * bp(s, 1800, 3500)
     place(vo, s, m["at"], 1.0)
 lvl = np.abs(vo[0]) + np.abs(vo[1])
 lvl = lfilter([1 - 0.9995], [1, -0.9995], lvl)
-vo *= np.where(lvl > 0.08, (0.08 / np.maximum(lvl, 1e-6)) ** 0.4, 1.0)
+vo *= np.where(lvl > 0.08, (0.08 / np.maximum(lvl, 1e-6)) ** 0.3, 1.0)  # gentle levelling, keeps the dynamics
 
 # ── space, ducking, master ───────────────────────────────────────────────
 print("mix…")

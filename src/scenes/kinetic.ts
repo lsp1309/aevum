@@ -1,5 +1,5 @@
 import { gsap } from "../core/gsap";
-import { overlay, html, W, fmt, VERTICAL } from "../core/stage";
+import { overlay, html, W, fmt, VERTICAL, SHORT } from "../core/stage";
 import { toRaw } from "../core/film";
 import { VO, TXT, voiceBeat } from "../i18n";
 import "./kinetic.css";
@@ -20,12 +20,22 @@ interface Word {
 
 const R = VO.reads.phrases; // [reads, puts what matters first, and understands…]
 const [vIn, vOut] = voiceBeat();
-export const KINETIC: Word[] = [
-  { text: TXT.reads[0], in: R[0] + 0.05, out: R[1] - 0.1, y: fmt(92, 330), size: fmt(54, 64) },
-  { text: TXT.reads[1], in: R[1] + 0.05, out: R[2] - 0.1, y: fmt(92, 330), size: fmt(54, 64) },
-  { text: TXT.reads[2], in: R[2] + 0.1, out: VO.reads.end + 0.1, y: fmt(92, 330), size: fmt(54, 64), accent: true },
-  { text: TXT.voice, in: vIn, out: vOut, y: fmt(92, 330), size: fmt(54, 64), accent: true },
-];
+const Y = fmt(92, 330);
+const SZ = fmt(54, 64);
+export const KINETIC: Word[] = SHORT
+  ? // the 30-second cut: the voice tells the story, the words mark the picture
+    [
+      { text: "Reads.", in: 8.65, out: 9.3, y: Y, size: SZ },
+      { text: "Prioritizes.", in: 9.4, out: 10.15, y: Y, size: SZ },
+      { text: "Replies.", in: 10.55, out: 11.6, y: Y, size: SZ, accent: true },
+      { text: TXT.voice, in: 12.2, out: 14.0, y: Y, size: SZ, accent: true },
+    ]
+  : [
+      { text: TXT.reads[0], in: R[0] + 0.05, out: R[1] - 0.1, y: Y, size: SZ },
+      { text: TXT.reads[1], in: R[1] + 0.05, out: R[2] - 0.1, y: Y, size: SZ },
+      { text: TXT.reads[2], in: R[2] + 0.1, out: VO.reads.end + 0.1, y: Y, size: SZ, accent: true },
+      { text: TXT.voice, in: vIn, out: vOut, y: Y, size: SZ, accent: true },
+    ];
 
 export function buildKinetic(tl: gsap.core.Timeline) {
   for (const w of KINETIC) {

@@ -12,6 +12,8 @@ import { SHORT_CUTS } from "../timing";
  *   flash    a hard flash with an anamorphic streak, a breath of scale
  *   implode  the frame collapses inwards into a violet bloom, then reopens
  *
+ * Each also tears the picture into magenta / cyan ghosts at the join.
+ *
  * Pure function of film time → seekable, identical live and in the render.
  */
 const PRE = 0.28;
@@ -91,9 +93,12 @@ export function initTransitions() {
         break;
     }
     const tr = `translate3d(${tx}px,0,0) scale(${sc})`;
+    // chromatic split: the picture tears into magenta and cyan ghosts at the join
+    const ch = Math.max(inA, outB);
+    const split = ch > 0.02 ? ` drop-shadow(${(-16 * ch).toFixed(1)}px 0 0 rgba(255,60,190,${(0.5 * ch).toFixed(3)})) drop-shadow(${(16 * ch).toFixed(1)}px 0 0 rgba(50,210,255,${(0.5 * ch).toFixed(3)}))` : "";
     for (const el of [viewport, fx]) {
       el.style.transform = tr;
-      el.style.filter = blur > 0.05 ? `blur(${blur.toFixed(2)}px)` : "";
+      el.style.filter = (blur > 0.05 ? `blur(${blur.toFixed(2)}px)` : "") + (el === viewport ? split : "");
     }
     flash.style.opacity = fl.toFixed(3);
     flash.style.background = `radial-gradient(60% 60% at 50% 50%, rgba(255,255,255,0.95), rgba(${tint},0.55) 38%, rgba(70,110,255,0.18) 70%, rgba(40,60,200,0) 100%)`;

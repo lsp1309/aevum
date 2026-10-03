@@ -1,166 +1,141 @@
 {
   "voice": "af_heart",
   "lang": "en-us",
-  "speed": 0.96,
-  "pause": 0.15,
-  "note": "30-second cut (?cut=short). Silent lines only carry timing for on-screen words.",
+  "speed": 0.95,
+  "g2p": "misaki",
+  "note": "30-second cut (?cut=short). A spoken story, not the on-screen text. Silent lines only carry timing for on-screen words.",
   "lines": [
     {
       "id": "everywhere",
-      "text": "Your work arrives from everywhere.",
-      "say": "Your work arrives from everywhere.",
-      "at": 0.9,
-      "captions": []
+      "text": "You know the feeling…",
+      "say": "You know the feeling…",
+      "at": 1.3,
+      "captions": [
+        "You know the feeling…"
+      ]
     },
     {
       "id": "atonce",
-      "silent": true,
-      "at": 3.3,
-      "end": 5.0,
-      "phrases": [
-        3.3,
-        3.8,
-        4.3,
-        4.8
-      ],
-      "captions": []
+      "text": "Emails, meetings, invoices… all at once.",
+      "say": "Emails, meetings, invoices… all at once.",
+      "at": 3.4,
+      "captions": [],
+      "phrase_offsets": [
+        0.0,
+        0.49,
+        1.21,
+        1.94
+      ]
     },
     {
       "id": "place",
       "silent": true,
-      "at": 5.0,
-      "end": 5.5,
+      "at": 5.9,
+      "end": 6.0,
       "phrases": [
-        5.0
+        5.9
       ],
       "captions": []
     },
     {
       "id": "meet",
-      "text": "Meet ASTRYA.",
-      "say": "Meet Astria.",
-      "speed": 0.9,
-      "at": 6.25,
+      "text": "So we built ASTRYA.",
+      "say": "So we built Astria.",
+      "at": 6.4,
       "captions": [
-        "Meet ASTRYA."
-      ]
+        "So we built ASTRYA."
+      ],
+      "speed": 0.92
     },
     {
       "id": "reads",
-      "text": "It reads, prioritizes, understands…",
-      "chunks": [
-        {
-          "say": "It reads,"
-        },
-        {
-          "say": "prioritizes,"
-        },
-        {
-          "say": "understands…"
-        }
-      ],
-      "at": 8.5,
+      "text": "It reads every email, and knows what really matters…",
+      "say": "It reads every email, and knows what really matters…",
+      "at": 8.15,
       "captions": [
-        "It reads,",
-        "prioritizes,",
-        "understands…"
-      ],
-      "pause": 0.1
+        "It reads every email,",
+        "and knows what really matters…"
+      ]
     },
     {
       "id": "voice",
-      "text": "and replies, in your voice.",
-      "chunks": [
-        {
-          "say": "and replies,"
-        },
-        {
-          "say": "in your voice."
-        }
-      ],
-      "at": 11.85,
+      "text": "then writes your replies, the way you would.",
+      "say": "then writes your replies, the way you would.",
+      "at": 11.7,
       "captions": [
-        "and replies,",
-        "in your voice."
-      ],
-      "pause": 0.12
+        "then writes your replies,",
+        "the way you would."
+      ]
     },
     {
       "id": "calendar",
       "silent": true,
-      "at": 13.6,
-      "end": 13.8,
+      "at": 14.0,
+      "end": 14.1,
       "phrases": [
-        13.6
+        14.0
       ],
       "captions": []
     },
     {
       "id": "parallel",
       "silent": true,
-      "at": 13.9,
-      "end": 14.0,
+      "at": 14.15,
+      "end": 14.2,
       "phrases": [
-        13.9
+        14.15
       ],
       "captions": []
     },
     {
       "id": "one",
-      "text": "One intelligence.",
-      "say": "One intelligence.",
+      "text": "And it doesn't stop at email.",
+      "say": "And it doesn't stop at email.",
       "at": 15.95,
       "captions": [
-        "One intelligence."
+        "And it doesn't stop at email."
       ]
     },
     {
       "id": "connected",
-      "text": "Connected to every tool you use.",
-      "say": "Connected to every tool you use.",
-      "at": 17.55,
+      "text": "Your calendar, your invoices, your files… handled, in one place.",
+      "say": "Your calendar, your invoices, your files… handled, in one place.",
+      "at": 17.75,
       "captions": [
-        "Connected to every tool you use."
+        "Your calendar, your invoices, your files…",
+        "handled, in one place."
       ]
     },
     {
       "id": "morning",
       "silent": true,
-      "at": 20.0,
-      "end": 20.1,
+      "at": 21.9,
+      "end": 22.0,
       "phrases": [
-        20.0
+        21.9
       ],
       "captions": []
     },
     {
       "id": "focus",
       "silent": true,
-      "at": 20.2,
-      "end": 20.3,
+      "at": 22.05,
+      "end": 22.1,
       "phrases": [
-        20.2
+        22.05
       ],
       "captions": []
     },
     {
       "id": "astrya",
       "text": "ASTRYA. Intelligence that works with you.",
-      "chunks": [
-        {
-          "say": "Astria."
-        },
-        {
-          "say": "Intelligence that works with you."
-        }
-      ],
-      "pause": 0.3,
-      "speed": 0.92,
-      "at": 23.3,
+      "say": "Astria. Intelligence that works with you.",
+      "at": 23.25,
       "captions": [
         "",
         ""
-      ]
+      ],
+      "speed": 0.92
     }
   ]
 }

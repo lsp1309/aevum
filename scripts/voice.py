@@ -10,6 +10,10 @@ A line is either one utterance (`say`, phrases found from pauses in the
 waveform) or a list of `chunks` joined by short pauses (phrase starts are then
 exact — used where on-screen words must land on a phrase). A line that would
 run into the next one is re-rendered slightly faster.
+
+With "g2p": "misaki" (English), text goes through misaki — the grapheme-to-
+phoneme front end Kokoro was trained with — instead of espeak: natural stress
+and intonation. Each line is one utterance, spoken in a single pass.
 """
 import json, os, sys
 import numpy as np
@@ -22,6 +26,19 @@ MODEL = os.environ.get("KOKORO_DIR", "/home/user/tts")
 spec = json.load(open(os.path.join(ROOT, "scripts", f"narration.{LANG}.json")))
 k = Kokoro(os.path.join(MODEL, "kokoro-v1.0.onnx"), os.path.join(MODEL, "voices-v1.0.bin"))
 out = os.path.join(ROOT, "scripts", ".vo", LANG)
+G2P = None
+if spec.get("g2p") == "misaki":
+    from misaki import en, espeak
+
+    G2P = en.G2P(trf=False, british=False, fallback=espeak.EspeakFallback(british=False))
+
+
+def say(text, speed):
+    """One utterance → (samples, sr)."""
+    if G2P:
+        ph, _ = G2P(text)
+        return k.create(ph, voice=spec["voice"], speed=speed, is_phonemes=True)
+    return k.create(text, voice=spec["voice"], speed=speed, lang=spec["lang"])
 os.makedirs(out, exist_ok=True)
 
 
@@ -52,13 +69,13 @@ def phrases(s, sr, min_gap=0.11):
 
 def synth(line, speed):
     if "chunks" not in line:
-        s, sr = k.create(line["say"], voice=spec["voice"], speed=speed, lang=spec["lang"])
+        s, sr = say(line["say"], speed)
         s = trim(np.asarray(s, dtype=np.float32), sr)
-        return s, sr, phrases(s, sr)
+        return s, sr, phrases(s, sr, line.get("min_gap", 0.11))
     parts, starts, sr = [], [], 24000
     pause = line.get("pause", spec.get("pause", 0.16))
     for j, c in enumerate(line["chunks"]):
-        s, sr = k.create(c["say"], voice=spec["voice"], speed=speed, lang=spec["lang"])
+        s, sr = say(c["say"], speed)
         s = trim(np.asarray(s, dtype=np.float32), sr, tail=0.05)
         if j:
             parts.append(np.zeros(int(c.get("pause", pause) * sr), np.float32))
@@ -84,6 +101,8 @@ for i, line in enumerate(lines):
         tries += 1
     path = os.path.join(out, f"line_{i:02d}.wav")
     sf.write(path, s, sr)
+    if "phrase_offsets" in line:  # word onsets measured on the take (no pause between them to detect)
+        ph = line["phrase_offsets"]
     meta.append({"i": i, "id": line["id"], "at": line["at"], "dur": round(len(s) / sr, 3), "sr": sr, "text": line["text"], "phrases": ph, "speed": round(speed, 3)})
     print(f"{i:02d} {line['at']:6.2f}→{line['at'] + len(s)/sr:6.2f}  {len(s)/sr:5.2f}s (max {limit:4.2f}, speed {speed:.2f})  phrases {ph}  {line['text']}")
 json.dump(meta, open(os.path.join(out, "meta.json"), "w"), indent=1, ensure_ascii=False)

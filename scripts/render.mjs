@@ -11,6 +11,7 @@
  *   npm run render -- --format vertical               (9:16, 1080×1920)
  *   npm run render -- --lang fr                       (French cut)
  *   npm run render -- --cut short                     (the 30-second film)
+ *   npm run render -- --page promo                    (the vertical promo film, promo.html)
  *   npm run render -- --cues scripts/cues.json             (sound cue sheet for scripts/score.py)
  */
 import { spawn } from "node:child_process";
@@ -35,7 +36,8 @@ const args = Object.fromEntries(
 
 const fps = Number(args.fps ?? 30);
 const crf = String(args.crf ?? 16);
-const vertical = args.format === "vertical";
+const page = args.page ? String(args.page) : "";
+const vertical = args.format === "vertical" || page === "promo";
 const width = vertical ? 1080 : 1920;
 const height = vertical ? 1920 : 1080;
 const useDev = Boolean(args.dev);
@@ -58,15 +60,16 @@ const server = await startServer();
 const browser = await chromium.launch({
   args: ["--use-angle=swiftshader", "--enable-unsafe-swiftshader", "--ignore-gpu-blocklist", "--force-color-profile=srgb", "--hide-scrollbars"],
 });
-const page = await browser.newPage({ viewport: { width, height }, deviceScaleFactor: 1 });
-page.on("console", (m) => (m.type() === "error" || m.type() === "warning") && console.log(`[page:${m.type()}]`, m.text()));
-page.on("pageerror", (e) => console.log("[pageerror]", e.message));
-await page.goto(`${server.url}/?render=1${vertical ? "&format=vertical" : ""}&lang=${lang}${short ? "&cut=short" : ""}`, { waitUntil: "load" });
-await page.waitForFunction(() => window.__film && window.__film.duration > 0, null, { timeout: 60000 });
-const duration = await page.evaluate(() => window.__film.duration);
+const tab = await browser.newPage({ viewport: { width, height }, deviceScaleFactor: 1 });
+tab.on("console", (m) => (m.type() === "error" || m.type() === "warning") && console.log(`[page:${m.type()}]`, m.text()));
+tab.on("pageerror", (e) => console.log("[pageerror]", e.message));
+const url = page ? `${server.url}/${page}.html?render=1` : `${server.url}/?render=1${vertical ? "&format=vertical" : ""}&lang=${lang}${short ? "&cut=short" : ""}`;
+await tab.goto(url, { waitUntil: "load" });
+await tab.waitForFunction(() => window.__film && window.__film.duration > 0, null, { timeout: 60000 });
+const duration = await tab.evaluate(() => window.__film.duration);
 
 const seek = (t) =>
-  page.evaluate(
+  tab.evaluate(
     (t) =>
       new Promise((res) => {
         window.__film.seek(t);
@@ -77,7 +80,7 @@ const seek = (t) =>
 
 if (args.cues) {
   const { writeFileSync } = await import("node:fs");
-  const cues = await page.evaluate(() => ({ duration: window.__film.duration, chapters: window.__film.chapters, cues: window.__film.cues }));
+  const cues = await tab.evaluate(() => ({ duration: window.__film.duration, chapters: window.__film.chapters, cues: window.__film.cues }));
   const file = resolve(root, String(args.cues));
   mkdirSync(dirname(file), { recursive: true });
   writeFileSync(file, JSON.stringify(cues, null, 1));
@@ -89,7 +92,7 @@ if (args.cues) {
   for (const t of times) {
     await seek(t);
     const file = `${dir}/t${t.toFixed(2).padStart(6, "0")}.jpg`;
-    await page.screenshot({ path: file, type: "jpeg", quality: 90, timeout: 180000 });
+    await tab.screenshot({ path: file, type: "jpeg", quality: 90, timeout: 180000 });
     console.log("shot", file);
   }
 } else {
@@ -120,7 +123,7 @@ if (args.cues) {
   const t0 = Date.now();
   for (let f = 0; f < total; f++) {
     await seek(from + f / fps);
-    const buf = await page.screenshot({ type: "jpeg", quality: 95, timeout: 180000 });
+    const buf = await tab.screenshot({ type: "jpeg", quality: 95, timeout: 180000 });
     if (!ff.stdin.write(buf)) await new Promise((r) => ff.stdin.once("drain", r));
     if (f % fps === 0) {
       const el = (Date.now() - t0) / 1000;

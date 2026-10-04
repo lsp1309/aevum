@@ -1,0 +1,130 @@
+[
+ {
+  "i": 0,
+  "id": "loud",
+  "at": 0.5,
+  "dur": 1.63,
+  "sr": 24000,
+  "text": "Work has never been this loud.",
+  "phrases": [
+   0.0
+  ],
+  "speed": 0.932
+ },
+ {
+  "i": 1,
+  "id": "pull",
+  "at": 2.45,
+  "dur": 3.084,
+  "sr": 24000,
+  "text": "Messages, meetings, deadlines… all demanding you.",
+  "phrases": [
+   0.0,
+   0.84,
+   2.12
+  ],
+  "speed": 0.9
+ },
+ {
+  "i": 2,
+  "id": "signal",
+  "at": 6.0,
+  "dur": 2.283,
+  "sr": 24000,
+  "text": "Astrya turns the noise… into signal.",
+  "phrases": [
+   0.0,
+   1.56
+  ],
+  "speed": 1.017
+ },
+ {
+  "i": 3,
+  "id": "reads",
+  "at": 8.6,
+  "dur": 2.697,
+  "sr": 24000,
+  "text": "It reads everything, and surfaces what matters.",
+  "phrases": [
+   0.0,
+   1.34
+  ],
+  "speed": 1.003
+ },
+ {
+  "i": 4,
+  "id": "voice",
+  "at": 11.6,
+  "dur": 1.445,
+  "sr": 24000,
+  "text": "It replies in your voice,",
+  "phrases": [
+   0.0
+  ],
+  "speed": 0.9
+ },
+ {
+  "i": 5,
+  "id": "week",
+  "at": 13.8,
+  "dur": 1.272,
+  "sr": 24000,
+  "text": "untangles your week,",
+  "phrases": [
+   0.0,
+   1.1
+  ],
+  "speed": 0.9
+ },
+ {
+  "i": 6,
+  "id": "rest",
+  "at": 16.3,
+  "dur": 1.601,
+  "sr": 24000,
+  "text": "and quietly handles the rest.",
+  "phrases": [
+   0.0
+  ],
+  "speed": 0.9
+ },
+ {
+  "i": 7,
+  "id": "one",
+  "at": 20.1,
+  "dur": 2.746,
+  "sr": 24000,
+  "text": "Every tool, every thread, working as one.",
+  "phrases": [
+   0.0,
+   1.11
+  ],
+  "speed": 0.9
+ },
+ {
+  "i": 8,
+  "id": "free",
+  "at": 23.9,
+  "dur": 2.416,
+  "sr": 24000,
+  "text": "So you can focus on what only you can do.",
+  "phrases": [
+   0.0,
+   1.1
+  ],
+  "speed": 0.9
+ },
+ {
+  "i": 9,
+  "id": "brand",
+  "at": 26.75,
+  "dur": 2.554,
+  "sr": 24000,
+  "text": "Astrya. Intelligence that works with you.",
+  "phrases": [
+   0.0,
+   0.96
+  ],
+  "speed": 0.9
+ }
+]

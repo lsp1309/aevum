@@ -1,0 +1,90 @@
+{
+ "loud": {
+  "start": 0.5,
+  "end": 2.13,
+  "phrases": [
+   0.5
+  ],
+  "captions": []
+ },
+ "pull": {
+  "start": 2.45,
+  "end": 5.534,
+  "phrases": [
+   2.45,
+   3.29,
+   4.57
+  ],
+  "captions": []
+ },
+ "signal": {
+  "start": 6.0,
+  "end": 8.283,
+  "phrases": [
+   6.0,
+   7.56
+  ],
+  "captions": []
+ },
+ "reads": {
+  "start": 8.6,
+  "end": 11.297,
+  "phrases": [
+   8.6,
+   9.94
+  ],
+  "captions": []
+ },
+ "voice": {
+  "start": 11.6,
+  "end": 13.045,
+  "phrases": [
+   11.6
+  ],
+  "captions": []
+ },
+ "week": {
+  "start": 13.8,
+  "end": 15.072,
+  "phrases": [
+   13.8,
+   14.9
+  ],
+  "captions": []
+ },
+ "rest": {
+  "start": 16.3,
+  "end": 17.901,
+  "phrases": [
+   16.3
+  ],
+  "captions": []
+ },
+ "one": {
+  "start": 20.1,
+  "end": 22.846,
+  "phrases": [
+   20.1,
+   21.21
+  ],
+  "captions": []
+ },
+ "free": {
+  "start": 23.9,
+  "end": 26.316,
+  "phrases": [
+   23.9,
+   25.0
+  ],
+  "captions": []
+ },
+ "brand": {
+  "start": 26.75,
+  "end": 29.304,
+  "phrases": [
+   26.75,
+   27.71
+  ],
+  "captions": []
+ }
+}

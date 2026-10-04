@@ -1,0 +1,69 @@
+{
+ "voice": "af_bella",
+ "lang": "en-us",
+ "speed": 0.9,
+ "g2p": "misaki",
+ "note": "Promo film (promo.html, 9:16). Calm, confident, unhurried: the story of the product, never the on-screen text.",
+ "lines": [
+  {
+   "id": "loud",
+   "text": "Work has never been this loud.",
+   "say": "Work has never been this loud.",
+   "at": 0.5
+  },
+  {
+   "id": "pull",
+   "text": "Messages, meetings, deadlines… all demanding you.",
+   "say": "Messages, meetings, deadlines… all demanding you.",
+   "at": 2.45
+  },
+  {
+   "id": "signal",
+   "text": "Astrya turns the noise… into signal.",
+   "say": "Astria turns the noise… into signal.",
+   "at": 6.0
+  },
+  {
+   "id": "reads",
+   "text": "It reads everything, and surfaces what matters.",
+   "say": "It reads everything, and surfaces what matters.",
+   "at": 8.6
+  },
+  {
+   "id": "voice",
+   "text": "It replies in your voice,",
+   "say": "It replies in your voice,",
+   "at": 11.6
+  },
+  {
+   "id": "week",
+   "text": "untangles your week,",
+   "say": "untangles your week,",
+   "at": 13.8
+  },
+  {
+   "id": "rest",
+   "text": "and quietly handles the rest.",
+   "say": "and quietly handles the rest.",
+   "at": 16.3
+  },
+  {
+   "id": "one",
+   "text": "Every tool, every thread, working as one.",
+   "say": "Every tool, every thread… working as one.",
+   "at": 20.1
+  },
+  {
+   "id": "free",
+   "text": "So you can focus on what only you can do.",
+   "say": "So you can focus on what only you can do.",
+   "at": 23.9
+  },
+  {
+   "id": "brand",
+   "text": "Astrya. Intelligence that works with you.",
+   "say": "Astria. Intelligence that works with you.",
+   "at": 26.75
+  }
+ ]
+}

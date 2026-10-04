@@ -887,10 +887,10 @@ body {
   letter-spacing: -0.035em;
 }
 .sys-b {
-  top: 1640px;
+  top: 1712px;
   text-align: right;
   font-weight: 250;
-  font-size: 150px;
+  font-size: 138px;
   letter-spacing: -0.05em;
   background: linear-gradient(100deg, #eef5ff 10%, #8cbcff 45%, #3b7bff 85%);
   -webkit-background-clip: text;

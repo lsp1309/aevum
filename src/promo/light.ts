@@ -37,13 +37,13 @@ export function initLight() {
 export const rgba = (c: string, a: number) => `rgba(${c},${Math.max(0, Math.min(1, a)).toFixed(4)})`;
 
 /** A horizontal beam of light across [x0,x1] at y: hot core + soft bloom. */
-export function hBeam(g: CanvasRenderingContext2D, x0: number, x1: number, y: number, core: number, glow: number, a: number, c = "255,214,160") {
+export function hBeam(g: CanvasRenderingContext2D, x0: number, x1: number, y: number, core: number, glow: number, a: number, c = "150,195,255") {
   if (a <= 0.002 || x1 <= x0) return;
   const R = glow;
   const gr = g.createLinearGradient(0, y - R, 0, y + R);
   gr.addColorStop(0, rgba(c, 0));
   gr.addColorStop(0.5 - core / (2 * R), rgba(c, 0.18 * a));
-  gr.addColorStop(0.5, rgba("255,250,240", a));
+  gr.addColorStop(0.5, rgba("244,249,255", a));
   gr.addColorStop(0.5 + core / (2 * R), rgba(c, 0.18 * a));
   gr.addColorStop(1, rgba(c, 0));
   g.fillStyle = gr;
@@ -51,10 +51,10 @@ export function hBeam(g: CanvasRenderingContext2D, x0: number, x1: number, y: nu
 }
 
 /** A soft round flare. */
-export function flare(g: CanvasRenderingContext2D, x: number, y: number, r: number, a: number, c = "255,200,150") {
+export function flare(g: CanvasRenderingContext2D, x: number, y: number, r: number, a: number, c = "140,190,255") {
   if (a <= 0.002 || r <= 0) return;
   const gr = g.createRadialGradient(x, y, 0, x, y, r);
-  gr.addColorStop(0, rgba("255,252,245", a));
+  gr.addColorStop(0, rgba("246,250,255", a));
   gr.addColorStop(0.12, rgba(c, 0.55 * a));
   gr.addColorStop(0.4, rgba(c, 0.14 * a));
   gr.addColorStop(1, rgba(c, 0));
@@ -63,13 +63,13 @@ export function flare(g: CanvasRenderingContext2D, x: number, y: number, r: numb
 }
 
 /** An anamorphic streak (horizontal lens flare). */
-export function streak(g: CanvasRenderingContext2D, x: number, y: number, len: number, h: number, a: number, c = "255,190,140") {
+export function streak(g: CanvasRenderingContext2D, x: number, y: number, len: number, h: number, a: number, c = "130,180,255") {
   if (a <= 0.002) return;
   g.save();
   g.translate(x, y);
   g.scale(len / 100, h / 100);
   const gr = g.createRadialGradient(0, 0, 0, 0, 0, 100);
-  gr.addColorStop(0, rgba("255,250,240", a));
+  gr.addColorStop(0, rgba("244,249,255", a));
   gr.addColorStop(0.3, rgba(c, 0.4 * a));
   gr.addColorStop(1, rgba(c, 0));
   g.fillStyle = gr;
@@ -78,7 +78,7 @@ export function streak(g: CanvasRenderingContext2D, x: number, y: number, len: n
 }
 
 /** A glowing polyline / curve (stroked several times, wide → narrow). */
-export function glowPath(g: CanvasRenderingContext2D, path: Path2D, w: number, a: number, c = "255,200,140") {
+export function glowPath(g: CanvasRenderingContext2D, path: Path2D, w: number, a: number, c = "130,180,255") {
   if (a <= 0.002) return;
   g.lineCap = "round";
   g.lineJoin = "round";
@@ -88,7 +88,7 @@ export function glowPath(g: CanvasRenderingContext2D, path: Path2D, w: number, a
     [1.6, 0.35],
     [0.6, 1],
   ] as const) {
-    g.strokeStyle = k < 1 ? rgba("255,248,236", a * al) : rgba(c, a * al);
+    g.strokeStyle = k < 1 ? rgba("242,248,255", a * al) : rgba(c, a * al);
     g.lineWidth = w * k;
     g.stroke(path);
   }

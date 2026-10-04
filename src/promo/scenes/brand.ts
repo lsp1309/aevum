@@ -21,21 +21,23 @@ const BAND = `${ell(RING_A, RING_B)}${ell(IN_A, IN_B)}`;
 const U = 3; // svg px per mark unit
 
 let uid = 0;
-function mark(cls: string, withDay: boolean) {
+function mark(cls: string, withDay: boolean, onLight = false) {
+  // on daylight the mark carries the deep end of the blue scale
+  const stops = onLight ? ["#6cc0ff", "#3b7bff", "#2350e0", "#142f9e"] : ["#e4f1ff", "#7fc4ff", "#3b7bff", "#1d3fc4"];
   const id = `pm${uid++}`;
   return html(`<svg class="mark ${cls}" viewBox="-200 -200 400 400" width="${400 * U}" height="${400 * U}" style="width:${400 * U}px;height:${400 * U}px;margin:${-200 * U}px 0 0 ${-200 * U}px" fill="none">
     <defs>
       <linearGradient id="${id}g" x1="-150" y1="-40" x2="150" y2="40" gradientUnits="userSpaceOnUse">
-        <stop offset="0" stop-color="#ffe6b0"/><stop offset="0.34" stop-color="#ff9e57"/><stop offset="0.68" stop-color="#ff5f7e"/><stop offset="1" stop-color="#9b74ff"/>
+        <stop offset="0" stop-color="${stops[0]}"/><stop offset="0.3" stop-color="${stops[1]}"/><stop offset="0.66" stop-color="${stops[2]}"/><stop offset="1" stop-color="${stops[3]}"/>
       </linearGradient>
       <mask id="${id}m" maskUnits="userSpaceOnUse" x="-200" y="-200" width="400" height="400">
         <path class="rv" d="${ell(MID_A, MID_B)}" stroke="#fff" stroke-width="54" stroke-linecap="round"/>
       </mask>
     </defs>
     <g transform="rotate(${RING_TILT})">
-      ${withDay ? `<path class="day" d="${ell(IN_A + 0.5, IN_B + 0.5)}" fill="#fbf3e9" opacity="0"/>` : ""}
+      ${withDay ? `<path class="day" d="${ell(IN_A + 0.5, IN_B + 0.5)}" fill="#f4f8fe" opacity="0"/>` : ""}
       <g mask="url(#${id}m)"><path class="band" d="${BAND}" fill="url(#${id}g)" fill-rule="evenodd"/></g>
-      <path class="glint" d="${ell(MID_A, MID_B)}" stroke="#fffaf0" stroke-width="4" stroke-linecap="round" opacity="0"/>
+      <path class="glint" d="${ell(MID_A, MID_B)}" stroke="#f6faff" stroke-width="4" stroke-linecap="round" opacity="0"/>
     </g>
   </svg>`);
 }
@@ -44,7 +46,7 @@ export function buildBrand(tl: gsap.core.Timeline) {
   const R0 = S.ring;
   const Y1 = 800; // the mark, in the dark
   const root = html(`<section class="scene" id="s-brand">
-    <div class="wordmark wm-a" style="top:1010px;font-size:104px;color:#f4eee6">ASTRYA</div>
+    <div class="wordmark wm-a" style="top:1010px;font-size:104px;color:#f2f6fd">ASTRYA</div>
   </section>`);
   world.appendChild(root);
   const m1 = mark("m1", true);
@@ -109,7 +111,7 @@ export function buildBrand(tl: gsap.core.Timeline) {
   paint((g, t) => {
     const k = t - (F + 0.45);
     if (k < -0.2 || k > 1) return;
-    streak(g, CX, Y1, 1600, 50, 0.5 * Math.exp(-Math.max(0, k) * 4) * smooth(clamp((k + 0.2) / 0.2)), "255,170,110");
+    streak(g, CX, Y1, 1600, 50, 0.5 * Math.exp(-Math.max(0, k) * 4) * smooth(clamp((k + 0.2) / 0.2)), "110,165,255");
   });
 
   // ── the end card ─────────────────────────────────────────────────────────
@@ -124,7 +126,7 @@ export function buildBrand(tl: gsap.core.Timeline) {
   </section>`);
   front.appendChild(end);
   const rig = end.querySelector<HTMLElement>(".end-rig")!;
-  const m2 = mark("m2", false);
+  const m2 = mark("m2", false, true);
   m2.style.top = `${Y2}px`;
   rig.insertBefore(m2, rig.children[1]);
   const glow = end.querySelector<HTMLElement>(".end-glow")!;
@@ -146,7 +148,7 @@ export function buildBrand(tl: gsap.core.Timeline) {
   tl.fromTo(wmBChars, { opacity: 0, y: 40, filter: "blur(10px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.7, stagger: 0.045, ease: "power3.out" }, E + 0.12);
   tl.fromTo(wmB, { letterSpacing: "0.42em" }, { letterSpacing: "0.22em", duration: 1.1, ease: "power3.out" }, E + 0.12);
   tl.fromTo(tagWords, { opacity: 0, y: 24, filter: "blur(8px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.6, stagger: 0.07, ease: "power3.out" }, VO.brand.phrases[1] - 0.05);
-  tl.fromTo(cta, { opacity: 0, y: 30, scale: 0.92 }, { opacity: 1, y: 0, scale: 1, duration: 0.7, ease: "back.out(1.6)" }, VO.brand.phrases[1] + 0.75);
+  tl.fromTo(cta, { opacity: 0, y: 30, scale: 0.92 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.25)" }, VO.brand.phrases[1] + 0.75);
   tl.fromTo(wmBChars, { backgroundPosition: "100% 0" }, { backgroundPosition: "0% 0", duration: 1.1, stagger: 0.04, ease: "power2.inOut" }, S.end - 1.35);
   tl.to($("#vig"), { opacity: 0.25, duration: 0.6 }, F + 0.3);
   tl.to($("#grain"), { opacity: 0.05, duration: 0.6 }, F + 0.3);

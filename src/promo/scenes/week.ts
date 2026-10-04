@@ -32,7 +32,7 @@ export function buildWeek(tl: gsap.core.Timeline) {
   </section>`);
   world.appendChild(root);
   const rig = root.querySelector<HTMLElement>(".wk-rig")!;
-  const blk = (cls: string, r: { x: number; y: number; w: number; h: number }, title: string, meta: string, c = "#8a8290") => {
+  const blk = (cls: string, r: { x: number; y: number; w: number; h: number }, title: string, meta: string, c = "#5a6b8f") => {
     const el = html(`<div class="blk ${cls}" style="--c:${c};left:${r.x}px;top:${r.y}px;width:${r.w}px;height:${r.h}px"><b>${title}</b><em>${meta}</em><i class="ring"></i></div>`);
     rig.appendChild(el);
     return el;
@@ -51,9 +51,9 @@ export function buildWeek(tl: gsap.core.Timeline) {
     return el;
   };
   const m0 = VO.week.start + 0.05;
-  const board = mk("Board prep", "60 min · moved to 11:30", "#b9a2ff", clash(13.5, 14.5, 0), slot(11.5, 12.5), m0);
-  const kick = mk("Northline kickoff", "60 min · moved to 13:00", "#ff9e57", clash(14, 15, 60), slot(13, 14), m0 + 0.2);
-  const hiring = mk("Hiring sync", "45 min · moved to 16:00", "#ff6f98", clash(14, 14.75, 120), slot(16, 16.75), m0 + 0.4);
+  const board = mk("Board prep", "60 min · moved to 11:30", "#8fa8ff", clash(13.5, 14.5, 0), slot(11.5, 12.5), m0);
+  const kick = mk("Northline kickoff", "60 min · moved to 13:00", "#3b7bff", clash(14, 15, 60), slot(13, 14), m0 + 0.2);
+  const hiring = mk("Hiring sync", "45 min · moved to 16:00", "#5ad1ff", clash(14, 14.75, 120), slot(16, 16.75), m0 + 0.4);
   const pricing = html(`<div class="blk hero" style="left:${PRICING.x}px;top:${PRICING.y}px;width:${PRICING.w}px;height:${PRICING.h}px"><b>Pricing call · Luka</b><em class="mono">14:30 – 15:30 · invite sent</em></div>`);
   rig.appendChild(pricing);
   const chip = root.querySelector<HTMLElement>(".wk-chip")!;
@@ -72,7 +72,7 @@ export function buildWeek(tl: gsap.core.Timeline) {
   tl.from(lines, { scaleX: 0, duration: 0.7, stagger: 0.03, ease: "power3.out" }, L - 0.4);
   tl.from(labels, { opacity: 0, x: -16, duration: 0.5, stagger: 0.03, ease: "power2.out" }, L - 0.3);
   tl.from(head.children, { opacity: 0, y: 30, filter: "blur(8px)", duration: 0.6, stagger: 0.07, ease: "power3.out" }, L - 0.25);
-  tl.from([ops, board, kick, hiring], { opacity: 0, scale: 0.92, duration: 0.45, stagger: 0.05, ease: "back.out(1.6)" }, L - 0.2);
+  tl.from([ops, board, kick, hiring], { opacity: 0, scale: 0.94, duration: 0.5, stagger: 0.05, ease: "power3.out" }, L - 0.2);
   cue("whoosh", L - 0.6, 0.7, 0.7);
   // the pricing call (the phrase that flew in) takes its place
   tl.set(pricing, { autoAlpha: 1 }, L + 0.52);
@@ -89,7 +89,7 @@ export function buildWeek(tl: gsap.core.Timeline) {
 
   // untangle: each block springs to a free slot
   moves.forEach((m, i) => {
-    tl.to(m.el, { left: m.to.x, top: m.to.y, width: m.to.w, height: m.to.h, duration: 0.7, ease: "back.out(1.5)" }, m.at);
+    tl.to(m.el, { left: m.to.x, top: m.to.y, width: m.to.w, height: m.to.h, duration: 0.78, ease: "back.out(1.15)" }, m.at);
     tl.to(rings[i], { opacity: 0, duration: 0.3 }, m.at + 0.1);
     cue("tick", m.at + 0.05, undefined, 0.9);
     cue("soft", m.at + 0.3, undefined, 0.3);
@@ -107,7 +107,7 @@ export function buildWeek(tl: gsap.core.Timeline) {
       path.moveTo(x0, y0);
       path.bezierCurveTo(x0 - 120, y0, x1 - 120, y1, x0 + (x1 - x0) * p, y0 + (y1 - y0) * p);
       const a = (1 - smooth(clamp((k - 0.35) / 0.5))) * 0.8;
-      glowPath(g, path, 3.5, a, "255,190,130");
+      glowPath(g, path, 3.5, a, "120,175,255");
       flare(g, x0 + (x1 - x0) * p, y0 + (y1 - y0) * p, 90, a * 0.8);
     }
   });
@@ -117,7 +117,7 @@ export function buildWeek(tl: gsap.core.Timeline) {
   tl.to(focus, { scaleY: 1, autoAlpha: 1, duration: 0.6, ease: "power3.out" }, f0);
   tl.from(focus.children, { opacity: 0, y: 12, duration: 0.45, stagger: 0.06 }, f0 + 0.2);
   tl.fromTo(focus.querySelector(".sheen"), { xPercent: -100 }, { xPercent: 100, duration: 0.9, ease: "power2.inOut" }, f0 + 0.3);
-  tl.to(chip, { scrambleText: { text: "Week untangled ✓", chars: "·•", speed: 1 }, color: "#ffd08a", boxShadow: "inset 0 0 0 1.5px rgba(255,208,138,0.55), 0 0 30px rgba(255,190,110,0.3)", duration: 0.5, ease: "none" }, f0 + 0.25);
+  tl.to(chip, { scrambleText: { text: "Week untangled ✓", chars: "·•", speed: 1 }, color: "#c8f0ff", boxShadow: "inset 0 0 0 1.5px rgba(90,209,255,0.65), 0 0 30px rgba(90,209,255,0.32)", duration: 0.5, ease: "none" }, f0 + 0.25);
   cue("chime", f0, undefined, 0.7);
   cue("chime", f0 + 0.25, undefined, 0.5);
 
@@ -134,6 +134,6 @@ export function buildWeek(tl: gsap.core.Timeline) {
   tl.set(root, { visibility: "hidden" }, S.lanes + 0.05);
 
   // light: violet shadows, ember floor
-  tl.to(sky, { top: "12,8,18", bot: "20,9,12", c1: "170,130,255", l1x: 0.15, l1y: 0.2, l1r: 0.5, l1i: 0.22, c2: "255,110,70", l2x: 0.7, l2y: 1.05, l2i: 0.2, duration: 1.0, ease: "power2.inOut" }, L - 0.5);
+  tl.to(sky, { top: "4,8,22", bot: "5,11,30", c1: "95,125,255", l1x: 0.15, l1y: 0.2, l1r: 0.5, l1i: 0.24, c2: "40,110,255", l2x: 0.7, l2y: 1.05, l2i: 0.2, duration: 1.0, ease: "power2.inOut" }, L - 0.5);
   void DAY;
 }

@@ -21,7 +21,8 @@ export const rowY = (i: number) => ROW.top + i * ROW.pitch;
 const FOC = 1000;
 const DEPTH = 5200;
 const M = 18; // sprite margin (badges overflow)
-const SANS = '"Inter Tight Variable", sans-serif';
+const SANS = '"Manrope Variable", sans-serif';
+const BRAND = '"Inter Tight Variable", sans-serif'; // the name only
 const MONO = '"JetBrains Mono Variable", monospace';
 const YC = 900; // the line of the name
 const K = 1.55; // sprite size at unit depth
@@ -57,6 +58,7 @@ interface Frag {
   w: number;
   h: number;
   img: HTMLCanvasElement;
+  soft: HTMLCanvasElement; // the same, out of focus (depth of field, motion smear)
   row?: number;
   rowImg?: HTMLCanvasElement;
   letter?: number;
@@ -66,6 +68,17 @@ interface Frag {
   fx?: number; // screen position at the freeze
   fy?: number;
   fs?: number;
+}
+
+/** A blurred copy of a sprite (cheap depth of field, drawn instead of the sharp one). */
+function defocus(src: HTMLCanvasElement) {
+  const c = document.createElement("canvas");
+  c.width = src.width;
+  c.height = src.height;
+  const g = c.getContext("2d")!;
+  g.filter = "blur(4px)";
+  g.drawImage(src, 0, 0);
+  return c;
 }
 
 function ctx2(w: number, h: number) {
@@ -90,12 +103,12 @@ function icon(g: CanvasRenderingContext2D, b: Bit, cx: number, cy: number) {
   const alert = b.kind === "alert";
   g.beginPath();
   g.arc(cx, cy, 20, 0, Math.PI * 2);
-  g.fillStyle = alert ? "rgba(255,75,62,0.18)" : "rgba(244,238,230,0.08)";
+  g.fillStyle = alert ? "rgba(70,130,255,0.22)" : "rgba(200,220,255,0.07)";
   g.fill();
-  g.strokeStyle = alert ? "rgba(255,90,70,0.5)" : "rgba(244,238,230,0.16)";
+  g.strokeStyle = alert ? "rgba(120,170,255,0.6)" : "rgba(170,200,255,0.16)";
   g.lineWidth = 1.5;
   g.stroke();
-  g.strokeStyle = g.fillStyle = alert ? "#ff6a5a" : "rgba(244,238,230,0.8)";
+  g.strokeStyle = g.fillStyle = alert ? "#9cc4ff" : "rgba(225,235,252,0.82)";
   g.lineWidth = 2;
   g.textAlign = "center";
   g.textBaseline = "middle";
@@ -145,7 +158,7 @@ function icon(g: CanvasRenderingContext2D, b: Bit, cx: number, cy: number) {
 function badge(g: CanvasRenderingContext2D, x: number, y: number, s: string) {
   g.beginPath();
   g.arc(x, y, 15, 0, Math.PI * 2);
-  g.fillStyle = "#ff4b3e";
+  g.fillStyle = "#2f6bff";
   g.fill();
   g.fillStyle = "#fff";
   g.font = `700 16px ${SANS}`;
@@ -167,12 +180,12 @@ function bitSprite(b: Bit, skipFirst = false) {
     const h = 56;
     const { c, g } = ctx2(w, h);
     rr(g, 0, 0, w, h, 28);
-    g.fillStyle = "rgba(26,23,28,0.92)";
+    g.fillStyle = "rgba(13,20,40,0.92)";
     g.fill();
-    g.strokeStyle = "rgba(244,238,230,0.16)";
+    g.strokeStyle = "rgba(225,235,252,0.16)";
     g.lineWidth = 1.5;
     g.stroke();
-    g.fillStyle = "rgba(244,238,230,0.78)";
+    g.fillStyle = "rgba(225,235,252,0.78)";
     g.font = `500 21px ${MONO}`;
     g.fillText(b.title, 22, 35);
     return { c, w, h };
@@ -183,26 +196,26 @@ function bitSprite(b: Bit, skipFirst = false) {
   const { c, g } = ctx2(w, h);
   rr(g, 0, 0, w, h, 22);
   const gr = g.createLinearGradient(0, 0, 0, h);
-  gr.addColorStop(0, "rgba(36,32,38,0.94)");
-  gr.addColorStop(1, "rgba(20,18,22,0.94)");
+  gr.addColorStop(0, "rgba(22,31,58,0.94)");
+  gr.addColorStop(1, "rgba(9,14,30,0.94)");
   g.fillStyle = gr;
   g.fill();
-  g.strokeStyle = "rgba(244,238,230,0.15)";
+  g.strokeStyle = "rgba(225,235,252,0.15)";
   g.lineWidth = 1.5;
   g.stroke();
   icon(g, b, 40, h / 2);
   g.font = TITLE;
-  g.fillStyle = "#f4eee6";
+  g.fillStyle = "#f2f6fd";
   const first = skipFirst ? tw(TITLE, b.title[0]) : 0;
   g.fillText(skipFirst ? b.title.slice(1) : b.title, 78 + first, 41);
   if (b.meta) {
     g.font = META;
-    g.fillStyle = "rgba(244,238,230,0.42)";
+    g.fillStyle = "rgba(225,235,252,0.42)";
     g.fillText(b.meta, 78 + tw(TITLE, b.title) + 16, 40);
   }
   if (b.body) {
     g.font = BODY;
-    g.fillStyle = "rgba(244,238,230,0.55)";
+    g.fillStyle = "rgba(225,235,252,0.55)";
     let s = b.body;
     while (tw(BODY, s) > w - 100 && s.length > 4) s = s.slice(0, -2);
     g.fillText(s === b.body ? s : `${s.trimEnd()}…`, 78, 73);
@@ -217,36 +230,36 @@ export function rowSprite(r: Row) {
   const { c, g } = ctx2(w, h);
   rr(g, 0, 0, w, h, 22);
   const gr = g.createLinearGradient(0, 0, 0, h);
-  gr.addColorStop(0, "rgba(38,32,40,0.9)");
-  gr.addColorStop(1, "rgba(20,17,22,0.92)");
+  gr.addColorStop(0, "rgba(22,32,60,0.86)");
+  gr.addColorStop(1, "rgba(9,14,30,0.9)");
   g.fillStyle = gr;
   g.fill();
-  g.strokeStyle = "rgba(255,235,215,0.12)";
+  g.strokeStyle = "rgba(150,190,255,0.13)";
   g.lineWidth = 1.5;
   g.stroke();
   const ag = g.createLinearGradient(24, 26, 76, 78);
   const warm = r.from.startsWith("Luka");
-  ag.addColorStop(0, warm ? "#ffe7c2" : "#4a4048");
-  ag.addColorStop(1, warm ? "#ffa36a" : "#2e282f");
+  ag.addColorStop(0, warm ? "#e6f0ff" : "#2a3a5e");
+  ag.addColorStop(1, warm ? "#7fb0ff" : "#141e38");
   g.beginPath();
   g.arc(50, h / 2, 26, 0, Math.PI * 2);
   g.fillStyle = ag;
   g.fill();
-  g.fillStyle = warm ? "#1a1012" : "rgba(244,238,230,0.78)";
-  g.font = `650 21px ${SANS}`;
+  g.fillStyle = warm ? "#061334" : "rgba(226,236,252,0.8)";
+  g.font = `700 20px ${SANS}`;
   g.textAlign = "center";
   g.textBaseline = "middle";
   g.fillText(r.initials, 50, h / 2 + 1);
   g.textAlign = "left";
   g.textBaseline = "alphabetic";
-  g.fillStyle = "#f4eee6";
-  g.font = `620 27px ${SANS}`;
+  g.fillStyle = "#f2f6fd";
+  g.font = `650 26px ${SANS}`;
   g.fillText(r.from, 98, 46);
-  g.fillStyle = "rgba(244,238,230,0.52)";
-  g.font = `400 23px ${SANS}`;
+  g.fillStyle = "rgba(225,235,252,0.52)";
+  g.font = `450 22px ${SANS}`;
   g.fillText(r.subject, 98, 79);
-  g.fillStyle = "rgba(244,238,230,0.3)";
-  g.font = `400 19px ${MONO}`;
+  g.fillStyle = "rgba(225,235,252,0.3)";
+  g.font = `400 18px ${MONO}`;
   g.textAlign = "right";
   g.fillText(r.time, w - 28, 46);
   return c;
@@ -279,7 +292,7 @@ export function buildNoise(tl: gsap.core.Timeline) {
   };
   const make = (bit: Bit, skip = false): Frag => {
     const sp = bitSprite(bit, skip);
-    return { bit, x: 0, y: 0, z0: 0, ta: 0, w: sp.w, h: sp.h, img: sp.c };
+    return { bit, x: 0, y: 0, z0: 0, ta: 0, w: sp.w, h: sp.h, img: sp.c, soft: defocus(sp.c) };
   };
   // the storm
   for (let rep = 0; rep < 3; rep++)
@@ -349,7 +362,7 @@ export function buildNoise(tl: gsap.core.Timeline) {
   }
 
   const backOut = (x: number) => {
-    const c = 1.25;
+    const c = 1.06; // a whisper of overshoot as each row settles
     return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2);
   };
 
@@ -426,10 +439,13 @@ export function buildNoise(tl: gsap.core.Timeline) {
         const q = clamp((v - 600) / 1800);
         for (let k = 3; k >= 1; k--) {
           const pg = proj(f, tt, v * 0.011 * k);
-          draw(f.img, (pg.sx - CX) * punch + CX + ox, (pg.sy - CY) * punch + CY + oy, pg.sz, pg.sz, pg.r, a * 0.22 * q * (1 - k / 4.5));
+          draw(f.soft, (pg.sx - CX) * punch + CX + ox, (pg.sy - CY) * punch + CY + oy, pg.sz, pg.sz, pg.r, a * 0.24 * q * (1 - k / 4.5));
         }
       }
-      draw(f.img, cx, cy, sx, sy, r, a);
+      // depth of field: far away and very close, the lens lets go
+      const dof = t < fz ? Math.max(smooth(clamp((p.z - 2300) / 1500)), smooth(clamp((320 - p.z) / 260))) : 0;
+      if (dof > 0.02) draw(f.soft, cx, cy, sx, sy, r, a * dof);
+      if (dof < 0.98) draw(f.img, cx, cy, sx, sy, r, a * (1 - dof));
       // the first letter of the six, live (it leaves its notification at S.fly)
       if (named && t < S.fly) {
         const glow = smooth(clamp((t - S.glow) / 0.25));
@@ -437,12 +453,12 @@ export function buildNoise(tl: gsap.core.Timeline) {
         const s = Math.sin(r);
         g.setTransform(sx * c, sx * s, -sy * s, sy * c, cx, cy);
         g.globalAlpha = a;
-        g.font = TITLE;
-        g.fillStyle = glow > 0 ? `rgb(255,${Math.round(238 - 30 * glow)},${Math.round(230 - 100 * glow)})` : "#f4eee6";
+        g.font = `600 28px ${BRAND}`;
+        g.fillStyle = `rgb(${Math.round(242 - 90 * glow)},${Math.round(246 - 46 * glow)},255)`;
         g.fillText(NAME_BITS[f.letter!].title[0], f.lx!, f.ly!);
         if (glow > 0) {
           g.globalCompositeOperation = "lighter";
-          g.shadowColor = "rgba(255,170,80,0.9)";
+          g.shadowColor = "rgba(70,140,255,0.95)";
           g.shadowBlur = 18 * glow;
           g.globalAlpha = 0.8 * glow;
           g.fillText(NAME_BITS[f.letter!].title[0], f.lx!, f.ly!);
@@ -497,7 +513,7 @@ export function buildNoise(tl: gsap.core.Timeline) {
       const d = mod(pos, 10);
       cols[j].style.transform = `translate3d(0, ${(-d).toFixed(4)}em, 0)`;
       const vis = k === 0 ? 1 : smooth(clamp(c - (p10 - 1) + 0.0001));
-      cell.style.width = `${(0.5 * vis).toFixed(4)}em`;
+      cell.style.width = `${(0.6 * vis).toFixed(4)}em`;
       cell.style.opacity = vis.toFixed(3);
       const blur = Math.min(10, (vel / p10) * 0.35);
       cols[j].style.filter = blur > 0.3 ? `blur(${blur.toFixed(2)}px)` : "";
@@ -510,14 +526,14 @@ export function buildNoise(tl: gsap.core.Timeline) {
   tl.to(counter, { opacity: 0, duration: 0.25 }, S.ignite - 0.1);
   // ACT II·b: back, higher in the frame — it rolls down to the two that matter
   tl.fromTo(counter, { y: -300, scale: 0.92, filter: "blur(12px)" }, { y: -330, opacity: 1, scale: 0.88, filter: "blur(0px)", duration: 0.7, ease: "power3.out", immediateRender: false }, S.sort - 0.35);
-  tl.to(label, { scrambleText: { text: "NEED YOU", chars: "ABCDEFGHIJKLMNOPQRSTUVWXYZ", speed: 0.6 }, color: "#ffd08a", duration: 0.7, ease: "none" }, S.sort + 0.35);
-  tl.to(numEl, { color: "#fff3e2", textShadow: "0 0 80px rgba(255,160,90,0.55)", duration: 0.6 }, S.sort + 0.8);
+  tl.to(label, { scrambleText: { text: "NEED YOU", chars: "ABCDEFGHIJKLMNOPQRSTUVWXYZ", speed: 0.6 }, color: "#9cc4ff", duration: 0.7, ease: "none" }, S.sort + 0.35);
+  tl.to(numEl, { color: "#f6faff", textShadow: "0 0 80px rgba(70,130,255,0.6)", duration: 0.6 }, S.sort + 0.8);
   tl.to(counter, { scale: 1.7, y: -520, opacity: 0, filter: "blur(18px)", duration: 0.55, ease: "power3.in" }, S.dive - 0.1);
   cue("tick", 0.45, undefined, 0.5);
 
   // ── the name: six letters leave the noise ─────────────────────────────────
   const FS = 150;
-  meas.font = `600 ${FS}px ${SANS}`;
+  meas.font = `600 ${FS}px ${BRAND}`;
   const mA = meas.measureText("A");
   const baseOff = (FS - (mA.fontBoundingBoxAscent + mA.fontBoundingBoxDescent)) / 2 + mA.fontBoundingBoxAscent;
   const capH = mA.actualBoundingBoxAscent;
@@ -592,8 +608,9 @@ export function buildNoise(tl: gsap.core.Timeline) {
       const blur = 7 * arc * arc;
       const gl = L.glow + c;
       el.style.filter = blur > 0.2 ? `blur(${blur.toFixed(2)}px)` : "";
-      el.style.color = `rgb(255,${Math.round(238 - 40 * gl)},${Math.round(230 - 120 * gl)})`;
-      el.style.textShadow = `0 0 ${(20 + 50 * gl).toFixed(1)}px rgba(255,150,70,${(0.85 * gl).toFixed(3)})`;
+      const gk = Math.min(1, gl);
+      el.style.color = `rgb(${Math.round(242 - 80 * gk)},${Math.round(246 - 40 * gk)},255)`;
+      el.style.textShadow = `0 0 ${(18 + 46 * gl).toFixed(1)}px rgba(60,130,255,${(0.9 * gl).toFixed(3)})`;
     });
   });
 
@@ -617,8 +634,8 @@ export function buildNoise(tl: gsap.core.Timeline) {
       const a = 1 - smooth(clamp((t - (S.scan + SCAN - 0.15)) / 0.4));
       const yu = lineUp(t);
       const yd = lineDown(t);
-      hBeam(g, -40, W + 40, yu, 2.5, 55, a, "255,170,100");
-      hBeam(g, -40, W + 40, yd, 2.5, 55, a, "255,170,100");
+      hBeam(g, -40, W + 40, yu, 2.5, 55, a, "110,165,255");
+      hBeam(g, -40, W + 40, yd, 2.5, 55, a, "110,165,255");
       streak(g, CX, yu, 900, 30, 0.35 * a);
       streak(g, CX, yd, 900, 30, 0.35 * a);
     }
@@ -628,19 +645,19 @@ export function buildNoise(tl: gsap.core.Timeline) {
       const k = t - f.pass!;
       if (k < 0 || k > 0.4) continue;
       const vis = f.fs! > 0.17 && f.fx! > -100 && f.fx! < W + 100;
-      if (vis) flare(g, f.fx!, f.fy!, 120 * f.fs! + 30, 0.55 * Math.exp(-k * 9), "255,160,90");
+      if (vis) flare(g, f.fx!, f.fy!, 120 * f.fs! + 30, 0.55 * Math.exp(-k * 9), "100,160,255");
     }
   });
 
   // ── atmosphere ────────────────────────────────────────────────────────────
-  gsap.set(sky, { c1: "130,126,146", l1x: 0.5, l1y: 0.46, l1r: 0.55, l1i: 0, c2: "255,58,44", l2x: 0.5, l2y: 1.08, l2r: 0.5, l2i: 0, fog: 0.8 });
+  gsap.set(sky, { c1: "105,128,175", l1x: 0.5, l1y: 0.46, l1r: 0.55, l1i: 0, c2: "30,70,230", l2x: 0.5, l2y: 1.08, l2r: 0.5, l2i: 0, fog: 0.8 });
   tl.to(sky, { l1i: 0.45, l2i: 0.2, duration: 5.0, ease: "power1.in" }, 0.3);
   tl.to(sky, { drift: 2.4, duration: 5.3, ease: "power2.in" }, 0.2);
   tl.to(sky, { l1i: 0.06, l2i: 0, duration: 0.25, ease: "power3.out" }, S.freeze);
-  tl.to(sky, { c1: "255,160,80", l1y: YC / H, l1r: 0.34, l1i: 0.55, duration: 1.2, ease: "power2.inOut" }, S.fly + 0.1);
+  tl.to(sky, { c1: "80,145,255", l1y: YC / H, l1r: 0.34, l1i: 0.55, duration: 1.2, ease: "power2.inOut" }, S.fly + 0.1);
   tl.to(sky, { l1i: 1.1, l1r: 0.42, duration: 0.08, ease: "power2.out" }, S.ignite - 0.02);
-  tl.to(sky, { l1i: 0.16, l1r: 0.5, c1: "255,120,70", duration: 0.9, ease: "power3.out" }, S.ignite + 0.08);
-  tl.to(sky, { top: "10,7,10", bot: "22,9,10", c2: "255,96,52", l2i: 0.22, l2y: 1.12, duration: 1.4, ease: "power2.inOut" }, S.scan);
+  tl.to(sky, { l1i: 0.16, l1r: 0.5, c1: "50,110,255", duration: 0.9, ease: "power3.out" }, S.ignite + 0.08);
+  tl.to(sky, { top: "3,6,14", bot: "6,13,34", c2: "40,95,255", l2i: 0.22, l2y: 1.12, duration: 1.4, ease: "power2.inOut" }, S.scan);
 
   // sound of the storm
   for (let k = 0; k < 26; k++) {

@@ -1,5 +1,4 @@
-import "@fontsource/instrument-serif/400.css";
-import "@fontsource/instrument-serif/400-italic.css";
+import "@fontsource-variable/manrope";
 import "@fontsource-variable/inter-tight";
 import "@fontsource-variable/jetbrains-mono";
 import "./promo.css";
@@ -52,10 +51,9 @@ async function boot() {
     renderFrame(true);
   });
   await Promise.all([
-    document.fonts.load('400 200px "Instrument Serif"'),
-    document.fonts.load('italic 400 200px "Instrument Serif"'),
+    document.fonts.load('200 200px "Manrope Variable"'),
+    document.fonts.load('600 24px "Manrope Variable"'),
     document.fonts.load('600 160px "Inter Tight Variable"'),
-    document.fonts.load('400 24px "Inter Tight Variable"'),
     document.fonts.load('400 24px "JetBrains Mono Variable"'),
   ]);
   await document.fonts.ready;

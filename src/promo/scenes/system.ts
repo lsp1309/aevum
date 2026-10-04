@@ -22,13 +22,13 @@ const I = {
   tasks: `<path d="m4.5 7 1.8 1.8L9.5 5.5M4.5 13l1.8 1.8 3.2-3.3M12.5 7.5h7M12.5 13.5h7M12.5 19h7"/>`,
 };
 const MODS = [
-  { k: "mail", c: "255,208,138", t: "Mail", s: "312 → 2 need you" },
-  { k: "reply", c: "255,111,152", t: "Replies", s: "drafted in your voice" },
-  { k: "cal", c: "185,162,255", t: "Calendar", s: "3 conflicts resolved" },
-  { k: "coin", c: "255,208,138", t: "Finance", s: "INV-4821 reconciled" },
-  { k: "truck", c: "255,140,90", t: "Logistics", s: "AT-8891 · via Basel" },
-  { k: "doc", c: "255,111,152", t: "Docs", s: "Q4 brief · ready" },
-  { k: "tasks", c: "244,238,230", t: "Tasks", s: "4 due Friday · on track" },
+  { k: "mail", c: "170,205,255", t: "Mail", s: "312 → 2 need you" },
+  { k: "reply", c: "90,209,255", t: "Replies", s: "drafted in your voice" },
+  { k: "cal", c: "140,165,255", t: "Calendar", s: "3 conflicts resolved" },
+  { k: "coin", c: "170,205,255", t: "Finance", s: "INV-4821 reconciled" },
+  { k: "truck", c: "70,135,255", t: "Logistics", s: "AT-8891 · via Basel" },
+  { k: "doc", c: "90,209,255", t: "Docs", s: "Q4 brief · ready" },
+  { k: "tasks", c: "225,235,252", t: "Tasks", s: "4 due Friday · on track" },
 ] as const;
 
 const PERSP = 1500;
@@ -115,7 +115,7 @@ export function buildSystem(tl: gsap.core.Timeline) {
   tl.to(st, { pulse: 1, duration: S.implode - S.one, ease: "none" }, S.one);
   tl.to(sky, { beam: 1.0, duration: 0.25, ease: "power2.out" }, S.one);
   tl.to(sky, { beam: 0.6, duration: 1.0 }, S.one + 0.25);
-  tl.to(mods, { boxShadow: (i: number) => `inset 0 1px 0 rgba(255,240,225,0.2), inset 0 0 0 1.5px rgba(${MODS[i].c},0.8), 0 0 80px -6px rgba(${MODS[i].c},0.75), 0 30px 60px -30px rgba(0,0,0,0.95)`, duration: 0.25, stagger: 0.05 }, S.one);
+  tl.to(mods, { boxShadow: (i: number) => `inset 0 1px 0 rgba(215,232,255,0.22), inset 0 0 0 1.5px rgba(${MODS[i].c},0.8), 0 0 80px -6px rgba(${MODS[i].c},0.75), 0 30px 60px -30px rgba(0,0,0,0.95)`, duration: 0.25, stagger: 0.05 }, S.one);
   cue("chime", S.one, undefined, 1.0);
   cue("sweep", S.one - 0.1, 0.8, 0.8);
   for (let k = 0; k < 6; k++) cue("tick", S.one + 0.3 + k * 0.25, undefined, 0.45);
@@ -134,13 +134,13 @@ export function buildSystem(tl: gsap.core.Timeline) {
         if (prev) {
           const depth = (h.front + 1) / 2;
           const a = (0.15 + 0.85 * depth) * (1 - st.pull);
-          g.strokeStyle = rgba("255,190,130", 0.18 * a);
+          g.strokeStyle = rgba("90,150,255", 0.2 * a);
           g.lineWidth = 16;
           g.beginPath();
           g.moveTo(prev.x, prev.y);
           g.lineTo(p.x, p.y);
           g.stroke();
-          g.strokeStyle = rgba("255,245,230", 0.85 * a);
+          g.strokeStyle = rgba("238,246,255", 0.85 * a);
           g.lineWidth = 2.4;
           g.stroke();
         }
@@ -188,7 +188,7 @@ export function buildSystem(tl: gsap.core.Timeline) {
   tl.to(flash, { opacity: 0, scale: 2.2, duration: 0.9, ease: "power2.out" }, S.bloom + 0.08);
 
   // light: deep black so the beam carries the frame
-  tl.to(sky, { top: "6,5,8", bot: "10,6,9", c1: "255,190,120", l1x: 0.5, l1y: 0.5, l1r: 0.55, l1i: 0.18, l2i: 0.08, duration: 0.6, ease: "power2.inOut" }, P0 - 0.3);
+  tl.to(sky, { top: "2,4,10", bot: "3,7,18", c1: "110,165,255", l1x: 0.5, l1y: 0.5, l1r: 0.55, l1i: 0.18, l2i: 0.08, duration: 0.6, ease: "power2.inOut" }, P0 - 0.3);
   void W;
   void H;
   void beat;

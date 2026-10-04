@@ -6,27 +6,27 @@ import { $, sizeCanvas, W, H } from "./stage";
  * resolution (it is all soft light), driven by a tweenable state.
  *   – a vertical base gradient (top / bottom)
  *   – two volumetric lights, modulated by slow smoke (fbm)
- *   – an ember horizon, a vertical beam (the pillar act)
+ *   – a blue horizon, a vertical beam (the pillar act)
  *   – `flood`: the whole frame opens into warm daylight (the end card)
  * Colours are "r,g,b" strings (0–255) so GSAP can tween them.
  */
 export const sky = {
-  top: "8,7,10",
-  bot: "5,4,7",
+  top: "3,5,12",
+  bot: "2,3,8",
   l1x: 0.5,
   l1y: 0.42,
   l1r: 0.5,
   l1i: 0.0,
-  c1: "120,110,130",
+  c1: "100,125,175",
   l2x: 0.5,
   l2y: 0.9,
   l2r: 0.4,
   l2i: 0.0,
-  c2: "255,120,60",
+  c2: "40,90,255",
   fog: 0.6,
   beam: 0,
   horizon: 0,
-  hz: "255,110,50",
+  hz: "40,100,255",
   flood: 0,
   drift: 0,
 };
@@ -68,19 +68,31 @@ void main(){
   col *= 0.85 + 0.3 * sm;
   col += light(s, uL1, uC1, sm);
   col += light(s, uL2, uC2, sm);
-  // ember horizon, low in the frame
+  // blue horizon, low in the frame
   float hy = 1.0 - uv.y;
   col += uHz * uHorizon * (exp(-hy * hy * 22.0) * 0.9 + exp(-hy * 4.0) * 0.18) * (0.75 + 0.5 * sm);
   // the beam: a vertical shaft of white-gold light through the centre
   float bx = abs(s.x - ${W / 2}.0);
-  col += vec3(1.0, 0.86, 0.66) * uBeam * (exp(-bx / 26.0) * 0.9 + exp(-bx / 160.0) * 0.35 + exp(-bx / 520.0) * 0.12) * (0.8 + 0.4 * sm);
+  col += vec3(0.74, 0.86, 1.0) * uBeam * (exp(-bx / 26.0) * 0.9 + exp(-bx / 160.0) * 0.35 + exp(-bx / 520.0) * 0.12) * (0.8 + 0.4 * sm);
+
+  // dust: a few motes of light drifting very slowly, barely there
+  vec2 dp = (s + vec2(0.0, -t * 9.0 - uDrift * 140.0)) / 46.0;
+  vec2 cell = floor(dp);
+  vec2 fr = fract(dp) - 0.5;
+  float pr = h21(cell);
+  if (pr > 0.955) {
+    vec2 o = vec2(h21(cell + 7.1), h21(cell + 3.3)) - 0.5;
+    float d = length(fr - o * 0.6);
+    float tw = 0.55 + 0.45 * sin(t * (1.0 + 2.0 * h21(cell + 1.7)) + pr * 40.0);
+    col += vec3(0.55, 0.72, 1.0) * smoothstep(0.09, 0.0, d) * 0.07 * tw * (1.0 - uFlood);
+  }
 
   // filmic shoulder (keeps highlights rich, never clipped flat)
   col = 1.0 - exp(-col * 1.15);
 
-  // daylight: cream at the top, apricot at the bottom, a breath of smoke
-  vec3 day = mix(vec3(0.985, 0.962, 0.930), vec3(1.0, 0.835, 0.690), smoothstep(0.25, 1.05, uv.y));
-  day += vec3(1.0, 0.62, 0.48) * 0.10 * exp(-pow((uv.x - 0.5) * 1.6, 2.0) - pow((uv.y - 1.05) * 2.2, 2.0));
+  // daylight: cool white at the top, pale sky blue at the bottom, a breath of smoke
+  vec3 day = mix(vec3(0.962, 0.975, 0.995), vec3(0.80, 0.872, 0.995), smoothstep(0.25, 1.05, uv.y));
+  day += vec3(0.30, 0.55, 1.0) * 0.12 * exp(-pow((uv.x - 0.5) * 1.6, 2.0) - pow((uv.y - 1.05) * 2.2, 2.0));
   day -= vec3(0.03, 0.035, 0.03) * (smoke - 0.5);
   col = mix(col, day, uFlood);
 

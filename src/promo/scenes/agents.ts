@@ -16,9 +16,9 @@ import { hourY, LANE_HOURS, LANE_H } from "../layout";
 const check = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path class="ck" d="m6 12.5 4 4 8-9"/></svg>`;
 
 const AGENTS = [
-  { c: "255,208,138", label: "FINANCE AGENT", title: "Invoice 4821", steps: ["Checking the September payment run", "Transfer found · 12 Sep · CHF 4,820", "Reconciled · reply drafted for Luka"] },
-  { c: "255,140,90", label: "LOGISTICS AGENT", title: "Shipment AT-8891", steps: ["Delay detected at the border", "Rerouting via Basel", "Rerouted · arrives Friday 09:00"] },
-  { c: "255,111,152", label: "DOCS AGENT", title: "Q4 brief for Ziyad", steps: ["Reading 14 threads · 3 decks", "Drafting · 3 pages", "Brief ready · shared with Ziyad"] },
+  { c: "170,205,255", label: "FINANCE AGENT", title: "Invoice 4821", steps: ["Checking the September payment run", "Transfer found · 12 Sep · CHF 4,820", "Reconciled · reply drafted for Luka"] },
+  { c: "70,135,255", label: "LOGISTICS AGENT", title: "Shipment AT-8891", steps: ["Delay detected at the border", "Rerouting via Basel", "Rerouted · arrives Friday 09:00"] },
+  { c: "90,209,255", label: "DOCS AGENT", title: "Q4 brief for Ziyad", steps: ["Reading 14 threads · 3 decks", "Drafting · 3 pages", "Brief ready · shared with Ziyad"] },
 ];
 const LOG: Array<[number, string, string]> = [
   [0, "finance", "payment run · sep · 214 lines"],
@@ -37,7 +37,7 @@ export function buildAgents(tl: gsap.core.Timeline) {
   const ys = LANE_HOURS.map((h) => hourY(h));
   const root = html(`<section class="scene" id="s-agents">
     <div class="ag-rig">
-      <div class="ag-head"><div class="serif">Meanwhile…</div><div class="mono">3 AGENTS · RUNNING IN PARALLEL</div></div>
+      <div class="ag-head"><div class="ttl">Meanwhile…</div><div class="label">3 agents · running in parallel</div></div>
       ${AGENTS.map(
         (a, i) => `<div class="lane" style="--c:${a.c};top:${ys[i] - LANE_H / 2}px">
           <div class="ln-top"><span class="ln-glyph"><i></i></span><span>${a.label}</span><span class="ln-step">01 / 03</span></div>
@@ -61,7 +61,7 @@ export function buildAgents(tl: gsap.core.Timeline) {
 
   tl.set(root, { visibility: "visible" }, L0 - 0.4);
   // the three kept hour lines take over from the week's, light up, stretch
-  tl.to(lines, { background: "rgba(255,220,170,0.9)", boxShadow: "0 0 18px rgba(255,170,100,0.8)", duration: 0.3 }, L0 - 0.35);
+  tl.to(lines, { background: "rgba(205,226,255,0.92)", boxShadow: "0 0 18px rgba(70,135,255,0.85)", duration: 0.3 }, L0 - 0.35);
   tl.to(lines, { left: 70, width: 940, duration: 0.4, ease: "power3.inOut" }, L0 - 0.25);
   cue("sweep", L0 - 0.3, 0.5, 0.8);
 
@@ -87,9 +87,9 @@ export function buildAgents(tl: gsap.core.Timeline) {
     });
     // done: the check pops
     const ck = ln.querySelector<HTMLElement>(".ln-check")!;
-    tl.fromTo(ck, { scale: 0, rotation: -40 }, { scale: 1, rotation: 0, duration: 0.5, ease: "back.out(2.6)" }, done[i]);
+    tl.fromTo(ck, { scale: 0, rotation: -40 }, { scale: 1, rotation: 0, duration: 0.55, ease: "back.out(1.7)" }, done[i]);
     tl.fromTo(ck.querySelector(".ck"), { drawSVG: "0%" }, { drawSVG: "100%", duration: 0.35, ease: "power2.out" }, done[i] + 0.08);
-    tl.to(ln, { boxShadow: `inset 0 1px 0 rgba(255,240,225,0.16), inset 0 0 0 1.5px rgba(${AGENTS[i].c},0.7), 0 0 70px -10px rgba(${AGENTS[i].c},0.55), 0 40px 80px -40px rgba(0,0,0,0.95)`, duration: 0.4 }, done[i]);
+    tl.to(ln, { boxShadow: `inset 0 1px 0 rgba(210,228,255,0.18), inset 0 0 0 1.5px rgba(${AGENTS[i].c},0.7), 0 0 70px -10px rgba(${AGENTS[i].c},0.5), 0 40px 80px -40px rgba(0,3,12,0.95)`, duration: 0.4 }, done[i]);
     cue("chime", done[i], undefined, 0.9);
     cue("hit", done[i], undefined, 0.3);
   });
@@ -143,9 +143,9 @@ export function buildAgents(tl: gsap.core.Timeline) {
     });
     // the beam forming
     const k = clamp((t - (S.pillar - 0.2)) / 0.2);
-    if (k > 0 && t < S.pillar + 0.3) flare(g, CX, CY, 900, 0.7 * smooth(k) * (1 - smooth(clamp((t - S.pillar) / 0.3))), "255,200,140");
+    if (k > 0 && t < S.pillar + 0.3) flare(g, CX, CY, 900, 0.7 * smooth(k) * (1 - smooth(clamp((t - S.pillar) / 0.3))), "150,195,255");
   });
 
   // light: three warm sources, low
-  tl.to(sky, { top: "9,7,10", bot: "16,9,10", c1: "255,180,110", l1x: 0.1, l1y: 0.35, l1r: 0.45, l1i: 0.2, c2: "255,100,140", l2x: 0.95, l2y: 0.8, l2r: 0.5, l2i: 0.18, duration: 1.2, ease: "power2.inOut" }, L0 - 0.3);
+  tl.to(sky, { top: "3,6,14", bot: "5,10,26", c1: "110,165,255", l1x: 0.1, l1y: 0.35, l1r: 0.45, l1i: 0.2, c2: "50,190,255", l2x: 0.95, l2y: 0.8, l2r: 0.5, l2i: 0.18, duration: 1.2, ease: "power2.inOut" }, L0 - 0.3);
 }

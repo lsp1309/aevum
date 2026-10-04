@@ -47,7 +47,7 @@ export function buildInbox(tl: gsap.core.Timeline) {
     </div>
     <div class="voiceprint abs">
       <div class="vp-bars">${"<i></i>".repeat(56)}</div>
-      <div class="vp-label mono">VOICE PROFILE · ZIYAD · LEARNED FROM 2,140 SENT EMAILS</div>
+      <div class="vp-label">VOICE PROFILE · ZIYAD · LEARNED FROM 2,140 SENT EMAILS</div>
     </div>
   </section>`);
   world.appendChild(root);
@@ -78,7 +78,7 @@ export function buildInbox(tl: gsap.core.Timeline) {
   rows.forEach((_, i) => {
     const t = r0 + i * 0.075;
     tl.fromTo(reads[i], { "--r": 0 }, { "--r": 1, duration: 0.55, ease: "power2.inOut" }, t);
-    tl.to(tags[i], { opacity: 1, scale: 1, x: 0, duration: 0.45, ease: "back.out(2.2)" }, t + 0.32);
+    tl.to(tags[i], { opacity: 1, scale: 1, x: 0, duration: 0.5, ease: "back.out(1.5)" }, t + 0.32);
     if (i % 2 === 0) cue("tick", t + 0.32, undefined, 0.5);
   });
 
@@ -94,7 +94,7 @@ export function buildInbox(tl: gsap.core.Timeline) {
   tl.to(hero, { y: ya - rowY(KEY_A), z: 30, duration: 1.0, ease: "power3.inOut" }, s0 + 0.15);
   tl.to(second, { y: yb - rowY(KEY_B), z: 30, duration: 1.0, ease: "power3.inOut" }, s0 + 0.2);
   tl.to([hero, second], {
-    boxShadow: "inset 0 1px 0 rgba(255,240,225,0.16), inset 0 0 0 1.5px rgba(255,170,110,0.6), 0 0 70px -10px rgba(255,120,60,0.5), 0 40px 70px -30px rgba(0,0,0,0.9)",
+    boxShadow: "inset 0 1px 0 rgba(210,228,255,0.2), inset 0 0 0 1.5px rgba(120,170,255,0.65), 0 0 70px -10px rgba(47,107,255,0.55), 0 40px 70px -30px rgba(0,3,12,0.9)",
     duration: 0.6,
   }, s0 + 0.7);
   cue("whoosh", s0, 1.0, 0.5);
@@ -178,6 +178,8 @@ export function buildInbox(tl: gsap.core.Timeline) {
     fly.style.width = `${w.toFixed(2)}px`;
     fly.style.height = `${h.toFixed(2)}px`;
     fly.style.borderRadius = `${lerp(12, 20, F.grow).toFixed(2)}px`;
+    const mb = 3.2 * Math.sin(Math.PI * F.p) * (F.p < 1 ? 1 : 0); // motion blur at speed
+    fly.style.filter = mb > 0.2 ? `blur(${mb.toFixed(2)}px)` : "";
     fly.style.transformOrigin = "0 0";
   });
   paint((g, t) => {
@@ -195,9 +197,9 @@ export function buildInbox(tl: gsap.core.Timeline) {
       else path.lineTo(x, y);
     }
     const a = 1 - smooth(clamp((t - LAND) / 0.3));
-    glowPath(g, path, 6, 0.7 * a, "255,130,140");
+    glowPath(g, path, 6, 0.7 * a, "80,150,255");
     const q = at(head);
-    flare(g, q.x + start.w / 2, q.y + start.h / 2, 160, 0.5 * a, "255,140,150");
+    flare(g, q.x + start.w / 2, q.y + start.h / 2, 160, 0.5 * a, "90,160,255");
   });
 
   // the email and its reply leave upwards: the camera tilts down to the week
@@ -206,8 +208,8 @@ export function buildInbox(tl: gsap.core.Timeline) {
   tl.set(fly, { autoAlpha: 0 }, S.land + 0.7);
 
   // light: warm, then rose for the voice
-  tl.to(sky, { c1: "255,140,70", l1x: 0.5, l1y: 0.26, l1r: 0.3, l1i: 0.42, l2i: 0.12, duration: 1.0, ease: "power2.inOut" }, S.sort - 0.2);
-  tl.to(sky, { c1: "255,110,150", l1y: 0.42, l1r: 0.55, l1i: 0.26, c2: "255,120,70", l2i: 0.16, duration: 1.0, ease: "power2.inOut" }, D0);
+  tl.to(sky, { c1: "60,120,255", l1x: 0.5, l1y: 0.26, l1r: 0.3, l1i: 0.4, l2i: 0.12, duration: 1.0, ease: "power2.inOut" }, S.sort - 0.2);
+  tl.to(sky, { c1: "70,125,255", l1y: 0.42, l1r: 0.55, l1i: 0.26, c2: "40,170,255", l2i: 0.14, duration: 1.0, ease: "power2.inOut" }, D0);
   void W;
   void beat;
   void ROW;

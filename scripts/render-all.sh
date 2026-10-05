@@ -7,7 +7,7 @@
 #   FORMAT=vertical scripts/render-all.sh   9:16 → out/astrya-9x16-en.mp4
 #   LANG_CUT=fr …                           French cut (voice-over, titles, captions)
 #   SHORT=1 …                               the 30-second film → out/astrya-16x9-en-short.mp4
-#   PAGE=promo …                            the vertical promo → out/astrya-promo-9x16.mp4
+#   PAGE=promo | PAGE=mosaic …              a vertical promo page → out/astrya-<page>-9x16.mp4
 #   FPS=30 …                                faster render (default 60 fps)
 set -e
 cd "$(dirname "$0")/.."
@@ -22,9 +22,9 @@ CUES=scripts/cues.json; MIX=public/audio/astrya-mix-$CUT.m4a; GRADE=scripts/grad
 if [ -n "$SHORT" ]; then
   TAG=$TAG-short; CUES=scripts/cues.short.json; MIX=public/audio/astrya-mix-short.m4a; GRADE=scripts/grade_short.txt; XARGS="--cut short"
 fi
-if [ "${PAGE:-}" = promo ]; then
-  # the vertical promo film (promo.html): its own cues, score and grade
-  FORMAT=vertical; TAG=promo-9x16; CUES=scripts/cues.promo.json; MIX=public/audio/astrya-promo.m4a; GRADE=scripts/grade_promo.txt; XARGS="--page promo"
+if [ -n "${PAGE:-}" ]; then
+  # a vertical promo page (promo.html, mosaic.html…): its own cues, score and grade
+  FORMAT=vertical; TAG=$PAGE-9x16; CUES=scripts/cues.$PAGE.json; MIX=public/audio/astrya-$PAGE.m4a; GRADE=scripts/grade_$PAGE.txt; XARGS="--page $PAGE"
 fi
 DIR=out/seg-$TAG
 mkdir -p "$DIR"

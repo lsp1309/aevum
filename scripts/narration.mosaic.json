@@ -1,0 +1,70 @@
+{
+ "voice": "bf_emma",
+ "lang": "en-gb",
+ "british": true,
+ "speed": 0.92,
+ "g2p": "misaki",
+ "note": "Mosaic film (mosaic.html, 9:16). Calm, close, unhurried. The pieces → the picture.",
+ "lines": [
+  {
+   "id": "pieces",
+   "text": "Every day, your work arrives in pieces.",
+   "say": "Every day, your work arrives in pieces.",
+   "at": 0.4
+  },
+  {
+   "id": "nothing",
+   "text": "Fragments of everything. A picture of nothing.",
+   "say": "Fragments of everything. A picture of nothing.",
+   "at": 3.0
+  },
+  {
+   "id": "together",
+   "text": "Astrya puts the pieces together.",
+   "say": "Astria puts the pieces together.",
+   "at": 5.8
+  },
+  {
+   "id": "matter",
+   "text": "It knows which messages matter,",
+   "say": "It knows which messages matter,",
+   "at": 9.3
+  },
+  {
+   "id": "writes",
+   "text": "writes back the way you would,",
+   "say": "writes back the way you would,",
+   "at": 11.6
+  },
+  {
+   "id": "time",
+   "text": "finds the time your week was hiding,",
+   "say": "finds the time your week was hiding,",
+   "at": 13.6
+  },
+  {
+   "id": "agents",
+   "text": "and sends its agents to finish the rest.",
+   "say": "and sends its agents to finish the rest.",
+   "at": 15.95
+  },
+  {
+   "id": "system",
+   "text": "Mail, calendar, finance, documents… one system, thinking together.",
+   "say": "Mail, calendar, finance, documents… one system, thinking together.",
+   "at": 19.8
+  },
+  {
+   "id": "picture",
+   "text": "So the whole picture is finally yours.",
+   "say": "So the whole picture is finally yours.",
+   "at": 24.0
+  },
+  {
+   "id": "brand",
+   "text": "Astrya. Intelligence that works with you.",
+   "say": "Astria. Intelligence that works with you.",
+   "at": 26.7
+  }
+ ]
+}

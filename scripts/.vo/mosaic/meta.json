@@ -1,0 +1,123 @@
+[
+ {
+  "i": 0,
+  "id": "pieces",
+  "at": 0.4,
+  "dur": 2.282,
+  "sr": 24000,
+  "text": "Every day, your work arrives in pieces.",
+  "phrases": [
+   0.0
+  ],
+  "speed": 0.996
+ },
+ {
+  "i": 1,
+  "id": "nothing",
+  "at": 3.0,
+  "dur": 2.499,
+  "sr": 24000,
+  "text": "Fragments of everything. A picture of nothing.",
+  "phrases": [
+   0.0,
+   1.36
+  ],
+  "speed": 0.968
+ },
+ {
+  "i": 2,
+  "id": "together",
+  "at": 5.8,
+  "dur": 2.002,
+  "sr": 24000,
+  "text": "Astrya puts the pieces together.",
+  "phrases": [
+   0.0
+  ],
+  "speed": 0.92
+ },
+ {
+  "i": 3,
+  "id": "matter",
+  "at": 9.3,
+  "dur": 1.979,
+  "sr": 24000,
+  "text": "It knows which messages matter,",
+  "phrases": [
+   0.0
+  ],
+  "speed": 0.92
+ },
+ {
+  "i": 4,
+  "id": "writes",
+  "at": 11.6,
+  "dur": 1.662,
+  "sr": 24000,
+  "text": "writes back the way you would,",
+  "phrases": [
+   0.0
+  ],
+  "speed": 0.92
+ },
+ {
+  "i": 5,
+  "id": "time",
+  "at": 13.6,
+  "dur": 2.016,
+  "sr": 24000,
+  "text": "finds the time your week was hiding,",
+  "phrases": [
+   0.0
+  ],
+  "speed": 0.92
+ },
+ {
+  "i": 6,
+  "id": "agents",
+  "at": 15.95,
+  "dur": 2.243,
+  "sr": 24000,
+  "text": "and sends its agents to finish the rest.",
+  "phrases": [
+   0.0
+  ],
+  "speed": 0.92
+ },
+ {
+  "i": 7,
+  "id": "system",
+  "at": 19.8,
+  "dur": 3.628,
+  "sr": 24000,
+  "text": "Mail, calendar, finance, documents… one system, thinking together.",
+  "phrases": [
+   0.0
+  ],
+  "speed": 0.92
+ },
+ {
+  "i": 8,
+  "id": "picture",
+  "at": 24.0,
+  "dur": 2.254,
+  "sr": 24000,
+  "text": "So the whole picture is finally yours.",
+  "phrases": [
+   0.0
+  ],
+  "speed": 0.92
+ },
+ {
+  "i": 9,
+  "id": "brand",
+  "at": 26.7,
+  "dur": 2.381,
+  "sr": 24000,
+  "text": "Astrya. Intelligence that works with you.",
+  "phrases": [
+   0.0
+  ],
+  "speed": 0.92
+ }
+]

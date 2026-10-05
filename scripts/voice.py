@@ -30,7 +30,8 @@ G2P = None
 if spec.get("g2p") == "misaki":
     from misaki import en, espeak
 
-    G2P = en.G2P(trf=False, british=False, fallback=espeak.EspeakFallback(british=False))
+    BR = bool(spec.get("british"))  # a British voice (bf_/bm_) wants British phonemes
+    G2P = en.G2P(trf=False, british=BR, fallback=espeak.EspeakFallback(british=BR))
 
 
 def say(text, speed):

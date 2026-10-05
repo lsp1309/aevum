@@ -33,7 +33,7 @@ export const S = {
   end: 12.0,
 };
 
-const ICON = {
+export const ICON = {
   mail: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="6" width="17" height="12" rx="2"/><path d="m4 7 8 6 8-6"/></svg>`,
   reply: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M10 7 5 12l5 5"/><path d="M5 12h9a5 5 0 0 1 5 5v1"/></svg>`,
   cal: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5.5" width="16" height="14" rx="2.5"/><path d="M4 10h16M9 3.5v4M15 3.5v4"/></svg>`,
@@ -71,7 +71,7 @@ const STREAM = [
 export const cam = { x: 0, y: 0, z: 0, rx: 0, ry: 0, rz: 0, s: 1 };
 
 /** Typing: characters appear one by one; the word being typed glows. */
-function typer(el: HTMLElement, t0: number, rate: number, opts: { caret?: boolean; hot?: boolean } = {}) {
+export function typer(el: HTMLElement, t0: number, rate: number, opts: { caret?: boolean; hot?: boolean } = {}) {
   const chars = splitChars(el);
   const caret = document.createElement("span");
   caret.className = "caret";

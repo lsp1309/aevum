@@ -37,7 +37,7 @@ const args = Object.fromEntries(
 const fps = Number(args.fps ?? 30);
 const crf = String(args.crf ?? 16);
 const page = args.page ? String(args.page) : "";
-const vertical = args.format === "vertical" || (Boolean(page) && page !== "remix"); // the promo pages are 9:16 (remix is 16:9)
+const vertical = args.format === "vertical" || (Boolean(page) && !page.startsWith("remix")); // the promo pages are 9:16 (remix is 16:9)
 const width = vertical ? 1080 : 1920;
 const height = vertical ? 1920 : 1080;
 const useDev = Boolean(args.dev);

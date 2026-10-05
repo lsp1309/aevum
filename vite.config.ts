@@ -9,6 +9,6 @@ export default defineConfig({
     target: "es2022",
     assetsInlineLimit: 0,
     chunkSizeWarningLimit: 900,
-    rollupOptions: { input: { main: resolve(root, "index.html"), promo: resolve(root, "promo.html"), mosaic: resolve(root, "mosaic.html") } },
+    rollupOptions: { input: { main: resolve(root, "index.html"), promo: resolve(root, "promo.html"), mosaic: resolve(root, "mosaic.html"), remix: resolve(root, "remix.html") } },
   },
 });

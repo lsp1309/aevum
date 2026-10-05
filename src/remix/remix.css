@@ -1,0 +1,397 @@
+/* ASTRYA — Prompt. Black, Astrya blues, white; neon only for the agents. */
+:root {
+  --sans: "Manrope Variable", "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --brand: "Inter Tight Variable", "Inter", ui-sans-serif, sans-serif;
+  --mono: "JetBrains Mono Variable", ui-monospace, monospace;
+  --blue: #2f6bff;
+  --blue-2: #4d8dff;
+  --ice: #bcd6ff;
+  --cyan: #22e5ff;
+  --violet: #9b5cff;
+  --magenta: #ff3df0;
+  --lime: #b6ff3a;
+}
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: #000;
+  overflow: hidden;
+}
+body {
+  font-family: var(--sans);
+  color: #fff;
+  -webkit-font-smoothing: antialiased;
+}
+#app {
+  position: fixed;
+  inset: 0;
+  background: #000;
+}
+#stage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  overflow: hidden;
+  background: #020409;
+  contain: strict;
+  isolation: isolate;
+}
+#stage > * {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+#world,
+#front {
+  perspective: 1700px;
+  perspective-origin: 960px 540px;
+  transform-style: preserve-3d;
+}
+#grain {
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  background-size: 256px 256px;
+}
+#vig {
+  background: radial-gradient(120% 90% at 50% 50%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.5) 100%);
+}
+.abs {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.scene {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  visibility: hidden;
+}
+.wd {
+  display: inline-block;
+  white-space: nowrap;
+}
+.ch {
+  display: inline-block;
+  white-space: pre;
+}
+
+/* logo */
+.wordmark {
+  font-family: var(--brand);
+  font-weight: 600;
+  font-size: 118px;
+  letter-spacing: 0.16em;
+  line-height: 1;
+  color: #fff;
+  text-shadow:
+    0 0 30px rgba(120, 170, 255, 0.85),
+    0 0 90px rgba(47, 107, 255, 0.55);
+  white-space: nowrap;
+}
+
+/* pills */
+.pills {
+  position: absolute;
+  left: 0;
+  width: 1920px;
+  top: 455px;
+  display: flex;
+  justify-content: center;
+  gap: 28px;
+}
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  height: 132px;
+  padding: 0 46px 0 38px;
+  border-radius: 34px;
+  font-weight: 600;
+  font-size: 48px;
+  letter-spacing: -0.01em;
+  color: #fff;
+  background: rgba(8, 14, 34, 0.42);
+  box-shadow:
+    inset 0 0 0 2.5px rgba(255, 255, 255, 0.9),
+    inset 0 0 18px rgba(140, 190, 255, 0.35),
+    0 0 26px rgba(90, 150, 255, 0.75),
+    0 0 70px rgba(47, 107, 255, 0.45);
+  backdrop-filter: blur(6px);
+}
+.pill svg {
+  width: 50px;
+  height: 50px;
+}
+.pill.on {
+  color: #bfe6ff;
+  background: rgba(47, 107, 255, 0.35);
+  box-shadow:
+    inset 0 0 0 2.5px #9fd8ff,
+    inset 0 0 24px rgba(90, 200, 255, 0.6),
+    0 0 36px rgba(90, 200, 255, 0.95),
+    0 0 110px rgba(47, 107, 255, 0.8);
+}
+.cursor {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 110px;
+  height: 110px;
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.6));
+}
+
+/* the prompt */
+.bigtype {
+  position: absolute;
+  left: 420px;
+  top: 440px;
+  font-weight: 600;
+  font-size: 104px;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  white-space: nowrap;
+  transform-origin: 0 0;
+}
+.bigtype .hot {
+  background: linear-gradient(100deg, #7fe3ff, #4d8dff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.caret {
+  display: inline-block;
+  width: 6px;
+  height: 0.95em;
+  margin-left: 6px;
+  vertical-align: -0.12em;
+  background: #7fe3ff;
+}
+.plus {
+  position: absolute;
+  width: 70px;
+  height: 70px;
+}
+.box {
+  position: absolute;
+  border-radius: 44px;
+  background: linear-gradient(180deg, rgba(14, 18, 30, 0.96), rgba(6, 8, 14, 0.98));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 0 0 1.5px rgba(150, 185, 255, 0.12),
+    0 40px 90px -30px rgba(0, 0, 0, 0.9);
+}
+.box .row {
+  position: absolute;
+  left: 50px;
+  right: 40px;
+  bottom: 34px;
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  font-weight: 550;
+  font-size: 30px;
+  color: rgba(225, 235, 252, 0.85);
+}
+.box .row .sp {
+  flex: 1;
+}
+.box .row svg {
+  width: 36px;
+  height: 36px;
+}
+.send {
+  width: 62px;
+  height: 62px;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(180deg, #4d8dff, #2f6bff);
+  box-shadow: 0 0 30px rgba(47, 107, 255, 0.8);
+}
+.send svg {
+  width: 34px !important;
+  height: 34px !important;
+  color: #fff;
+}
+.box .txt {
+  position: absolute;
+  left: 54px;
+  top: 52px;
+  font-weight: 560;
+  font-size: 44px;
+  letter-spacing: -0.015em;
+  white-space: nowrap;
+}
+
+/* the agent stream (Astrya's "code") */
+.stream {
+  position: absolute;
+  font-family: var(--mono);
+  font-size: 30px;
+  line-height: 46px;
+  white-space: pre;
+  color: rgba(225, 235, 252, 0.85);
+  transform-style: preserve-3d;
+}
+.stream .a1 { color: var(--cyan); text-shadow: 0 0 14px var(--cyan); }
+.stream .a2 { color: var(--violet); text-shadow: 0 0 14px var(--violet); }
+.stream .a3 { color: var(--magenta); text-shadow: 0 0 14px var(--magenta); }
+.stream .a4 { color: var(--lime); text-shadow: 0 0 14px var(--lime); }
+.stream .k { color: #7fb3ff; }
+.stream .s { color: #ffffff; font-weight: 600; }
+
+/* the card (the product) */
+.card {
+  position: absolute;
+  width: 1180px;
+  height: 660px;
+  border-radius: 46px;
+  overflow: hidden;
+  transform-style: flat;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    inset 0 0 0 2px rgba(150, 200, 255, 0.35),
+    0 0 60px rgba(47, 107, 255, 0.45),
+    0 60px 120px -40px rgba(0, 0, 0, 0.9);
+}
+.card .bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #050a2a 0%, #0b1fa8 45%, #2f6bff 85%, #5ab8ff 100%);
+}
+.card .neon {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(60% 80% at 10% 100%, rgba(255, 61, 240, 0.85), rgba(255, 61, 240, 0) 70%),
+    radial-gradient(55% 70% at 95% 10%, rgba(34, 229, 255, 0.85), rgba(34, 229, 255, 0) 70%),
+    radial-gradient(50% 60% at 90% 95%, rgba(182, 255, 58, 0.6), rgba(182, 255, 58, 0) 70%),
+    linear-gradient(125deg, #2a0a7a 0%, #6a2bff 35%, #2f6bff 65%, #0a1a6a 100%);
+  opacity: 0;
+}
+.card .sheen {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 0.28) 50%, rgba(255, 255, 255, 0) 70%);
+  transform: translateX(-120%);
+}
+.card .nav {
+  position: absolute;
+  left: 56px;
+  top: 44px;
+  display: flex;
+  align-items: center;
+  gap: 44px;
+  font-weight: 600;
+  font-size: 26px;
+  color: rgba(255, 255, 255, 0.92);
+}
+.card .nav .lg {
+  width: 66px;
+  height: 66px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.35);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+}
+.card h2 {
+  position: absolute;
+  left: 60px;
+  top: 220px;
+  margin: 0;
+  font-weight: 600;
+  font-size: 88px;
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+}
+.card .btn {
+  position: absolute;
+  left: 60px;
+  bottom: 56px;
+  height: 64px;
+  padding: 0 30px;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  font-weight: 700;
+  font-size: 26px;
+  color: #071334;
+  background: #fff;
+}
+.chips {
+  position: absolute;
+  right: 56px;
+  top: 150px;
+  width: 470px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.chip {
+  position: relative;
+  height: 92px;
+  border-radius: 22px;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  font-weight: 650;
+  font-size: 26px;
+  color: #fff;
+  background: rgba(4, 6, 20, 0.55);
+  box-shadow:
+    inset 0 0 0 2px var(--c),
+    0 0 26px var(--c);
+  overflow: hidden;
+}
+.chip i {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--c);
+  box-shadow: 0 0 14px var(--c), 0 0 30px var(--c);
+}
+.chip em {
+  margin-left: auto;
+  font-style: normal;
+  font-family: var(--mono);
+  font-size: 20px;
+  color: var(--c);
+}
+.chip .bar {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 5px;
+  width: 100%;
+  background: var(--c);
+  box-shadow: 0 0 12px var(--c);
+  transform-origin: 0 50%;
+}
+
+/* outro */
+.handled {
+  position: absolute;
+  left: 0;
+  width: 1920px;
+  top: 640px;
+  text-align: center;
+  font-family: var(--brand);
+  font-weight: 600;
+  font-size: 104px;
+  letter-spacing: -0.01em;
+  color: #fff;
+  white-space: nowrap;
+}
+.handled .ch {
+  transform-origin: 50% 80%;
+}

@@ -24,7 +24,7 @@ if [ -n "$SHORT" ]; then
 fi
 if [ -n "${PAGE:-}" ]; then
   # a vertical promo page (promo.html, mosaic.html…): its own cues, score and grade
-  FORMAT=vertical; TAG=$PAGE-9x16; CUES=scripts/cues.$PAGE.json; MIX=public/audio/astrya-$PAGE.m4a; GRADE=scripts/grade_$PAGE.txt; XARGS="--page $PAGE"
+  FORMAT=vertical; TAG=$PAGE-9x16; [ "$PAGE" = remix ] && FORMAT=horizontal && TAG=$PAGE-16x9; CUES=scripts/cues.$PAGE.json; MIX=public/audio/astrya-$PAGE.m4a; GRADE=scripts/grade_$PAGE.txt; XARGS="--page $PAGE"
 fi
 DIR=out/seg-$TAG
 mkdir -p "$DIR"

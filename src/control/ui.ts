@@ -1,9 +1,10 @@
 import { gsap } from "../core/gsap";
 import { onFrame, cue, clamp, smooth, lerp, rng } from "../core/clock";
 import { icon, ringMark } from "../core/icons";
-import { html, splitChars, world, front, $, W, H } from "../remix/stage";
+import { html, splitChars, world, front, $, W, H } from "./stage";
+import { V, L, ROWS_Y, rect, type Box } from "./layout";
 import { T } from "./timing";
-import { hud, COUNTS, ROWS_Y } from "./gl";
+import { hud, COUNTS } from "./gl";
 
 /**
  * The DOM layer of "Astrya takes control": the storm of windows and
@@ -14,6 +15,8 @@ import { hud, COUNTS, ROWS_Y } from "./gl";
 const P = (t: number, a: number, b: number) => clamp((t - a) / (b - a));
 const eOut = (x: number) => 1 - Math.pow(1 - x, 3);
 const fmt = (n: number) => Math.round(n).toLocaleString("en-US");
+/** Row centres inside the inbox panel (its own units). */
+const ROW_LOCAL = [208, 326, 444, 562, 680];
 
 export function buildFilm(tl: gsap.core.Timeline) {
   const show = (el: HTMLElement, a: number, b: number) =>
@@ -41,6 +44,14 @@ export function buildFilm(tl: gsap.core.Timeline) {
     ft(chars, { opacity: 0, scale: 2.2, filter: "blur(20px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.45, stagger: 0.03, ease: "expo.out" }, a);
     if (!cut) ft(chars, { opacity: 1, filter: "blur(0px)" }, { opacity: 0, y: -24, filter: "blur(14px)", duration: 0.3, stagger: 0.012, ease: "power2.in" }, b - 0.35);
     return { el, chars };
+  };
+  const place = (el: HTMLElement, b: Box, parent: HTMLElement) => {
+    const w = html(`<div class="fit" style="left:${b.x}px;top:${b.y}px;transform:scale(${b.s})"></div>`);
+    el.style.left = "0px";
+    el.style.top = "0px";
+    w.append(el);
+    parent.append(w);
+    return w;
   };
   const splitWords = (el: HTMLElement) => {
     const ws = (el.textContent ?? "").trim().split(/\s+/);
@@ -165,8 +176,8 @@ export function buildFilm(tl: gsap.core.Timeline) {
     const el = html(`<div class="${isPill ? "npill" : "pop"}">${m}</div>`);
     front.append(el);
     const at = T.flood + 0.3 + Math.pow(i / popDefs.length, 0.7) * (T.stop - 0.25 - T.flood - 0.3);
-    const x = 60 + R() * (W - 520);
-    const y = 150 + R() * (H - 300);
+    const x = 40 + R() * (W - (V ? 460 : 520));
+    const y = (V ? 260 : 150) + R() * (H - (V ? 480 : 300));
     const rot = (R() - 0.5) * 10;
     const dx = (R() - 0.5) * 120;
     const dy = (R() - 0.5) * 80;
@@ -252,7 +263,10 @@ export function buildFilm(tl: gsap.core.Timeline) {
     cleared.textContent = `${fmt(COUNTS.noise * smooth(P(t, T.organize + 0.4, T.organize + 2.0)))} NEWSLETTERS & NOTIFICATIONS CLEARED`;
     cleared.style.opacity = (P(t, T.organize + 0.4, T.organize + 0.7) * (1 - P(t, T.act + 0.6, T.act + 0.9))).toFixed(3);
   });
-  // actions, on the cards themselves (what Astrya actually does)
+  // actions: what Astrya actually does, each chip wired to its card by a line of light
+  const wires = html(`<svg class="wires" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">${[0, 1, 2, 3].map(() => `<line stroke="#9fd0ff" stroke-width="2.5" stroke-linecap="round"/>`).join("")}</svg>`);
+  front.append(wires);
+  const wl = [...wires.querySelectorAll("line")];
   const acts = [
     [icon.reply, "Reply prepared"],
     [icon.finance, "Finance agent · on it"],
@@ -264,18 +278,29 @@ export function buildFilm(tl: gsap.core.Timeline) {
     return el;
   });
   onFrame((t) => {
+    let any = false;
     acts.forEach((el, k) => {
-      const a = T.act + 0.25 + k * 0.12;
+      const a = T.act + 0.2 + k * 0.14;
       const c = hud.cards[k];
-      const vis = t >= a && t < T.act + 1.1 && c && c.z < 1 && c.on > 0.2;
+      const vis = t >= a && t < T.act + 1.1 && c && c.z < 1;
       el.style.visibility = vis ? "visible" : "hidden";
+      wl[k].style.visibility = el.style.visibility;
       if (!vis) return;
+      any = true;
       const k2 = eOut(P(t, a, a + 0.25));
-      el.style.left = `${c.x}px`;
-      el.style.top = `${c.y - 70}px`;
-      el.style.opacity = (k2 * (1 - P(t, T.act + 0.8, T.act + 1.1))).toFixed(3);
-      el.style.transform = `translate(-50%, -100%) scale(${lerp(0.5, 1, k2)})`;
+      const o = k2 * (1 - P(t, T.act + 0.8, T.act + 1.1));
+      const [x, y] = L.chips[k];
+      el.style.left = `${x}px`;
+      el.style.top = `${y}px`;
+      el.style.opacity = o.toFixed(3);
+      el.style.transform = `translate(-50%, -50%) scale(${lerp(0.6, 1, k2)})`;
+      wl[k].setAttribute("x1", String(x));
+      wl[k].setAttribute("y1", String(y + 30));
+      wl[k].setAttribute("x2", String(lerp(x, c.x, k2)));
+      wl[k].setAttribute("y2", String(lerp(y + 30, c.y, k2)));
+      wl[k].style.opacity = (o * 0.85).toFixed(3);
     });
+    wires.style.visibility = any ? "visible" : "hidden";
   });
   acts.forEach((_, k) => cue("chime", T.act + 0.25 + k * 0.12, undefined, 0.5));
   cue("whoosh", T.act + 0.7, 1.0, 1.0);
@@ -291,31 +316,32 @@ export function buildFilm(tl: gsap.core.Timeline) {
   const inbox = html(`<div class="panel inbox">
     <div class="hd"><h3>Inbox</h3><span class="unr">3 need you</span><span class="sortedby">${icon.sparkle}Sorted by ASTRYA</span></div>
     ${rows
-      .map(([a, b, c, d, e, f], i) => `<div class="mrow${i === 0 ? " top" : ""}" style="top:${ROWS_Y[i] - 110 - 54}px"><span class="av">${a}</span><div class="who">${b}<span>${c}</span></div><div class="sub">${d}</div><span class="tm">${e}</span>${f ? `<span class="chp">${f}</span>` : ""}</div>`)
+      .map(([a, b, c, d, e, f], i) => `<div class="mrow${i === 0 ? " top" : ""}" style="top:${ROW_LOCAL[i] - 54}px"><span class="av">${a}</span><div class="who">${b}<span>${c}</span></div><div class="sub">${d}</div><span class="tm">${e}</span>${f ? `<span class="chp">${f}</span>` : ""}</div>`)
       .join("")}
-    <div class="grp" style="top:${ROWS_Y[3] - 110 - 50}px">${icon.reply}<b>Replies prepared by ASTRYA</b> · ${fmt(COUNTS.reply)} ready to approve</div>
-    <div class="grp" style="top:${ROWS_Y[4] - 110 - 50}px"><span class="stack"><i>JF</i><i>SP</i><i>AF</i><i>MC</i><i>HL</i></span><b>Can wait</b> · ${fmt(COUNTS.wait)} messages</div>
+    <div class="grp" style="top:${ROW_LOCAL[3] - 50}px">${icon.reply}<b>Replies prepared by ASTRYA</b> · ${fmt(COUNTS.reply)} ready to approve</div>
+    <div class="grp" style="top:${ROW_LOCAL[4] - 50}px"><span class="stack"><i>JF</i><i>SP</i><i>AF</i><i>MC</i><i>HL</i></span><b>Can wait</b> · ${fmt(COUNTS.wait)} messages</div>
     <div class="foot">${fmt(COUNTS.noise)} newsletters &amp; notifications cleared</div>
   </div>`);
-  rig.append(inbox);
+  place(inbox, L.inbox, rig);
   show(rig, T.inbox - 0.15, T.detail + 0.1);
-  ft(inbox, { opacity: 0 }, { opacity: 1, duration: 0.35, ease: "power2.out" }, T.inbox - 0.12);
+  ft(inbox, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, T.inbox - 0.3);
+  flash(T.inbox - 0.18, 0.35, 0.08, 0.4);
   ft(inbox.querySelectorAll(".hd > *, .foot"), { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.35, stagger: 0.05, ease: "power3.out" }, T.inbox + 0.05);
   cue("chime", T.inbox, undefined, 0.8);
   cue("soft", T.inbox, 1.0, 0.6);
-  inbox.style.transformOrigin = `400px ${ROWS_Y[0] - 110}px`;
+  inbox.style.transformOrigin = `400px ${ROW_LOCAL[0]}px`;
   tl.to(inbox, { scale: 9, opacity: 0, duration: 0.55, ease: "power3.in" }, T.into);
   cue("whoosh", T.into, 0.55, 1.0);
   const mail = html(`<div class="panel mail">
     <div class="crumb">Inbox › Operations</div>
     <h2>Contract renewal — confirmation needed</h2>
     <div class="from"><span class="av">EB</span><b>Eva Brunner</b><small>eva.brunner@alpinesupplies.ch</small><span class="when">Today 09:12</span></div>
-    <div class="body">Hi Ziyad,<br>Following up: the current contract <span class="k">expires Friday</span>.<br><span class="k">Please confirm renewal</span> so we can lock Q4 allocation.<br>Without confirmation we cannot hold the Geneva warehouse slot.</div>
+    <div class="body">Hi Ziyad,<br>Following up: the current contract <span class="k">expires Friday</span>.<br><span class="k">Please confirm renewal</span> so we can lock Q4 allocation.<br>Without confirmation we cannot hold the Geneva<br>warehouse slot.<br><br>Best regards, Eva</div><div class="att">${icon.paperclip}Supply agreement 2026–27.pdf</div>
     <span class="due">Due Fri · 4 days</span>
   </div>`);
-  world.append(mail);
+  place(mail, L.mail, world);
   show(mail, T.into + 0.3, T.galaxy + 0.15);
-  ft(mail, { scale: 0.16, y: ROWS_Y[0] - 540, opacity: 0 }, { scale: 1, y: 0, opacity: 1, duration: 0.5, ease: "expo.out" }, T.into + 0.35);
+  ft(mail, { scale: 0.16, y: (ROWS_Y[0] - (L.mail.y + (L.mail.h * L.mail.s) / 2)) / L.mail.s, opacity: 0 }, { scale: 1, y: 0, opacity: 1, duration: 0.5, ease: "expo.out" }, T.into + 0.35);
   [...mail.querySelectorAll<HTMLElement>(".k")].forEach((k, i) => {
     const at = T.detail + 0.2 + i * 0.18;
     onFrame((t) => k.classList.toggle("hit", t >= at));
@@ -373,7 +399,10 @@ export function buildFilm(tl: gsap.core.Timeline) {
     <div class="step s1"><i>${icon.check}</i>Found the transfer · 12 Sep · CHF 4,820<em>done</em></div>
     <div class="step s2"><i>${icon.check}</i>Reply ready for Marc Dufour<em>done</em></div>
   </div>`);
-  rig2.append(reply, cal, tasks, agent);
+  place(reply, L.reply, rig2);
+  place(cal, L.cal, rig2);
+  place(tasks, L.tasks, rig2);
+  place(agent, L.agent, rig2);
   show(rig2, T.app - 0.05, T.calm + 0.6);
   onFrame((t) => {
     if (t < T.app || t > T.calm + 0.6) return;
@@ -397,7 +426,7 @@ export function buildFilm(tl: gsap.core.Timeline) {
   cue("click", T.approve - 0.08);
   // reply → particles → the week, the call lands on Thursday
   show(cal, T.cal - 0.05, T.tasks + 0.75);
-  stream(reply, [460, 190, 1000, 660], cal, [330, 150, 1260, 740], T.cal, 1.0, 11);
+  stream(reply, rect(L.reply), cal, rect(L.cal), T.cal, 1.0, 11);
   cue("whoosh", T.cal, 1.0, 0.9);
   cue("sweep", T.cal + 0.3, 0.8, 0.7);
   const nev = cal.querySelector<HTMLElement>(".cev.new")!;
@@ -406,7 +435,7 @@ export function buildFilm(tl: gsap.core.Timeline) {
   cue("chime", T.cal + 1.5, undefined, 0.7);
   // the week → particles → the tasks
   show(tasks, T.tasks - 0.05, T.calm + 0.6);
-  stream(cal, [330, 150, 1260, 740], tasks, [240, 190, 880, 700], T.tasks, 0.9, 12);
+  stream(cal, rect(L.cal), tasks, rect(L.tasks), T.tasks, 0.9, 12);
   cue("whoosh", T.tasks, 0.9, 0.9);
   const check = (row: HTMLElement, at: number) => {
     const i = row.querySelector<HTMLElement>(".cb i")!;
@@ -439,7 +468,7 @@ export function buildFilm(tl: gsap.core.Timeline) {
 
   // ── V. calm ──────────────────────────────────────────────────────────
   // the working screens glide back into the depth; the morning comes forward
-  tl.to([tasks, agent], { z: -900, opacity: 0, duration: 0.9, ease: "power2.inOut", stagger: 0.06 }, T.calm - 0.3);
+  tl.to([tasks, agent], { z: -900, opacity: 0, duration: 0.55, ease: "power2.in", stagger: 0.05 }, T.calm - 0.75);
   const rig3 = html(`<div class="rig"></div>`);
   world.append(rig3);
   const morning = html(`<div class="morning">
@@ -455,7 +484,11 @@ export function buildFilm(tl: gsap.core.Timeline) {
     <p>Northline opens in Geneva, Zurich and Milan. The first market proves the model; the next two scale it.</p>
     <p>Launch the first market by March, with the whole team on it.</p></div>`);
   const handled = html(`<div class="handledx">${icon.sparkle}3 new messages handled</div>`);
-  rig3.append(morning, doc, handled);
+  place(morning, L.morning, rig3);
+  place(doc, L.doc, rig3);
+  rig3.append(handled);
+  handled.style.left = `${L.handled.x}px`;
+  handled.style.top = `${L.handled.y}px`;
   show(rig3, T.calm - 0.1, T.end_logo + 0.2);
   ft(morning, { opacity: 0, z: -300, x: -60 }, { opacity: 1, z: 0, x: 0, duration: 1.2, ease: "power3.out" }, T.calm);
   ft(morning.querySelector(".today"), { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }, T.calm + 0.35);

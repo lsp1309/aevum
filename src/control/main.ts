@@ -8,7 +8,8 @@ import "./control.css";
 import { gsap } from "../core/gsap";
 import { master, renderFrame, invalidate, cues, onFrame, rng } from "../core/clock";
 import { film, setAnchors } from "../core/film";
-import { fit, $ } from "../remix/stage";
+import { fit, $ } from "./stage";
+import { V } from "./layout";
 import { initGL } from "./gl";
 import { buildFilm } from "./ui";
 import { T } from "./timing";
@@ -39,6 +40,7 @@ function initGrain() {
 async function boot() {
   const params = new URLSearchParams(location.search);
   const renderMode = params.has("render");
+  if (V) document.body.classList.add("v");
   fit();
   window.addEventListener("resize", () => {
     fit();

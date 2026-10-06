@@ -27,7 +27,7 @@
   position: absolute;
   left: 0;
   top: 410px;
-  width: 1920px;
+  width: 100%;
   text-align: center;
   font-weight: 800;
   font-size: 200px;
@@ -47,7 +47,7 @@
   position: absolute;
   left: 0;
   top: 770px;
-  width: 1920px;
+  width: 100%;
   text-align: center;
   font-weight: 600;
   font-size: 34px;
@@ -60,7 +60,7 @@
   position: absolute;
   left: 0;
   top: 64px;
-  width: 1920px;
+  width: 100%;
   text-align: center;
   font-weight: 800;
   font-size: 92px;
@@ -168,15 +168,15 @@
   position: absolute;
   left: 0;
   top: 0;
-  height: 50px;
-  padding: 0 20px;
+  height: 60px;
+  padding: 0 24px;
   border-radius: 99px;
   display: inline-flex;
   align-items: center;
   gap: 12px;
   font-weight: 700;
-  font-size: 18px;
-  letter-spacing: 0.18em;
+  font-size: 24px;
+  letter-spacing: 0.16em;
   color: #fff;
   white-space: nowrap;
   background: rgba(6, 12, 34, 0.75);
@@ -206,7 +206,7 @@
   white-space: nowrap;
   background: linear-gradient(180deg, #ffffff, #d4e6ff);
   box-shadow: 0 0 30px rgba(110, 175, 255, 0.95), 0 0 80px rgba(47, 107, 255, 0.5);
-  transform: translate(-50%, -100%);
+  transform: translate(-50%, -50%);
 }
 .achip svg {
   width: 24px;
@@ -217,7 +217,7 @@
   position: absolute;
   left: 0;
   top: 960px;
-  width: 1920px;
+  width: 100%;
   text-align: center;
   font-family: var(--mono);
   font-size: 22px;
@@ -925,7 +925,7 @@
   position: absolute;
   left: 0;
   top: 250px;
-  width: 1920px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -945,7 +945,7 @@
   position: absolute;
   left: 0;
   top: 690px;
-  width: 1920px;
+  width: 100%;
   text-align: center;
   font-weight: 600;
   font-size: 28px;
@@ -953,4 +953,81 @@
   color: #cfe4ff;
   white-space: nowrap;
   text-shadow: 0 0 20px rgba(90, 150, 255, 0.8);
+}
+
+/* screens are placed per format on a wrapper (layout.ts) */
+.fit {
+  position: absolute;
+  transform-origin: 0 0;
+  transform-style: preserve-3d;
+}
+.wires {
+  position: absolute;
+  left: 0;
+  top: 0;
+  overflow: visible;
+  filter: drop-shadow(0 0 6px #4d8dff);
+}
+.mail .att {
+  position: absolute;
+  left: 60px;
+  bottom: 40px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 21px;
+  color: rgba(170, 190, 230, 0.7);
+}
+.mail .att svg {
+  width: 24px;
+  height: 24px;
+}
+.mail .body {
+  margin-top: 26px;
+  line-height: 1.6;
+}
+
+/* ── 9:16 ─────────────────────────────────────────────────────── */
+body.v .slam {
+  top: 720px;
+  font-size: 150px;
+  white-space: normal;
+  line-height: 1.04;
+}
+body.v .slam.m {
+  top: 700px;
+  font-size: 140px;
+}
+body.v .beat {
+  top: 160px;
+  font-size: 96px;
+}
+body.v .quiet {
+  top: 1270px;
+  font-size: 32px;
+  letter-spacing: 0.3em;
+}
+body.v .counter {
+  left: 54px;
+  top: 80px;
+}
+body.v .cleared {
+  top: 1730px;
+  font-size: 20px;
+  letter-spacing: 0.18em;
+}
+body.v .achip {
+  font-size: 21px;
+  height: 58px;
+}
+body.v .logo {
+  top: 640px;
+}
+body.v .logo .wordmark {
+  font-size: 116px;
+}
+body.v .tagline {
+  top: 1080px;
+  font-size: 27px;
+  letter-spacing: 0.28em;
 }

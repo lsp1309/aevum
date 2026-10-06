@@ -9,6 +9,6 @@ export default defineConfig({
     target: "es2022",
     assetsInlineLimit: 0,
     chunkSizeWarningLimit: 900,
-    rollupOptions: { input: { main: resolve(root, "index.html"), promo: resolve(root, "promo.html"), mosaic: resolve(root, "mosaic.html"), remix: resolve(root, "remix.html"), remix2: resolve(root, "remix2.html"), astria: resolve(root, "astria.html"), tiktok: resolve(root, "tiktok.html"), control: resolve(root, "control.html") } },
+    rollupOptions: { input: { main: resolve(root, "index.html"), promo: resolve(root, "promo.html"), mosaic: resolve(root, "mosaic.html"), remix: resolve(root, "remix.html"), remix2: resolve(root, "remix2.html"), astria: resolve(root, "astria.html"), tiktok: resolve(root, "tiktok.html"), control: resolve(root, "control.html"), control9: resolve(root, "control9.html") } },
   },
 });

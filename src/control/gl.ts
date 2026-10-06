@@ -1,7 +1,8 @@
 import * as THREE from "three";
 import { onFrame, clamp, smooth, lerp, rng } from "../core/clock";
 import { T } from "./timing";
-import { W, H, $ } from "../remix/stage";
+import { W, H, $ } from "./stage";
+import { V, ROWS_Y, ROW_W, L } from "./layout";
 import { RING_A, RING_B, RING_W, RING_TILT } from "../core/icons";
 
 /**
@@ -236,7 +237,10 @@ const RINGS = [
 /** Where the cards land: the rows of the organized inbox (stage px → world at z = 0, camera at z = 1400, fov 40). */
 const UPX = (2 * 1400 * Math.tan((20 * Math.PI) / 180)) / H;
 const toWorld = (x: number, y: number) => new THREE.Vector3((x - W / 2) * UPX, -(y - H / 2) * UPX, 0);
-export const ROWS_Y = [318, 436, 554, 672, 790];
+/** The organized inbox: the cards land on its rows (scale so a card spans a row). */
+const ROW_SCALE = (ROW_W * UPX) / 340;
+/** Distances grow in 9:16, where the frame is narrow. */
+const KV = V ? 1.6 : 1;
 
 function chaos(map: THREE.Texture) {
   const scene = new THREE.Scene();
@@ -325,6 +329,11 @@ function chaos(map: THREE.Texture) {
   const point = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTex("235,245,255"), blending: THREE.AdditiveBlending, depthWrite: false, transparent: true, opacity: 0 }));
   const ring = ringMesh();
   core.add(glow, point, ring);
+  // the core always reads through the frozen storm
+  [glow, point, ring].forEach((o) => {
+    (o.material as THREE.Material).depthTest = false;
+    o.renderOrder = 1000;
+  });
   scene.add(core);
   // the wave: a shell and a ring of light
   const wave = new THREE.Mesh(
@@ -643,7 +652,7 @@ export function initGL() {
         // calm drift, then flight through the storm, faster and faster
         const k0 = smooth(P(t, 0, T.ten));
         const ang = Math.pow(Math.max(0, t - T.ten), 1.9) * 0.05;
-        const r = lerp(lerp(1500, 760, k0), 620, chaosK);
+        const r = lerp(lerp(1150, 760, k0), 620, chaosK) * KV;
         cp.set(Math.sin(ang) * r, lerp(140, 40, k0) + Math.sin(t * 1.7) * 90 * chaosK, Math.cos(ang) * r);
         look.set(Math.sin(ang + 0.6 * chaosK) * 300 * chaosK, 30, Math.cos(ang + 0.6 * chaosK) * 300 * chaosK - 0);
         fov = lerp(36, 58, chaosK);
@@ -656,7 +665,7 @@ export function initGL() {
         const angS = Math.pow(T.stop - T.ten, 1.9) * 0.05;
         const k = ease.io3(P(t, T.stop, T.logo + 0.6));
         const ang = angS + (t - T.stop) * 0.07;
-        const r = lerp(620, 1350, k);
+        const r = lerp(620, 1350, k) * KV;
         cp.set(Math.sin(ang) * r, lerp(60, 140, k), Math.cos(ang) * r);
         look.set(0, lerp(60, 0, k), 0);
         fov = lerp(58, 42, k);
@@ -667,9 +676,10 @@ export function initGL() {
         // the transformation: a slow, rising orbit; then the inbox, face on
         const angS = Math.pow(T.stop - T.ten, 1.9) * 0.05 + (T.wave + 0.8 - T.stop) * 0.07;
         const k = P(t, T.wave + 0.8, T.act + 1.0);
+        const ko = ease.out3(P(t, T.wave + 0.5, T.organize + 0.4));
         const ang = angS + ease.io3(k) * 1.6;
-        const r = lerp(1350, 2500, ease.io3(k));
-        const y = lerp(140, 900, ease.io3(k));
+        const r = lerp(1350, 3000, ko) * KV;
+        const y = lerp(140, 1050, ko) * (V ? 1.3 : 1);
         const orbit = new THREE.Vector3(Math.sin(ang) * r, y, Math.cos(ang) * r);
         const kf = ease.io3(P(t, T.act + 0.6, T.inbox));
         cp.copy(orbit).lerp(new THREE.Vector3(0, 0, 1400), kf);
@@ -707,12 +717,13 @@ export function initGL() {
       // the core
       const lit = smooth(P(t, T.light, T.light + 0.4));
       const ringOn = ease.out3(P(t, T.logo, T.logo + 0.8));
-      s.point.material.opacity = lit * (1 - 0.6 * ringOn);
-      s.point.scale.setScalar(lerp(10, 120, lit) * (1 + 0.15 * Math.sin(t * 6)));
-      s.glow.material.opacity = lit * 0.8 + (t > T.wave ? 0.6 * Math.exp(-(t - T.wave) * 2) : 0);
-      s.glow.scale.setScalar(lerp(200, 900, ringOn) + (t > T.wave ? 3000 * Math.exp(-(t - T.wave) * 2.5) : 0));
+      const gone = 1 - smooth(P(t, T.act + 0.8, T.inbox - 0.3));
+      s.point.material.opacity = lit * (1 - 0.6 * ringOn) * gone;
+      s.point.scale.setScalar(lerp(10, 120, lit) * (1 + 0.15 * Math.sin(t * 6)) * KV);
+      s.glow.material.opacity = (lit * 0.8 + (t > T.wave ? 0.6 * Math.exp(-(t - T.wave) * 2) : 0)) * gone;
+      s.glow.scale.setScalar((lerp(200, 900, ringOn) + (t > T.wave ? 3000 * Math.exp(-(t - T.wave) * 2.5) : 0)) * KV);
       (s.ring.material as THREE.MeshBasicMaterial).opacity = ringOn * (0.9 + 0.1 * Math.sin(t * 5));
-      s.ring.scale.setScalar(lerp(0.4, 1.3, ringOn) * (t < T.inbox - 0.6 ? 1 : 1 - ease.in3(P(t, T.inbox - 0.6, T.inbox))));
+      s.ring.scale.setScalar(lerp(0.4, 1.3, ringOn) * KV * (1 - ease.in3(P(t, T.act + 0.8, T.inbox - 0.35))));
       s.core.quaternion.copy(s.cam.quaternion);
       s.core.visible = t > T.light - 0.1;
       // the wave
@@ -727,6 +738,8 @@ export function initGL() {
       s.lmat.uniforms.uA.value = lineOn * 1.6;
       s.lmat.uniforms.uT.value = t;
       const cards: Array<{ x: number; y: number; z: number; on: number }> = [];
+      // a card on the far side of an orbit turns its face to the camera (no mirrored text)
+      const faceYaw = (yaw: number, p: THREE.Vector3) => (Math.sin(yaw) * (s.cam.position.x - p.x) + Math.cos(yaw) * (s.cam.position.z - p.z) < 0 ? yaw + Math.PI : yaw);
       const cq = chaosCam(Math.min(t, T.stop));
       qcam.position.copy(cq.cp);
       qcam.lookAt(cq.look);
@@ -743,7 +756,7 @@ export function initGL() {
         const sp = 0.25 + chaosK * 1.6;
         e3.set(Math.sin(age * c.spin.x * 0.5 + c.ph) * 0.45 * sp, Math.sin(age * c.spin.y * 0.4 + c.ph) * 0.55 * sp, Math.sin(age * c.spin.z * 0.4) * 0.3 * sp);
         q.copy(qFace).multiply(new THREE.Quaternion().setFromEuler(e3));
-        let scale = born ? (i < 2 ? lerp(0.6, 1.25, ka) : 1) : 0;
+        let scale = born ? (i < 2 ? lerp(0.6, 1.45, ka) : 1) : 0;
         let alpha = born ? Math.min(1, ka * 2) : 0;
         let fl = 0;
         // the wave touches every card: it is understood
@@ -757,7 +770,7 @@ export function initGL() {
           const ang0 = Math.atan2(dirv.x, dirv.z) + (t - T.understand) * 0.25 * (1 - c.lane * 0.5);
           const spiral = new THREE.Vector3(Math.sin(ang0) * r0, (c.lane - 0.5) * 500, Math.cos(ang0) * r0);
           pos.lerp(spiral, k);
-          q.slerp(new THREE.Quaternion().setFromAxisAngle(Y, ang0), k);
+          q.slerp(new THREE.Quaternion().setFromAxisAngle(Y, faceYaw(ang0, spiral)), k);
         }
         if (t >= T.organize) {
           if (c.cat === 3) {
@@ -773,7 +786,7 @@ export function initGL() {
             const lift = c.ring === 0 ? smooth(P(t, T.act, T.act + 0.6)) * 120 : 0;
             const target = new THREE.Vector3(Math.sin(angR) * rg.r, rg.y + lift + Math.floor(c.slot / 60) * 34, Math.cos(angR) * rg.r);
             pos.lerp(target, ko);
-            q.slerp(new THREE.Quaternion().setFromAxisAngle(Y, angR), ko);
+            q.slerp(new THREE.Quaternion().setFromAxisAngle(Y, faceYaw(angR, target)), ko);
             if (c.ring === 2) {
               // can wait: quietly stacks up, dims
               alpha *= 1 - 0.45 * ko;
@@ -789,14 +802,14 @@ export function initGL() {
           target.z = -2 * (c.slot % 10);
           pos.lerp(target, kl);
           q.slerp(ID, kl);
-          scale = lerp(scale, row < 3 ? 2.05 : 2.05 * (1 - 0.02 * (c.slot % 10)), kl);
+          scale = lerp(scale, row < 3 ? ROW_SCALE : ROW_SCALE * (1 - 0.02 * (c.slot % 10)), kl);
           if (row >= 3) alpha *= 1 - 0.85 * kl * (c.slot > 0 ? 1 : 0);
-          alpha *= 1 - smooth(P(t, T.inbox - 0.02, T.inbox + 0.3));
+          alpha *= 1 - smooth(P(t, T.inbox - 0.32, T.inbox - 0.08));
         }
         m4.compose(pos, q, sc.set(scale, scale, scale));
         s.mesh.setMatrixAt(i, m4);
         s.aFl[i] = fl * (t >= T.inbox ? 0 : 1);
-        s.aA[i] = alpha;
+        s.aA[i] = alpha * (1 - 0.55 * dark);
         // data line, card → core
         s.lpos.set([pos.x, pos.y, pos.z, 0, 0, 0], i * 6);
         if (HERO_CARDS.includes(i)) {
@@ -848,13 +861,13 @@ export function initGL() {
       g.coreMat.uniforms.uT.value = t;
       g.lmat.uniforms.uT.value = t;
       g.rg.rotation.y = t * 0.15;
-      const start = g.HERO.clone().add(new THREE.Vector3(0, 0, 1483));
+      const start = g.HERO.clone().add(new THREE.Vector3(0, 0, (1100 * H) / (L.mail.w * L.mail.s * 2 * Math.tan((20 * Math.PI) / 180))));
       const k1 = ease.io5(P(t, T.galaxy, T.orbit + 0.2));
       // the pull-back: straight back from the email, rising
       const back = new THREE.Vector3(0, 4200, 16500);
       let cp = start.clone().lerp(back, k1);
       let look = g.HERO.clone().lerp(new THREE.Vector3(0, 0, 0), smooth(P(t, T.galaxy + 0.8, T.orbit)));
-      let fov = lerp(40, 48, k1);
+      let fov = lerp(40, V ? 58 : 48, k1);
       if (t >= T.orbit) {
         // circle the core
         const k = ease.io3(P(t, T.orbit, T.dive + 0.2));
@@ -868,7 +881,7 @@ export function initGL() {
         // dive straight into it
         const k = ease.in3(P(t, T.dive, T.app));
         cp = cp.clone().lerp(new THREE.Vector3(0, 0, 0), k * 0.97);
-        fov = lerp(48, 95, k);
+        fov = lerp(V ? 58 : 48, 95, k);
       }
       g.cam.position.copy(cp);
       g.cam.fov = fov;
@@ -880,7 +893,7 @@ export function initGL() {
       g.lmat.uniforms.uA.value = smooth(P(t, T.lines, T.lines + 0.3));
       g.nmat.opacity = smooth(P(t, T.lines + 0.2, T.lines + 1.0)) * 0.8;
       (g.hero.material as THREE.MeshBasicMaterial).opacity = 1;
-      fog.style.opacity = (smooth(P(t, T.app - 0.3, T.app)) * 1).toFixed(3);
+      fog.style.opacity = (smooth(P(t, T.app - 0.12, T.app)) * 0.85).toFixed(3);
       renderer.render(g.scene, g.cam);
       return;
     }
@@ -891,7 +904,7 @@ export function initGL() {
     ccam.position.set(Math.sin(t * 0.12) * 50, Math.cos(t * 0.1) * 30, lerp(600, 1100, kr));
     ccam.lookAt(0, 0, -800);
     cglows.forEach((s, i) => (s.material.rotation = t * 0.04 * (i % 2 ? 1 : -1)));
-    fog.style.opacity = t >= T.app && t < T.app + 0.6 ? (1 - smooth(P(t, T.app, T.app + 0.6))).toFixed(3) : "0";
+    fog.style.opacity = t >= T.app && t < T.app + 0.3 ? (0.85 * (1 - smooth(P(t, T.app, T.app + 0.3)))).toFixed(3) : "0";
     renderer.render(calm, ccam);
   });
 }

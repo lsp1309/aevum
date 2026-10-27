@@ -1,10 +1,10 @@
 import { gsap } from "../core/gsap";
 import { onFrame, cue, smooth, lerp } from "../core/clock";
 import { camera, overlay, html, atmos, CX, CY } from "../core/stage";
-import { chars, titleIn } from "../core/text";
+import { chars } from "../core/text";
 import { shockwave, burst, orbitDust } from "../core/fx";
 import { ringMark, RING_TILT } from "../core/icons";
-import { P, ft, section, caption, igniteRing, glintRing, flash } from "./kit";
+import { P, ft, show, section, voCap, say, makeCursor, igniteRing, glintRing, flash } from "./kit";
 import { appShell, rowMarkup, sortedLayout, ROWS, SECTIONS } from "./product";
 import { T } from "./timing";
 
@@ -85,8 +85,8 @@ export function buildAutomation(tl: gsap.core.Timeline) {
   tl.to(rig, { opacity: 0, filter: "blur(12px)", scale: 0.92, duration: 1.0, ease: "exit" }, T.calm - 0.1);
   tl.to(atmos, { halo: 0.45, core: 0.1, duration: 2, ease: "sine.inOut" }, T.auto);
 
-  caption(tl, overlay, "cap-t", "Les tâches répétitives s'organisent.", T.rule, T.task + 0.5);
-  caption(tl, overlay, "cap-t", "Vous gardez le contrôle.", T.task + 0.6, T.calm - 0.1);
+  voCap(tl, overlay, "cap-t", "invoice", "Une facture arrive ? | <br> Astrya *la classe*, | *crée la tâche*, | et *vous prévient*.", T.control - 0.15);
+  voCap(tl, overlay, "cap-t", "control", "Par défaut, | <br> rien ne part *sans votre validation*.", T.calm);
 }
 
 // ── VI. le résultat ─────────────────────────────────────────────────────
@@ -108,11 +108,11 @@ export function buildCalm(tl: gsap.core.Timeline) {
     gsap.set(el, { y: yRow[i] });
   });
   gsap.set(app, { left: CX - 520, top: 110, width: 1040, height: 790 });
-  ft(tl, app, { opacity: 0, z: -500, filter: "blur(14px)" }, { opacity: 1, z: 0, filter: "blur(0px)", duration: 1.4, ease: "cine" }, T.calm);
-  ft(tl, list.querySelectorAll(".st"), { opacity: 0, x: 10 }, { opacity: 1, x: 0, duration: 0.5, stagger: 0.09, ease: "cine" }, T.calm + 0.6);
-  tl.to(app, { z: 60, duration: 2.4, ease: "sine.inOut" }, T.calm + 1.4);
-  tl.to(app, { opacity: 0, z: -400, filter: "blur(16px)", duration: 0.9, ease: "exit" }, T.finale - 0.6);
-  caption(tl, overlay, "cap-b", "Moins de tri. Plus de temps pour vos clients.", T.calm + 0.7, T.finale - 0.3);
+  ft(tl, app, { opacity: 0, z: -500, filter: "blur(14px)" }, { opacity: 1, z: 0, filter: "blur(0px)", duration: 1.0, ease: "cine" }, T.calm);
+  ft(tl, list.querySelectorAll(".st"), { opacity: 0, x: 10 }, { opacity: 1, x: 0, duration: 0.4, stagger: 0.07, ease: "cine" }, T.calm + 0.3);
+  tl.to(app, { z: 60, duration: 1.4, ease: "sine.inOut" }, T.calm + 1.0);
+  tl.to(app, { opacity: 0, z: -400, filter: "blur(16px)", duration: 0.7, ease: "exit" }, T.finale - 0.5);
+  voCap(tl, overlay, "cap-b cap-simple", "simple", "*Simple*, non ?", T.finale - 0.2);
   cue("soft", T.calm, 2.5, 0.6);
 }
 
@@ -157,9 +157,20 @@ export function buildFinale(tl: gsap.core.Timeline) {
   const cs = chars(word);
   ft(tl, cs, { opacity: 0, filter: "blur(14px)", y: (i: number) => (i % 2 ? 20 : -20), scaleY: 1.5 }, { opacity: 1, filter: "blur(0px)", y: 0, scaleY: 1, duration: 1.7, ease: "cine", stagger: { each: 0.075, from: "center" } }, T.fword);
   ft(tl, word, { letterSpacing: "1.6em", paddingLeft: "1.6em" }, { letterSpacing: "0.9em", paddingLeft: "0.9em", duration: 2.3, ease: "cine" }, T.fword);
-  tl.add(titleIn(slogan, { stagger: 0.07, dur: 1.2, blur: 12, y: 16 }), T.slogan);
+  say(tl, slogan, "slogan", "Moins de tâches répétitives. | *Plus de maîtrise.*", Infinity);
   ft(tl, cta, { opacity: 0, y: 856, filter: "blur(8px)" }, { opacity: 1, y: 836, filter: "blur(0px)", duration: 1.0, ease: "cine" }, T.cta);
-  glintRing(tl, svg, T.cta + 0.6);
+  glintRing(tl, svg, T.cta - 0.8);
+  // the pointer books the demo
+  const cur = makeCursor(overlay);
+  show(cur.el, T.cta + 0.3, T.end + 1);
+  ft(tl, cur.el, { x: CX + 360, y: 1000, opacity: 0 }, { opacity: 1, duration: 0.3, ease: "none" }, T.cta + 0.3);
+  cur.move(tl, CX + 70, 846, T.cta + 0.4, 1.0);
+  cur.press(tl, T.click);
+  tl.to(cta, { scale: 0.95, duration: 0.08, ease: "power2.out" }, T.click);
+  tl.to(cta, { scale: 1, duration: 0.35, ease: "spring" }, T.click + 0.08);
+  tl.fromTo(cta, { boxShadow: "inset 0 1px 0 rgba(255,255,255,0.25), 0 0 0 1px rgba(160,190,255,0.35), 0 14px 40px rgba(60,100,255,0.45)" }, { boxShadow: "inset 0 1px 0 rgba(255,255,255,0.35), 0 0 0 8px rgba(160,190,255,0.18), 0 14px 70px rgba(80,130,255,0.8)", duration: 0.3, ease: "sine.out", immediateRender: false }, T.click);
+  tl.to(cur.el, { opacity: 0, duration: 0.5 }, T.click + 1.2);
+  cue("click", T.click, undefined, 0.8);
   glintRing(tl, svg, T.end - 2.0);
   cue("sweep", T.cta + 0.6, 1.6, 0.3);
   cue("soft", T.cta, 3.0, 0.5);

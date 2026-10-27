@@ -1,0 +1,214 @@
+[
+ {
+  "i": 0,
+  "id": "hook",
+  "at": 0.6,
+  "dur": 2.662,
+  "sr": 24000,
+  "text": "Vous passez encore des heures à trier vos e-mails ?",
+  "phrases": [
+   0.0,
+   1.557
+  ],
+  "speed": 1.0
+ },
+ {
+  "i": 1,
+  "id": "words",
+  "at": 4.3,
+  "dur": 3.291,
+  "sr": 24000,
+  "text": "Demandes. Factures. Relances. Rendez-vous.",
+  "phrases": [
+   0.0,
+   0.82,
+   1.725,
+   2.587
+  ],
+  "speed": 1.05
+ },
+ {
+  "i": 2,
+  "id": "mass",
+  "at": 8.1,
+  "dur": 3.101,
+  "sr": 24000,
+  "text": "Tout arrive en même temps… et l'urgent se perd dans la masse.",
+  "phrases": [
+   0.0,
+   1.447
+  ],
+  "speed": 1.0
+ },
+ {
+  "i": 3,
+  "id": "turn",
+  "at": 11.9,
+  "dur": 2.465,
+  "sr": 24000,
+  "text": "Et si votre boîte mail travaillait pour vous ?",
+  "phrases": [
+   0.0,
+   1.421
+  ],
+  "speed": 1.0
+ },
+ {
+  "i": 4,
+  "id": "meet",
+  "at": 15.5,
+  "dur": 1.081,
+  "sr": 24000,
+  "text": "Voici Astrya.",
+  "phrases": [
+   0.0
+  ],
+  "speed": 0.95
+ },
+ {
+  "i": 5,
+  "id": "tagline",
+  "at": 17.1,
+  "dur": 2.358,
+  "sr": 24000,
+  "text": "L'assistant e-mail qui travaille avec vous.",
+  "phrases": [
+   0.0,
+   1.199
+  ],
+  "speed": 1.0
+ },
+ {
+  "i": 6,
+  "id": "read",
+  "at": 21.0,
+  "dur": 3.469,
+  "sr": 24000,
+  "text": "Chaque e-mail est lu, résumé, et classé par priorité.",
+  "phrases": [
+   0.0,
+   1.172,
+   2.025
+  ],
+  "speed": 1.0
+ },
+ {
+  "i": 7,
+  "id": "urgent",
+  "at": 25.4,
+  "dur": 3.169,
+  "sr": 24000,
+  "text": "Astrya comprend ce qui est urgent pour votre entreprise.",
+  "phrases": [
+   0.0,
+   1.947
+  ],
+  "speed": 1.0
+ },
+ {
+  "i": 8,
+  "id": "draft",
+  "at": 29.2,
+  "dur": 3.255,
+  "sr": 24000,
+  "text": "Il prépare la réponse, dans le ton de votre entreprise.",
+  "phrases": [
+   0.0,
+   1.588
+  ],
+  "speed": 1.0
+ },
+ {
+  "i": 9,
+  "id": "missing",
+  "at": 32.9,
+  "dur": 2.738,
+  "sr": 24000,
+  "text": "S'il manque une information, il vous le signale.",
+  "phrases": [
+   0.0,
+   1.587
+  ],
+  "speed": 1.0
+ },
+ {
+  "i": 10,
+  "id": "validate",
+  "at": 36.1,
+  "dur": 3.462,
+  "sr": 24000,
+  "text": "Vous validez, puis vous envoyez maintenant… ou au bon moment.",
+  "phrases": [
+   0.0,
+   1.03,
+   2.587
+  ],
+  "speed": 1.0
+ },
+ {
+  "i": 11,
+  "id": "invoice",
+  "at": 40.8,
+  "dur": 4.644,
+  "sr": 24000,
+  "text": "Une facture arrive ? Astrya la classe, crée la tâche, et vous prévient.",
+  "phrases": [
+   0.0,
+   1.422,
+   2.695,
+   3.749
+  ],
+  "speed": 1.0
+ },
+ {
+  "i": 12,
+  "id": "control",
+  "at": 46.0,
+  "dur": 2.739,
+  "sr": 24000,
+  "text": "Par défaut, rien ne part sans votre validation.",
+  "phrases": [
+   0.0,
+   0.915
+  ],
+  "speed": 1.0
+ },
+ {
+  "i": 13,
+  "id": "simple",
+  "at": 49.4,
+  "dur": 0.881,
+  "sr": 24000,
+  "text": "Simple, non ?",
+  "phrases": [
+   0.0
+  ],
+  "speed": 1.0
+ },
+ {
+  "i": 14,
+  "id": "slogan",
+  "at": 52.4,
+  "dur": 2.833,
+  "sr": 24000,
+  "text": "Moins de tâches répétitives. Plus de maîtrise.",
+  "phrases": [
+   0.0,
+   1.803
+  ],
+  "speed": 1.0
+ },
+ {
+  "i": 15,
+  "id": "cta",
+  "at": 55.8,
+  "dur": 2.814,
+  "sr": 24000,
+  "text": "Astrya. Réservez votre démonstration.",
+  "phrases": [
+   0.0,
+   1.017
+  ],
+  "speed": 1.0
+ }
+]

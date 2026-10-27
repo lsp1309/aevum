@@ -1,0 +1,150 @@
+{
+ "hook": {
+  "start": 0.6,
+  "end": 3.262,
+  "phrases": [
+   0.6,
+   2.157
+  ],
+  "captions": []
+ },
+ "words": {
+  "start": 4.3,
+  "end": 7.591,
+  "phrases": [
+   4.3,
+   5.12,
+   6.025,
+   6.887
+  ],
+  "captions": []
+ },
+ "mass": {
+  "start": 8.1,
+  "end": 11.201,
+  "phrases": [
+   8.1,
+   9.547
+  ],
+  "captions": []
+ },
+ "turn": {
+  "start": 11.9,
+  "end": 14.365,
+  "phrases": [
+   11.9,
+   13.321
+  ],
+  "captions": []
+ },
+ "meet": {
+  "start": 15.5,
+  "end": 16.581,
+  "phrases": [
+   15.5
+  ],
+  "captions": []
+ },
+ "tagline": {
+  "start": 17.1,
+  "end": 19.458,
+  "phrases": [
+   17.1,
+   18.299
+  ],
+  "captions": []
+ },
+ "read": {
+  "start": 21.0,
+  "end": 24.469,
+  "phrases": [
+   21.0,
+   22.172,
+   23.025
+  ],
+  "captions": []
+ },
+ "urgent": {
+  "start": 25.4,
+  "end": 28.569,
+  "phrases": [
+   25.4,
+   27.347
+  ],
+  "captions": []
+ },
+ "draft": {
+  "start": 29.2,
+  "end": 32.455,
+  "phrases": [
+   29.2,
+   30.788
+  ],
+  "captions": []
+ },
+ "missing": {
+  "start": 32.9,
+  "end": 35.638,
+  "phrases": [
+   32.9,
+   34.487
+  ],
+  "captions": []
+ },
+ "validate": {
+  "start": 36.1,
+  "end": 39.562,
+  "phrases": [
+   36.1,
+   37.13,
+   38.687
+  ],
+  "captions": []
+ },
+ "invoice": {
+  "start": 40.8,
+  "end": 45.444,
+  "phrases": [
+   40.8,
+   42.222,
+   43.495,
+   44.549
+  ],
+  "captions": []
+ },
+ "control": {
+  "start": 46.0,
+  "end": 48.739,
+  "phrases": [
+   46.0,
+   46.915
+  ],
+  "captions": []
+ },
+ "simple": {
+  "start": 49.4,
+  "end": 50.281,
+  "phrases": [
+   49.4
+  ],
+  "captions": []
+ },
+ "slogan": {
+  "start": 52.4,
+  "end": 55.233,
+  "phrases": [
+   52.4,
+   54.203
+  ],
+  "captions": []
+ },
+ "cta": {
+  "start": 55.8,
+  "end": 58.614,
+  "phrases": [
+   55.8,
+   56.817
+  ],
+  "captions": []
+ }
+}

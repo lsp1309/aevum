@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-ASTRYA — Entreprises (entreprises.html, 16:9): original score + sound design (no voice).
+ASTRYA — Entreprises (entreprises.html, 16:9): French voice-over, original score, sound design.
 
+    python3 scripts/voice.py entreprises     # narration (Kokoro, offline) + src/narration.timing.entreprises.json
     node scripts/render.mjs --page entreprises --dev --cues scripts/cues.entreprises.json
     python3 scripts/mix_entreprises.py       # → public/audio/astrya-entreprises.m4a
 
@@ -10,15 +11,19 @@ pulse that accelerates under a dissonant cluster and glitches, a riser to
 the freeze, then near silence. The reveal: a reverse swell and the ring's
 impact. The product: a light, filtered groove that opens up as the work gets
 done. Calm: the groove recedes. Finale: open chords, the logo's impact, air.
+The music is ducked under the voice (sidechain from the narration envelope).
 """
 import json, os, subprocess
 import numpy as np
 import soundfile as sf
+from scipy.signal import lfilter, resample_poly
 from audiolib import SR, rng, hz, env, lp, hp, bp, saw_pad, pluck, keys, kick, clap, hat, boom, noise_sweep, reverse_swell, click_s, chime_s, reverb
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sheet = json.load(open(os.path.join(ROOT, "scripts", "cues.entreprises.json")))
 S = sheet["chapters"]
+VOT = json.load(open(os.path.join(ROOT, "src", "narration.timing.entreprises.json")))
+S["words"] = VOT["words"]["start"]
 DUR = float(sheet["duration"])
 N = int((DUR + 1.0) * SR)
 music = np.zeros((2, N)); drums = np.zeros((2, N)); sfx = np.zeros((2, N))
@@ -109,7 +114,7 @@ sub("D1", 0.0, S["freeze"], 0.1, a=2.5, r=0.05)
 pad(["D2", "A2", "D3", "E3"], 0.0, S["cards"] + 0.5, 0.045, bright=1.6, a=2.5, r=1.0)
 pad(["A4", "D5", "E5"], S["streams"], S["cards"], 0.018, bright=5, a=1.5, r=1.0)
 place(sfx, noise_sweep(3.0, 200, 1200, 0.04, "bell"), 0.0)
-for t, n in zip([S["streams"], S["line1"], S["line1"] + 1.0], ["A5", "E6", "D6"]):
+for t, n in zip([S["clock"], S["streams"] + 1.0, S["streams"] + 2.0], ["A5", "E6", "D6"]):
     place(music, keys(hz(n), 2.6), t, 0.03, pan=0.3)
 
 # ── II. the problem: everything at once ───────────────────────────────────
@@ -189,15 +194,48 @@ for k, c in enumerate(sheet["cues"]):
         place(sfx, chime_s(g, pent[k % len(pent)]), t0, pan=pan * 0.6)
 
 wet = np.stack([reverb((music + 0.4 * sfx)[0], 0.0, 1.4), reverb((music + 0.4 * sfx)[1], 2.3, 1.4)])
-mix = music * 0.9 + wet * 0.5 + drums + sfx * 0.9
-mix = np.stack([hp(mix[0], 22), hp(mix[1], 22)])
-# a breath of near silence between the freeze and the ring
-duck = np.ones(N)
+bed = music * 0.9 + wet * 0.5 + drums + sfx * 0.9
+
+# a breath of near silence between the freeze and the ring (the voice stays)
+hush = np.ones(N)
 i0, i1 = int((S["freeze"] + 0.35) * SR), int((S["ring"] - 1.3) * SR)
-duck[i0:i1] = 0.25
-duck[i0 - int(0.3 * SR):i0] = np.linspace(1, 0.25, int(0.3 * SR))
-duck[i1:i1 + int(0.4 * SR)] = np.linspace(0.25, 1, int(0.4 * SR))
-mix = mix * duck
+hush[i0:i1] = 0.3
+hush[i0 - int(0.3 * SR):i0] = np.linspace(1, 0.3, int(0.3 * SR))
+hush[i1:i1 + int(0.4 * SR)] = np.linspace(0.3, 1, int(0.4 * SR))
+bed = bed * hush
+
+# ── voice-over ────────────────────────────────────────────────────────────
+vo = np.zeros((2, N))
+VODIR = os.path.join(ROOT, "scripts", ".vo", "entreprises")
+meta = json.load(open(os.path.join(VODIR, "meta.json")))
+for m in meta:
+    s, sr = sf.read(os.path.join(VODIR, f"line_{m['i']:02d}.wav"))
+    if sr != SR:
+        s = resample_poly(s, SR, sr)
+    s = hp(s, 85)
+    s = s + 0.25 * bp(s, 2500, 6000)  # presence
+    place(vo, s, m["at"], 1.0)
+lvl = lfilter([1 - 0.9995], [1, -0.9995], np.abs(vo[0]) + np.abs(vo[1]))
+vo *= np.where(lvl > 0.08, (0.08 / np.maximum(lvl, 1e-6)) ** 0.4, 1.0)  # gentle compression
+vo_mix = vo + np.stack([reverb(vo[0], 0.5, 0.7), reverb(vo[1], 1.7, 0.7)]) * 0.08
+# ducking: the bed dips under the narration, the speech band is carved out
+voice_env = np.abs(vo[0]) + np.abs(vo[1])
+att, rel = np.exp(-1 / (0.03 * SR)), np.exp(-1 / (0.4 * SR))
+e = np.zeros(N); acc = 0.0
+for i in range(0, N, 64):
+    v = voice_env[i:i + 64].max()
+    acc = att * acc + (1 - att) * v if v > acc else rel * acc + (1 - rel) * v
+    e[i:i + 64] = acc
+duck = 1 - 0.78 * np.clip(e / (e.max() * 0.3 + 1e-9), 0, 1)
+mid = np.stack([bp(bed[0], 300, 4000), bp(bed[1], 300, 4000)])
+bed = bed * duck - mid * (1 - duck) * 0.6
+mix = bed + vo_mix * 1.7
+for m in meta:
+    a, b = int(m["at"] * SR), int((m["at"] + m["dur"]) * SR)
+    rv = np.sqrt(np.mean(hp(vo_mix[0, a:b] * 1.7, 150) ** 2)) + 1e-9
+    rb = np.sqrt(np.mean(hp(bed[0, a:b], 150) ** 2)) + 1e-9
+    print(f"  voice/bed {m['id']:9s} {20 * np.log10(rv / rb):+5.1f} dB")
+mix = np.stack([hp(mix[0], 22), hp(mix[1], 22)])
 mix /= np.abs(mix).max()
 mix = np.tanh(mix * 1.6) / np.tanh(1.6)
 t_all = np.arange(N) / SR

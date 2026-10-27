@@ -38,10 +38,85 @@
   color: var(--ink-2);
 }
 .cap-l {
-  left: 130px;
-  top: 404px;
+  left: 120px;
+  top: 392px;
+  width: 560px;
+  font-size: 48px;
+  line-height: 1.14;
+}
+/* accent words, in the brand's blue (spoken words light up as they are said) */
+.cap .acc,
+.f-slogan .acc,
+.b-line .acc {
+  background: linear-gradient(100deg, #a9c6ff 0%, #6f98ff 55%, #4c7bff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.cap-hook {
+  top: 132px;
+  font-size: 66px;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.12;
+}
+.cap-big {
+  top: 432px;
+  font-size: 74px;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.1;
+  letter-spacing: -0.035em;
+  text-shadow: 0 0 40px rgba(110, 150, 255, 0.3);
+}
+.cap-simple {
+  top: 918px;
+  font-size: 62px;
+  font-weight: 500;
+  color: var(--ink);
+}
+.clock {
+  position: absolute;
+  left: 700px;
+  top: 360px;
   width: 520px;
-  font-size: 54px;
+  height: 520px;
+  visibility: hidden;
+}
+.clock svg {
+  overflow: visible;
+}
+.clock .c-rim {
+  fill: none;
+  stroke: rgba(150, 185, 255, 0.85);
+  stroke-width: 10;
+  stroke-linecap: round;
+}
+.clock .c-glow {
+  fill: none;
+  stroke: rgba(90, 140, 255, 0.5);
+  stroke-width: 26;
+  filter: blur(14px);
+}
+.clock .c-ticks line {
+  stroke: rgba(225, 235, 255, 0.75);
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+.clock .c-h,
+.clock .c-m {
+  stroke: #eef3ff;
+  stroke-linecap: round;
+  transform-origin: 0 0;
+}
+.clock .c-h {
+  stroke-width: 9;
+}
+.clock .c-m {
+  stroke-width: 6;
+}
+.clock .c-pin {
+  fill: #9dbcff;
 }
 .cap-s {
   left: 132px;
@@ -220,12 +295,12 @@
   position: absolute;
   left: 0;
   top: 0;
-  font-size: 23px;
+  font-size: 28px;
   color: var(--ink-3);
   white-space: nowrap;
 }
 .f-slogan {
-  font-size: 30px;
+  font-size: 40px;
   color: var(--ink);
   letter-spacing: -0.01em;
 }

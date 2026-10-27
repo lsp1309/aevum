@@ -2,6 +2,7 @@ import { gsap } from "../core/gsap";
 import { onFrame, clamp } from "../core/clock";
 import { $, html } from "../core/stage";
 import { titleIn } from "../core/text";
+import VOICE from "../narration.timing.entreprises.json";
 
 /** Shared vocabulary of the « Entreprises » film: visibility windows, guarded
  *  from/to tweens, captions, the flash, the halo's ignition and a cursor. */
@@ -51,6 +52,56 @@ export function caption(tl: gsap.core.Timeline, parent: HTMLElement, cls: string
   const ws = el.querySelectorAll(".w");
   tl.to(ws, { opacity: 0, filter: "blur(12px)", y: -18, duration: 0.55, stagger: 0.03, ease: "exit" }, b - 0.55);
   return el;
+}
+
+/** Voice-over lines in film time: start, end and the start of every phrase. */
+export const VO = VOICE as Record<string, { start: number; end: number; phrases: number[] }>;
+
+/** Fills `el` with a line that is revealed as it is spoken. Phrases are split
+ *  with « | », accent words wrapped in *…* (blue), « <br> » breaks the line.
+ *  Every word arrives on its own beat; the line leaves at `out`. */
+export function say(tl: gsap.core.Timeline, el: HTMLElement, id: string, text: string, out: number) {
+  const v = VO[id];
+  const starts = v.phrases;
+  const ends = [...starts.slice(1).map((x) => x - 0.12), v.end];
+  let acc = false;
+  const phrases: HTMLElement[][] = [];
+  el.innerHTML = "";
+  text.split("|").forEach((part, j) => {
+    const ws: HTMLElement[] = [];
+    part.trim().split(/\s+/).forEach((tok) => {
+      if (tok === "<br>") return void el.appendChild(document.createElement("br"));
+      const open = tok.startsWith("*");
+      const close = tok.endsWith("*") || tok.replace(/[.,?…!]+$/, "").endsWith("*");
+      if (open) acc = true;
+      const w = document.createElement("span");
+      w.className = acc ? "w acc" : "w";
+      w.textContent = tok.replace(/\*/g, "");
+      if (close) acc = false;
+      if (el.lastChild && el.lastChild.nodeName !== "BR") el.appendChild(document.createTextNode(" "));
+      el.appendChild(w);
+      ws.push(w);
+    });
+    phrases[j] = ws;
+  });
+  phrases.forEach((ws, j) => {
+    const a = starts[Math.min(j, starts.length - 1)];
+    const span = Math.max(0.2, (ends[Math.min(j, ends.length - 1)] - a) * 0.8);
+    ws.forEach((w, k) => {
+      ft(tl, w, { opacity: 0, y: 22, filter: "blur(12px)", scale: 0.96 }, { opacity: 1, y: 0, filter: "blur(0px)", scale: 1, duration: 0.5, ease: "cine" }, a - 0.04 + (k / ws.length) * span);
+    });
+  });
+  const all = phrases.flat();
+  if (Number.isFinite(out)) tl.to(all, { opacity: 0, y: -18, filter: "blur(12px)", duration: 0.45, stagger: 0.02, ease: "exit" }, out - 0.45);
+  return el;
+}
+
+/** A caption element driven by a voice line (see `say`). */
+export function voCap(tl: gsap.core.Timeline, parent: HTMLElement, cls: string, id: string, text: string, out: number, style = "") {
+  const el = html(`<div class="cap ${cls}" style="${style}"></div>`);
+  parent.appendChild(el);
+  show(el, VO[id].start - 0.1, out + 0.1);
+  return say(tl, el, id, text, out);
 }
 
 /** Draws the halo: the band unfolds both ways from one point, an echo breathes

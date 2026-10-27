@@ -18,7 +18,7 @@ import { T } from "./timing";
 
 const AUDIO = "/audio/astrya-entreprises.m4a";
 /** The frame shown when motion is reduced: the signature, readable as a still. */
-const POSTER = 43.2;
+const POSTER = 59.5;
 
 function initPlayer(mode: "auto" | "paused" | "reduced") {
   const audio = new Audio(AUDIO);

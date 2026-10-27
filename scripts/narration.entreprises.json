@@ -1,0 +1,236 @@
+{
+ "voice": "ff_siwis",
+ "lang": "fr-fr",
+ "speed": 1.0,
+ "pause": 0.16,
+ "lines": [
+  {
+   "id": "hook",
+   "text": "Vous passez encore des heures à trier vos e-mails ?",
+   "chunks": [
+    {
+     "say": "Vous passez encore des heures"
+    },
+    {
+     "say": "à trier vos imèles ?"
+    }
+   ],
+   "at": 0.6
+  },
+  {
+   "id": "words",
+   "text": "Demandes. Factures. Relances. Rendez-vous.",
+   "chunks": [
+    {
+     "say": "Demandes."
+    },
+    {
+     "say": "Factures."
+    },
+    {
+     "say": "Relances."
+    },
+    {
+     "say": "Rendez-vous."
+    }
+   ],
+   "at": 4.3,
+   "pause": 0.12,
+   "speed": 1.05
+  },
+  {
+   "id": "mass",
+   "text": "Tout arrive en même temps… et l'urgent se perd dans la masse.",
+   "chunks": [
+    {
+     "say": "Tout arrive en même temps…"
+    },
+    {
+     "say": "et l'urgent se perd dans la masse."
+    }
+   ],
+   "at": 8.1,
+   "pause": 0.25
+  },
+  {
+   "id": "turn",
+   "text": "Et si votre boîte mail travaillait pour vous ?",
+   "chunks": [
+    {
+     "say": "Et si votre boîte mèle"
+    },
+    {
+     "say": "travaillait pour vous ?"
+    }
+   ],
+   "at": 11.9
+  },
+  {
+   "id": "meet",
+   "text": "Voici Astrya.",
+   "chunks": [
+    {
+     "say": "Voici Astria."
+    }
+   ],
+   "at": 15.5,
+   "speed": 0.95
+  },
+  {
+   "id": "tagline",
+   "text": "L'assistant e-mail qui travaille avec vous.",
+   "chunks": [
+    {
+     "say": "L'assistant imèle"
+    },
+    {
+     "say": "qui travaille avec vous."
+    }
+   ],
+   "at": 17.1,
+   "pause": 0.1
+  },
+  {
+   "id": "read",
+   "text": "Chaque e-mail est lu, résumé, et classé par priorité.",
+   "chunks": [
+    {
+     "say": "Chaque imèle est lu,"
+    },
+    {
+     "say": "résumé,"
+    },
+    {
+     "say": "et classé par priorité."
+    }
+   ],
+   "at": 21.0
+  },
+  {
+   "id": "urgent",
+   "text": "Astrya comprend ce qui est urgent pour votre entreprise.",
+   "chunks": [
+    {
+     "say": "Astria comprend ce qui est urgent"
+    },
+    {
+     "say": "pour votre entreprise."
+    }
+   ],
+   "at": 25.4
+  },
+  {
+   "id": "draft",
+   "text": "Il prépare la réponse, dans le ton de votre entreprise.",
+   "chunks": [
+    {
+     "say": "Il prépare la réponse,"
+    },
+    {
+     "say": "dans le ton de votre entreprise."
+    }
+   ],
+   "at": 29.2
+  },
+  {
+   "id": "missing",
+   "text": "S'il manque une information, il vous le signale.",
+   "chunks": [
+    {
+     "say": "S'il manque une information,"
+    },
+    {
+     "say": "il vous le signale."
+    }
+   ],
+   "at": 32.9
+  },
+  {
+   "id": "validate",
+   "text": "Vous validez, puis vous envoyez maintenant… ou au bon moment.",
+   "chunks": [
+    {
+     "say": "Vous validez,"
+    },
+    {
+     "say": "puis vous envoyez maintenant…"
+    },
+    {
+     "say": "ou au bon moment."
+    }
+   ],
+   "at": 36.1
+  },
+  {
+   "id": "invoice",
+   "text": "Une facture arrive ? Astrya la classe, crée la tâche, et vous prévient.",
+   "chunks": [
+    {
+     "say": "Une facture arrive ?"
+    },
+    {
+     "say": "Astria la classe,"
+    },
+    {
+     "say": "crée la tâche,"
+    },
+    {
+     "say": "et vous prévient."
+    }
+   ],
+   "at": 40.8,
+   "pause": 0.12
+  },
+  {
+   "id": "control",
+   "text": "Par défaut, rien ne part sans votre validation.",
+   "chunks": [
+    {
+     "say": "Par défaut,"
+    },
+    {
+     "say": "rien ne part sans votre validation."
+    }
+   ],
+   "at": 46.0
+  },
+  {
+   "id": "simple",
+   "text": "Simple, non ?",
+   "chunks": [
+    {
+     "say": "Simple, non ?"
+    }
+   ],
+   "at": 49.4
+  },
+  {
+   "id": "slogan",
+   "text": "Moins de tâches répétitives. Plus de maîtrise.",
+   "chunks": [
+    {
+     "say": "Moins de tâches répétitives."
+    },
+    {
+     "say": "Plus de maîtrise."
+    }
+   ],
+   "at": 52.4,
+   "pause": 0.25
+  },
+  {
+   "id": "cta",
+   "text": "Astrya. Réservez votre démonstration.",
+   "chunks": [
+    {
+     "say": "Astria."
+    },
+    {
+     "say": "Réservez votre démonstration."
+    }
+   ],
+   "at": 55.8,
+   "pause": 0.3
+  }
+ ]
+}

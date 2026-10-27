@@ -1,46 +1,47 @@
-/** ASTRYA — film « Entreprises » (16:9, français). Every beat, in seconds. */
+/** ASTRYA — film « Entreprises » (16:9, français). Every beat, in seconds.
+ *  The voice-over (scripts/narration.entreprises.json) sets the pace. */
 export const T = {
-  // I. ouverture
-  light: 0.4, // a blue light rises out of the dark
-  streams: 1.0, // information starts flowing in
-  line1: 2.2, // « Chaque jour, tout arrive par e-mail. »
-  // II. le problème
-  cards: 4.4, // the first emails take shape
-  more: 6.2, // dozens more, in depth
-  words: 6.9, // « Demandes. Factures. Relances. Rendez-vous. »
-  dense: 9.0, // « Tout, en même temps. »
-  freeze: 10.6, // everything stops
-  // III. ASTRYA
-  sweep: 10.9, // a line of light reads the frame
-  through: 11.3, // the camera flies through the emails
-  ring: 12.2, // the halo ignites
-  word: 13.0, // ASTRYA
-  tagline: 13.8,
-  dive: 15.0, // through the halo, into the product
+  // I. ouverture — « Vous passez encore des heures à trier vos e-mails ? »
+  clock: 0.2, // a clock draws itself, time runs
+  light: 0.3, // a blue light rises out of the dark
+  streams: 0.8, // information starts flowing in
+  // II. le problème — « Demandes. Factures. Relances. Rendez-vous. »
+  cards: 2.6, // the first emails take shape
+  more: 5.0, // dozens more, in depth
+  dense: 8.1, // « Tout arrive en même temps… et l'urgent se perd dans la masse. »
+  freeze: 11.2, // everything stops
+  // III. ASTRYA — « Et si votre boîte mail travaillait pour vous ? » « Voici Astrya. »
+  sweep: 11.5, // a line of light reads the frame
+  through: 13.7, // the camera flies through the emails
+  ring: 14.8, // the halo ignites
+  word: 15.5, // ASTRYA
+  tagline: 17.1, // « L'assistant e-mail qui travaille avec vous. »
+  dive: 19.8, // through the halo, into the product
   // IV. le produit
-  inbox: 16.2,
-  sort: 17.1, // sorted by priority
-  focus: 20.0, // into the urgent email
-  analysis: 20.5, // « Ce qu'Astrya a compris »
-  draft: 23.9, // the card turns into the prepared reply
-  block: 26.3, // [À compléter] blocks the send
-  fill: 27.3, // the passage is completed
-  ready: 28.0,
-  schedule: 28.9, // « Programmer l'envoi »
-  scheduled: 29.9,
-  // V. l'automatisation
-  auto: 31.0,
-  rule: 31.4,
-  agents: 32.4,
-  invoice: 33.4,
-  task: 34.2,
-  control: 35.0, // validations + pause des envois
-  // VI. le résultat
-  calm: 37.0,
-  // VII. final
-  finale: 40.2,
-  fword: 41.0,
-  slogan: 42.2,
-  cta: 43.6,
-  end: 47.0,
+  inbox: 20.9, // « Chaque e-mail est lu, résumé, et classé par priorité. »
+  sort: 23.1, // sorted by priority
+  focus: 25.2, // into the urgent email — « Astrya comprend ce qui est urgent… »
+  analysis: 25.6, // « Ce qu'Astrya a compris »
+  draft: 29.2, // the card turns — « Il prépare la réponse… »
+  block: 34.5, // « S'il manque une information, il vous le signale. »
+  fill: 35.5, // the passage is completed
+  ready: 36.1, // « Vous validez… »
+  schedule: 38.6, // « …ou au bon moment. »
+  scheduled: 39.6,
+  // V. l'automatisation — « Une facture arrive ? Astrya la classe, crée la tâche, et vous prévient. »
+  auto: 40.3,
+  rule: 40.7,
+  agents: 41.5,
+  invoice: 42.2,
+  task: 43.5,
+  control: 45.9, // « Par défaut, rien ne part sans votre validation. »
+  // VI. le résultat — « Simple, non ? »
+  calm: 48.9,
+  // VII. final — « Moins de tâches répétitives. Plus de maîtrise. » « Astrya. Réservez votre démonstration. »
+  finale: 51.0,
+  fword: 51.6,
+  slogan: 52.4,
+  cta: 56.6,
+  click: 58.0, // the pointer presses the call to action
+  end: 61.0,
 };

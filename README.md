@@ -39,10 +39,13 @@ Player: <kbd>Space</kbd> play/pause · <kbd>←</kbd>/<kbd>→</kbd> ±5 s · <k
 The core sequence (33.5–63) follows the composition, motion and timing of the original
 film's 0:38–1:15 — same globe, orbits, tools and layout — rebuilt at a higher finish.
 
-## Film « Entreprises » (FR, 47 s)
+## Film « Entreprises » (FR, 61 s)
 
 A separate French ad for companies, in its own page (`entreprises.html`, sources in
-`src/entreprises/`); the main film is untouched. No voice: on-screen text, original score.
+`src/entreprises/`); the main film is untouched. Its grammar follows the reference ad the
+client supplied (a voice-led motion-design spot): a hook question, the problem, the reveal,
+the product, the result, the call to action; French voice-over, every word on screen arriving
+as it is spoken, key words in blue, a pointer that clicks. Palette kept Obsidian Blue.
 It only shows what the product does today (triage, summary and priority, a reply prepared in
 the company's tone with a blocking « [À compléter] », scheduled send, the « Facture reçue »
 automation model, specialised agents, supplier invoice « À valider », task, validations and
@@ -51,23 +54,36 @@ labelled « Interface simplifiée · données fictives ».
 
 ```bash
 npm run dev                                   # http://localhost:5173/entreprises.html (?t=20, ?paused)
+python3 scripts/voice.py entreprises          # voice-over (Kokoro ff_siwis, offline; needs ~/tts models)
 node scripts/render.mjs --page entreprises --dev --cues scripts/cues.entreprises.json
-python3 scripts/mix_entreprises.py            # → public/audio/astrya-entreprises.m4a
+python3 scripts/mix_entreprises.py            # → public/audio/astrya-entreprises.m4a (voice + score, −14 LUFS)
 PAGE=entreprises ./scripts/render-all.sh      # → out/astrya-entreprises-16x9.mp4 (1920×1080, 60 fps)
 ```
+
+The narration lives in `scripts/narration.entreprises.json` (`text` is what is shown, `say` what
+is spoken: « Astria », « imèle » so that the French voice pronounces the brand and « e-mail »
+correctly). Its timing (`src/narration.timing.entreprises.json`) drives the captions.
 
 Player: <kbd>Space</kbd> play/pause · <kbd>←</kbd>/<kbd>→</kbd> ±5 s · <kbd>R</kbd> restart ·
 <kbd>M</kbd> sound · <kbd>F</kbd> fullscreen. With reduced motion the page shows the final frame.
 
-| t | Scene |
-|---|---|
-| 0 | Opening — mail streams converge: « Chaque jour, tout arrive par e-mail. » |
-| 4.4 | Problem — the inbox overflows in 3D: « Tout, en même temps. » |
-| 10.6 | Reveal — freeze, the halo ignites, ASTRYA, « L'assistant e-mail qui travaille avec vous. » |
-| 16.2 | Demo — sort and priority, analysis, prepared reply, « [À compléter] », scheduled send |
-| 31 | Automation — « Facture reçue » rule, agents, invoice to validate, task, validations |
-| 37 | Result — every email has a status: « Moins de tri. Plus de temps pour vos clients. » |
-| 40.2 | Signature — « Moins de tâches répétitives. Plus de maîtrise. » · « Réservez votre démonstration » |
+| t | Voice | Picture |
+|---|---|---|
+| 0.6 | *Vous passez encore des heures à trier vos e-mails ?* | a clock races, mail streams converge |
+| 4.3 | *Demandes. Factures. Relances. Rendez-vous.* | the inbox overflows in 3D, unread counter climbs |
+| 8.1 | *Tout arrive en même temps… et l'urgent se perd dans la masse.* | everything freezes |
+| 11.9 | *Et si votre boîte mail travaillait pour vous ?* | a line of light, the camera flies through |
+| 15.5 | *Voici Astrya. L'assistant e-mail qui travaille avec vous.* | the halo ignites, wordmark |
+| 21.0 | *Chaque e-mail est lu, résumé, et classé par priorité.* | the inbox is read and sorted |
+| 25.4 | *Astrya comprend ce qui est urgent pour votre entreprise.* | « Ce qu'Astrya a compris » |
+| 29.2 | *Il prépare la réponse, dans le ton de votre entreprise.* | the card turns into the reply |
+| 32.9 | *S'il manque une information, il vous le signale.* | « [À compléter] » blocks the send, then is filled |
+| 36.1 | *Vous validez, puis vous envoyez maintenant… ou au bon moment.* | « Programmer l'envoi » |
+| 40.8 | *Une facture arrive ? Astrya la classe, crée la tâche, et vous prévient.* | automation chain |
+| 46.0 | *Par défaut, rien ne part sans votre validation.* | validations, send pause |
+| 49.4 | *Simple, non ?* | every email has a status |
+| 52.4 | *Moins de tâches répétitives. Plus de maîtrise.* | signature |
+| 55.8 | *Astrya. Réservez votre démonstration.* | the pointer clicks the call to action |
 
 ## Pipeline
 

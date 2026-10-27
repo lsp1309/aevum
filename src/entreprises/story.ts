@@ -1,11 +1,11 @@
 import { gsap } from "../core/gsap";
 import { onFrame, cue, rng, clamp, smooth, lerp } from "../core/clock";
 import { camera, overlay, html, atmos, W, H, CX, CY } from "../core/stage";
-import { chars, titleIn } from "../core/text";
+import { chars } from "../core/text";
 import { addFx, burst, shockwave, orbitDust, flareSweep } from "../core/fx";
 import { sprite } from "../core/background";
 import { ringMark, RING_A, RING_B, RING_TILT } from "../core/icons";
-import { P, eOut, show, ft, section, flash, caption, igniteRing, glintRing } from "./kit";
+import { P, eOut, show, ft, section, flash, igniteRing, glintRing, voCap, say, VO } from "./kit";
 import { T } from "./timing";
 
 /** Example inbox of the problem scene. Fictitious senders, everyday subjects. */
@@ -97,7 +97,33 @@ export function buildOpening(tl: gsap.core.Timeline) {
     }
   });
 
-  caption(tl, overlay, "cap-c", "Chaque jour, tout arrive par e-mail.", T.line1, T.cards + 0.8, `top:${CY + 150}px`);
+  // the hook: time slipping away on a clock face
+  const ticks = Array.from({ length: 12 }, (_, i) => {
+    const a = (i / 12) * Math.PI * 2;
+    const r0 = i % 3 ? 200 : 186;
+    return `<line x1="${(Math.sin(a) * r0).toFixed(1)}" y1="${(-Math.cos(a) * r0).toFixed(1)}" x2="${(Math.sin(a) * 214).toFixed(1)}" y2="${(-Math.cos(a) * 214).toFixed(1)}"/>`;
+  }).join("");
+  const clock = html(`<div class="clock"><svg viewBox="-260 -260 520 520" width="520" height="520" aria-hidden="true">
+    <circle class="c-glow" r="236"/><circle class="c-rim" r="236"/><g class="c-ticks">${ticks}</g>
+    <line class="c-h" x1="0" y1="18" x2="0" y2="-118"/><line class="c-m" x1="0" y1="26" x2="0" y2="-178"/><circle class="c-pin" r="7"/></svg></div>`);
+  overlay.appendChild(clock);
+  show(clock, T.clock, T.cards + 1.2);
+  const rim = clock.querySelectorAll(".c-rim, .c-glow");
+  ft(tl, rim, { drawSVG: "50% 50%" }, { drawSVG: "0% 100%", duration: 1.3, ease: "cineInOut" }, T.clock);
+  ft(tl, clock.querySelectorAll(".c-ticks line"), { opacity: 0 }, { opacity: 1, duration: 0.3, stagger: 0.05, ease: "sine.out" }, T.clock + 0.4);
+  ft(tl, clock.querySelectorAll(".c-h, .c-m, .c-pin"), { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "sine.out" }, T.clock + 0.6);
+  const hands = { m: 0 };
+  tl.set(hands, { m: 0 }, 0);
+  tl.to(hands, { m: 720 * 2.2, duration: T.cards + 1.2 - T.clock, ease: "power2.in" }, T.clock);
+  const hm = clock.querySelector(".c-m") as SVGElement;
+  const hh = clock.querySelector(".c-h") as SVGElement;
+  onFrame(() => {
+    hm.style.transform = `rotate(${(hands.m + 40).toFixed(1)}deg)`;
+    hh.style.transform = `rotate(${(hands.m / 12 + 300).toFixed(1)}deg)`;
+  });
+  ft(tl, clock, { scale: 0.9, opacity: 1, filter: "blur(0px)" }, { scale: 1, duration: 2.6, ease: "cine" }, T.clock);
+  tl.to(clock, { scale: 2.6, opacity: 0, filter: "blur(18px)", duration: 1.1, ease: "expo.in" }, T.cards + 0.1);
+  voCap(tl, overlay, "cap-c cap-hook", "hook", "Vous passez encore des heures | <br> à *trier vos e-mails* ?", VO.hook.end + 0.55);
 }
 
 // ── II. le problème ─────────────────────────────────────────────────────
@@ -175,30 +201,29 @@ export function buildProblem(tl: gsap.core.Timeline) {
   // kinetic words over a soft scrim
   const scrim = html(`<div class="scrim"></div>`);
   overlay.appendChild(scrim);
-  show(scrim, T.words - 0.2, T.freeze + 0.4);
-  ft(tl, scrim, { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "sine.out" }, T.words - 0.2);
-  tl.to(scrim, { opacity: 0, duration: 0.4, ease: "sine.in" }, T.freeze);
+  const W0 = VO.words.phrases;
+  show(scrim, W0[0] - 0.3, T.through + 0.4);
+  ft(tl, scrim, { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "sine.out" }, W0[0] - 0.3);
+  tl.to(scrim, { opacity: 0.6, duration: 0.4, ease: "sine.in" }, T.freeze);
+  tl.to(scrim, { opacity: 0, duration: 0.4, ease: "sine.in" }, T.through);
   const beats: Array<[string, number]> = [
-    ["Demandes.", T.words],
-    ["Factures.", T.words + 0.52],
-    ["Relances.", T.words + 1.04],
-    ["Rendez-vous.", T.words + 1.56],
+    ["Demandes.", W0[0]],
+    ["Factures.", W0[1]],
+    ["Relances.", W0[2]],
+    ["Rendez-vous.", W0[3]],
   ];
   beats.forEach(([w, at], i) => {
     const el = html(`<div class="kin">${w}</div>`);
     overlay.appendChild(el);
     const cs = chars(el);
-    show(el, at, at + 0.62);
+    show(el, at, at + 0.82);
     ft(tl, cs, { opacity: 0, scale: 1.8, filter: "blur(18px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.34, stagger: 0.018, ease: "expo.out" }, at);
-    tl.to(cs, { opacity: 0, y: -16, filter: "blur(12px)", duration: 0.2, stagger: 0.008, ease: "power2.in" }, at + 0.4);
+    tl.to(cs, { opacity: 0, y: -16, filter: "blur(12px)", duration: 0.2, stagger: 0.008, ease: "power2.in" }, at + 0.6);
     cue(i % 2 ? "click" : "tick", at, undefined, 0.8);
   });
-  const all = html(`<div class="kin kin-l">Tout, en même temps.</div>`);
-  overlay.appendChild(all);
-  show(all, T.dense, T.sweep + 0.35);
-  tl.add(titleIn(all, { stagger: 0.08, dur: 0.9, blur: 18, y: 18 }), T.dense);
-  tl.to(all.querySelectorAll(".w"), { opacity: 0, filter: "blur(16px)", scale: 1.06, duration: 0.35, stagger: 0.02, ease: "power2.in" }, T.sweep - 0.05);
-  cue("riser", T.dense - 0.4, 2.0, 0.6);
+  voCap(tl, overlay, "cap-c cap-big", "mass", "Tout arrive en même temps… | <br> et *l'urgent* se perd dans la masse.", T.sweep + 0.1);
+  voCap(tl, overlay, "cap-c cap-big", "turn", "Et si votre boîte mail | <br> *travaillait pour vous* ?", T.through + 0.75);
+  cue("riser", T.freeze - 1.8, 2.0, 0.6);
 }
 
 // ── III. ASTRYA ─────────────────────────────────────────────────────────
@@ -250,7 +275,7 @@ export function buildReveal(tl: gsap.core.Timeline) {
   const cs = chars(word);
   ft(tl, cs, { opacity: 0, filter: "blur(14px)", y: (i: number) => (i % 2 ? 22 : -22), scaleY: 1.5 }, { opacity: 1, filter: "blur(0px)", y: 0, scaleY: 1, duration: 1.7, ease: "cine", stagger: { each: 0.075, from: "center" } }, T.word);
   ft(tl, word, { letterSpacing: "1.6em", paddingLeft: "1.6em" }, { letterSpacing: "0.9em", paddingLeft: "0.9em", duration: 2.3, ease: "cine" }, T.word);
-  tl.add(titleIn(line, { stagger: 0.06, dur: 1.1, blur: 10, y: 14, glow: false }), T.tagline);
+  say(tl, line, "tagline", "L'assistant e-mail | qui travaille *avec vous*.", T.dive + 0.3);
   glintRing(tl, svg, T.tagline + 0.4);
   cue("sweep", T.tagline + 0.4, 1.6, 0.3);
 

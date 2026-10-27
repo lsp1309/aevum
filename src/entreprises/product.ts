@@ -3,7 +3,7 @@ import { onFrame, cue, clamp, smooth, lerp } from "../core/clock";
 import { camera, overlay, html } from "../core/stage";
 import { writeWords } from "../core/text";
 import { ringMark } from "../core/icons";
-import { P, show, ft, section, caption, makeCursor } from "./kit";
+import { P, show, ft, section, voCap, makeCursor } from "./kit";
 import { T } from "./timing";
 
 /**
@@ -151,8 +151,7 @@ export function buildProduct(tl: gsap.core.Timeline) {
   tl.to(app.querySelector(".sorted"), { opacity: 1, scale: 1, duration: 0.6, ease: "spring" }, T.sort + 0.9);
   cue("chime", T.sort + 0.9, undefined, 0.5);
 
-  caption(tl, overlay, "cap-l", "Chaque e-mail,<br>trié et priorisé.", T.inbox + 0.6, T.focus - 0.1);
-  caption(tl, overlay, "cap-s", "Résumé, catégorie, priorité, échéance.", T.sort + 0.4, T.focus - 0.1);
+  voCap(tl, overlay, "cap-l", "read", "Chaque e-mail est *lu*, | <br> *résumé*, | <br> et *classé par priorité*.", T.focus - 0.05);
 
   // ── V. into Marc's email: what Astrya understood ──────────────────────
   const flip = html(`<div class="flip">
@@ -209,7 +208,7 @@ export function buildProduct(tl: gsap.core.Timeline) {
   const why = front.querySelectorAll(".why li");
   ft(tl, why, { opacity: 0, x: -10 }, { opacity: 1, x: 0, duration: 0.5, stagger: 0.18, ease: "cine" }, T.analysis + 1.6);
   cue("click", T.analysis + 0.3, undefined, 0.5);
-  caption(tl, overlay, "cap-l", "Il comprend ce qui est urgent<br>pour votre entreprise.", T.analysis, T.draft + 0.2, "width:520px");
+  voCap(tl, overlay, "cap-l", "urgent", "Astrya comprend <br> ce qui est *urgent* | <br> pour votre entreprise.", T.draft - 0.1);
 
   // the pointer asks for a reply, the card turns
   const cur = makeCursor(overlay);
@@ -243,7 +242,8 @@ export function buildProduct(tl: gsap.core.Timeline) {
   ft(tl, back.querySelectorAll(".fh, .bf"), { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.6, stagger: 0.08, ease: "cine" }, T.draft + 0.5);
   tl.add(writeWords(body, null, 0.038), T.draft + 0.65);
   for (let i = 0; i < 10; i++) cue("tick", T.draft + 0.7 + i * 0.16, undefined, 0.25);
-  caption(tl, overlay, "cap-l", "Il prépare la réponse.<br>Vous validez.", T.draft + 0.3, T.schedule - 0.15);
+  voCap(tl, overlay, "cap-l", "draft", "Il prépare la réponse, | <br> dans *le ton <br> de votre entreprise*.", T.block - 1.65);
+  voCap(tl, overlay, "cap-l", "missing", "S'il manque <br> une information, | <br> *il vous le signale*.", T.ready - 0.1);
 
   // the pointer tries to send: blocked until the passage is completed
   cur.move(tl, 1640, 778, T.block - 0.55, 0.6);
@@ -297,7 +297,7 @@ export function buildProduct(tl: gsap.core.Timeline) {
   tl.to(cur.el, { opacity: 0, duration: 0.4 }, T.scheduled + 0.2);
   cue("click", T.schedule, undefined, 0.5);
   cue("chime", T.scheduled, undefined, 0.6);
-  caption(tl, overlay, "cap-l", "Envoyez maintenant,<br>ou au bon moment.", T.schedule - 0.05, T.auto + 0.1);
+  voCap(tl, overlay, "cap-l", "validate", "Vous *validez*, | <br> puis vous envoyez <br> maintenant… | <br> ou *au bon moment*.", T.auto + 0.2);
 
   // honesty label for the whole product part
   const note = html(`<div class="note">Interface simplifiée · données fictives</div>`);

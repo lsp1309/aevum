@@ -39,6 +39,36 @@ Player: <kbd>Space</kbd> play/pause · <kbd>←</kbd>/<kbd>→</kbd> ±5 s · <k
 The core sequence (33.5–63) follows the composition, motion and timing of the original
 film's 0:38–1:15 — same globe, orbits, tools and layout — rebuilt at a higher finish.
 
+## Film « Entreprises » (FR, 47 s)
+
+A separate French ad for companies, in its own page (`entreprises.html`, sources in
+`src/entreprises/`); the main film is untouched. No voice: on-screen text, original score.
+It only shows what the product does today (triage, summary and priority, a reply prepared in
+the company's tone with a blocking « [À compléter] », scheduled send, the « Facture reçue »
+automation model, specialised agents, supplier invoice « À valider », task, validations and
+send pause). No prices, figures, testimonials, calendar or integrations. Fictitious data,
+labelled « Interface simplifiée · données fictives ».
+
+```bash
+npm run dev                                   # http://localhost:5173/entreprises.html (?t=20, ?paused)
+node scripts/render.mjs --page entreprises --dev --cues scripts/cues.entreprises.json
+python3 scripts/mix_entreprises.py            # → public/audio/astrya-entreprises.m4a
+PAGE=entreprises ./scripts/render-all.sh      # → out/astrya-entreprises-16x9.mp4 (1920×1080, 60 fps)
+```
+
+Player: <kbd>Space</kbd> play/pause · <kbd>←</kbd>/<kbd>→</kbd> ±5 s · <kbd>R</kbd> restart ·
+<kbd>M</kbd> sound · <kbd>F</kbd> fullscreen. With reduced motion the page shows the final frame.
+
+| t | Scene |
+|---|---|
+| 0 | Opening — mail streams converge: « Chaque jour, tout arrive par e-mail. » |
+| 4.4 | Problem — the inbox overflows in 3D: « Tout, en même temps. » |
+| 10.6 | Reveal — freeze, the halo ignites, ASTRYA, « L'assistant e-mail qui travaille avec vous. » |
+| 16.2 | Demo — sort and priority, analysis, prepared reply, « [À compléter] », scheduled send |
+| 31 | Automation — « Facture reçue » rule, agents, invoice to validate, task, validations |
+| 37 | Result — every email has a status: « Moins de tri. Plus de temps pour vos clients. » |
+| 40.2 | Signature — « Moins de tâches répétitives. Plus de maîtrise. » · « Réservez votre démonstration » |
+
 ## Pipeline
 
 - **Edit** — scenes are authored on a raw GSAP timeline; `src/timing.ts → EDIT` maps raw→film time

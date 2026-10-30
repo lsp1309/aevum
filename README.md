@@ -60,9 +60,14 @@ python3 scripts/mix_entreprises.py            # → public/audio/astrya-entrepri
 PAGE=entreprises ./scripts/render-all.sh      # → out/astrya-entreprises-16x9.mp4 (1920×1080, 60 fps)
 ```
 
-The narration lives in `scripts/narration.entreprises.json` (`text` is what is shown, `say` what
-is spoken: « Astria », « imèle » so that the French voice pronounces the brand and « e-mail »
-correctly). Its timing (`src/narration.timing.entreprises.json`) drives the captions.
+The narration is written for the picture (`scripts/narration.entreprises.pro.json`); the on-screen
+titles are shorter and complement it. Current take: Kokoro, offline, with a male voice made by
+blending two voice styles — the French *ff_siwis* (40 %, for French pronunciation and melody) and
+the deep *am_onyx* (60 %): median pitch ≈ 130 Hz, natural range, almost no vocal fry
+(`scripts/narration.entreprises.json`, `"voice": {"ff_siwis": 0.4, "am_onyx": 0.6}`; `say` is
+what is spoken: « Astria », « imèle »). Lines are never sped up by more than 4 % (`max_speed`).
+Its timing (`src/narration.timing.entreprises.json`) drives the titles and the beats.
+`public/audio/astrya-entreprises-voix-seule.m4a` is the narration alone.
 
 ### Professional voice-over (male, standard French)
 
@@ -91,21 +96,19 @@ Player: <kbd>Space</kbd> play/pause · <kbd>←</kbd>/<kbd>→</kbd> ±5 s · <k
 
 | t | Voice | Picture |
 |---|---|---|
-| 0.6 | *Vous passez encore des heures à trier vos e-mails ?* | a clock races, mail streams converge |
-| 4.3 | *Demandes. Factures. Relances. Rendez-vous.* | the inbox overflows in 3D, unread counter climbs |
-| 8.1 | *Tout arrive en même temps… et l'urgent se perd dans la masse.* | everything freezes |
-| 11.9 | *Et si votre boîte mail travaillait pour vous ?* | a line of light, the camera flies through |
-| 15.5 | *Voici Astrya. L'assistant e-mail qui travaille avec vous.* | the halo ignites, wordmark |
-| 21.0 | *Chaque e-mail est lu, résumé, et classé par priorité.* | the inbox is read and sorted |
-| 25.4 | *Astrya comprend ce qui est urgent pour votre entreprise.* | « Ce qu'Astrya a compris » |
-| 29.2 | *Il prépare la réponse, dans le ton de votre entreprise.* | the card turns into the reply |
-| 32.9 | *S'il manque une information, il vous le signale.* | « [À compléter] » blocks the send, then is filled |
-| 36.1 | *Vous validez, puis vous envoyez maintenant… ou au bon moment.* | « Programmer l'envoi » |
-| 40.8 | *Une facture arrive ? Astrya la classe, crée la tâche, et vous prévient.* | automation chain |
-| 46.0 | *Par défaut, rien ne part sans votre validation.* | validations, send pause |
-| 49.4 | *Simple, non ?* | every email has a status |
-| 52.4 | *Moins de tâches répétitives. Plus de maîtrise.* | signature |
-| 55.8 | *Astrya. Réservez votre démonstration.* | the pointer clicks the call to action |
+| 0.7 | *Chaque matin, des dizaines d'e-mails vous attendent.* | L'horloge s'emballe, les flux d'e-mails convergent. |
+| 4.6 | *Des demandes. Des factures. Des relances. Tout arrive en même temps… et l'essentiel se perd.* | La boîte déborde en 3D ; mots « Demandes. Factures. Relances. Rendez-vous. » |
+| 11.6 | *Et si votre boîte mail travaillait pour vous ?* | Silence sur l'arrêt sur image (11,2 → 12,2), puis la ligne de lumière et la traversée. |
+| 15.8 | *Voici Astrya.* | Le halo s'allume (silence 14,8 → 15,8), le nom apparaît. La signature « L'assistant e-mail qui travaille avec vous » reste à l'écran sans voix. |
+| 21.0 | *Astrya lit chaque message, le résume, et vous montre l'essentiel.* | La boîte de réception se lit et se trie par priorité. |
+| 25.7 | *Il sait ce qui est urgent, pour votre entreprise.* | « Ce qu'Astrya a compris » : résumé, priorité, échéance. |
+| 29.5 | *Votre réponse est prête, dans votre ton.* | La carte se retourne, la réponse s'écrit. |
+| 33.3 | *Une information manque ? Il vous le signale.* | « [À compléter] » bloque l'envoi, puis est complété. |
+| 36.6 | *Vous relisez, vous validez… et vous l'envoyez maintenant, ou demain matin.* | « Programmer l'envoi » : demain 07:30. |
+| 41.0 | *Une facture arrive ? Elle est classée, la tâche est créée, vous êtes prévenu.* | La chaîne d'automatisation « Facture reçue ». |
+| 46.5 | *Et rien ne part sans votre accord.* | Validations en attente, pause des envois. Puis la vue calme : « Simple, non ? » à l'écran, sans voix. |
+| 52.2 | *Moins de tâches répétitives. Plus de maîtrise.* | Le halo revient (silence 51,0 → 52,6), le nom, la signature. |
+| 56.0 | *Astrya. Réservez votre démonstration.* | Le pointeur clique sur « Réservez votre démonstration » (58,0). |
 
 ## Pipeline
 

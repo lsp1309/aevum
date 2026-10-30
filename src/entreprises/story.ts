@@ -1,11 +1,11 @@
 import { gsap } from "../core/gsap";
 import { onFrame, cue, rng, clamp, smooth, lerp } from "../core/clock";
 import { camera, overlay, html, atmos, W, H, CX, CY } from "../core/stage";
-import { chars } from "../core/text";
+import { chars, titleIn } from "../core/text";
 import { addFx, burst, shockwave, orbitDust, flareSweep } from "../core/fx";
 import { sprite } from "../core/background";
 import { ringMark, RING_A, RING_B, RING_TILT } from "../core/icons";
-import { P, eOut, show, ft, section, flash, igniteRing, glintRing, voCap, say, VO } from "./kit";
+import { P, eOut, show, ft, section, flash, igniteRing, glintRing, voCap, VO } from "./kit";
 import { T } from "./timing";
 
 /** Example inbox of the problem scene. Fictitious senders, everyday subjects. */
@@ -201,7 +201,9 @@ export function buildProblem(tl: gsap.core.Timeline) {
   // kinetic words over a soft scrim
   const scrim = html(`<div class="scrim"></div>`);
   overlay.appendChild(scrim);
-  const W0 = VO.words.phrases;
+  // the voice names three kinds of email, then « Tout arrive en même temps… et l'essentiel se perd. »
+  const W0 = VO.problem.phrases;
+  VO.mass = { start: W0[3], end: VO.problem.end, phrases: W0.slice(3) };
   show(scrim, W0[0] - 0.3, T.through + 0.4);
   ft(tl, scrim, { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "sine.out" }, W0[0] - 0.3);
   tl.to(scrim, { opacity: 0.6, duration: 0.4, ease: "sine.in" }, T.freeze);
@@ -210,7 +212,6 @@ export function buildProblem(tl: gsap.core.Timeline) {
     ["Demandes.", W0[0]],
     ["Factures.", W0[1]],
     ["Relances.", W0[2]],
-    ["Rendez-vous.", W0[3]],
   ];
   beats.forEach(([w, at], i) => {
     const el = html(`<div class="kin">${w}</div>`);
@@ -221,7 +222,7 @@ export function buildProblem(tl: gsap.core.Timeline) {
     tl.to(cs, { opacity: 0, y: -16, filter: "blur(12px)", duration: 0.2, stagger: 0.008, ease: "power2.in" }, at + 0.6);
     cue(i % 2 ? "click" : "tick", at, undefined, 0.8);
   });
-  voCap(tl, overlay, "cap-c cap-big", "mass", "Tout arrive en même temps… | <br> et *l'urgent* se perd dans la masse.", T.sweep + 0.1);
+  voCap(tl, overlay, "cap-c cap-big", "mass", "Tout arrive en même temps… | <br> et *l'essentiel* se perd.", T.sweep + 0.1);
   voCap(tl, overlay, "cap-c cap-big", "turn", "Et si votre boîte mail | <br> *travaillait pour vous* ?", T.through + 0.75);
   cue("riser", T.freeze - 1.8, 2.0, 0.6);
 }
@@ -275,7 +276,7 @@ export function buildReveal(tl: gsap.core.Timeline) {
   const cs = chars(word);
   ft(tl, cs, { opacity: 0, filter: "blur(14px)", y: (i: number) => (i % 2 ? 22 : -22), scaleY: 1.5 }, { opacity: 1, filter: "blur(0px)", y: 0, scaleY: 1, duration: 1.7, ease: "cine", stagger: { each: 0.075, from: "center" } }, T.word);
   ft(tl, word, { letterSpacing: "1.6em", paddingLeft: "1.6em" }, { letterSpacing: "0.9em", paddingLeft: "0.9em", duration: 2.3, ease: "cine" }, T.word);
-  say(tl, line, "tagline", "L'assistant e-mail | qui travaille *avec vous*.", T.dive + 0.3);
+  tl.add(titleIn(line, { stagger: 0.06, dur: 1.1, blur: 10, y: 14, glow: false }), T.tagline);
   glintRing(tl, svg, T.tagline + 0.4);
   cue("sweep", T.tagline + 0.4, 1.6, 0.3);
 

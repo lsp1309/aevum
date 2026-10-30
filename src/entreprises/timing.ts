@@ -23,25 +23,25 @@ export const T = {
   focus: 25.2, // into the urgent email — « Astrya comprend ce qui est urgent… »
   analysis: 25.6, // « Ce qu'Astrya a compris »
   draft: 29.2, // the card turns — « Il prépare la réponse… »
-  block: 34.5, // « S'il manque une information, il vous le signale. »
-  fill: 35.5, // the passage is completed
-  ready: 36.1, // « Vous validez… »
+  block: 35.0, // « S'il manque une information, il vous le signale. »
+  fill: 35.8, // the passage is completed
+  ready: 36.4, // « Vous validez… »
   schedule: 38.6, // « …ou au bon moment. »
   scheduled: 39.6,
   // V. l'automatisation — « Une facture arrive ? Astrya la classe, crée la tâche, et vous prévient. »
   auto: 40.3,
   rule: 40.7,
   agents: 41.5,
-  invoice: 42.2,
-  task: 43.5,
-  control: 45.9, // « Par défaut, rien ne part sans votre validation. »
+  invoice: 42.5,
+  task: 43.7,
+  control: 46.4, // « Par défaut, rien ne part sans votre validation. »
   // VI. le résultat — « Simple, non ? »
   calm: 48.9,
   // VII. final — « Moins de tâches répétitives. Plus de maîtrise. » « Astrya. Réservez votre démonstration. »
   finale: 51.0,
   fword: 51.6,
-  slogan: 52.4,
-  cta: 56.6,
-  click: 58.0, // the pointer presses the call to action
+  slogan: 52.2,
+  cta: 56.9,
+  click: 58.3, // the pointer presses the call to action
   end: 61.0,
 };

@@ -4,7 +4,7 @@ import { camera, overlay, html, atmos, CX, CY } from "../core/stage";
 import { chars } from "../core/text";
 import { shockwave, burst, orbitDust } from "../core/fx";
 import { ringMark, RING_TILT } from "../core/icons";
-import { P, ft, show, section, voCap, say, makeCursor, igniteRing, glintRing, flash } from "./kit";
+import { P, ft, show, section, voCap, say, caption, makeCursor, igniteRing, glintRing, flash } from "./kit";
 import { appShell, rowMarkup, sortedLayout, ROWS, SECTIONS } from "./product";
 import { T } from "./timing";
 
@@ -85,8 +85,8 @@ export function buildAutomation(tl: gsap.core.Timeline) {
   tl.to(rig, { opacity: 0, filter: "blur(12px)", scale: 0.92, duration: 1.0, ease: "exit" }, T.calm - 0.1);
   tl.to(atmos, { halo: 0.45, core: 0.1, duration: 2, ease: "sine.inOut" }, T.auto);
 
-  voCap(tl, overlay, "cap-t", "invoice", "Une facture arrive ? | <br> Astrya *la classe*, | *crée la tâche*, | et *vous prévient*.", T.control - 0.15);
-  voCap(tl, overlay, "cap-t", "control", "Par défaut, | <br> rien ne part *sans votre validation*.", T.calm);
+  voCap(tl, overlay, "cap-t", "invoice", "Une facture arrive ? | <br> *Classée*, | *tâche créée*, | *vous êtes prévenu*.", T.control - 0.15);
+  voCap(tl, overlay, "cap-t", "control", "Rien ne part *sans votre accord*.", T.calm);
 }
 
 // ── VI. le résultat ─────────────────────────────────────────────────────
@@ -112,7 +112,7 @@ export function buildCalm(tl: gsap.core.Timeline) {
   ft(tl, list.querySelectorAll(".st"), { opacity: 0, x: 10 }, { opacity: 1, x: 0, duration: 0.4, stagger: 0.07, ease: "cine" }, T.calm + 0.3);
   tl.to(app, { z: 60, duration: 1.4, ease: "sine.inOut" }, T.calm + 1.0);
   tl.to(app, { opacity: 0, z: -400, filter: "blur(16px)", duration: 0.7, ease: "exit" }, T.finale - 0.5);
-  voCap(tl, overlay, "cap-b cap-simple", "simple", "*Simple*, non ?", T.finale - 0.2);
+  caption(tl, overlay, "cap-b cap-simple", "Simple, non ?", T.calm + 0.4, T.finale - 0.2);  // no voice: the picture breathes
   cue("soft", T.calm, 2.5, 0.6);
 }
 

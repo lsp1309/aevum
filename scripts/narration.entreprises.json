@@ -1,56 +1,51 @@
 {
- "voice": "ff_siwis",
+ "voice": {
+  "ff_siwis": 0.4,
+  "am_onyx": 0.6
+ },
  "lang": "fr-fr",
- "speed": 1.0,
- "pause": 0.16,
+ "speed": 0.96,
+ "pause": 0.22,
+ "about": "Voix off du film « Entreprises » : voix masculine obtenue en mélangeant la voix française ff_siwis (40 %) et la voix grave am_onyx (60 %) de Kokoro. Le texte vient de narration.entreprises.pro.json.",
  "lines": [
   {
    "id": "hook",
-   "text": "Vous passez encore des heures à trier vos e-mails ?",
+   "text": "Chaque matin, des dizaines d'e-mails vous attendent.",
    "chunks": [
     {
-     "say": "Vous passez encore des heures"
+     "say": "Chaque matin,"
     },
     {
-     "say": "à trier vos imèles ?"
+     "say": "des dizaines d'imèles vous attendent."
     }
    ],
-   "at": 0.6
+   "at": 0.7,
+   "speed": 0.95,
+   "pause": 0.22
   },
   {
-   "id": "words",
-   "text": "Demandes. Factures. Relances. Rendez-vous.",
+   "id": "problem",
+   "text": "Des demandes. Des factures. Des relances. Tout arrive en même temps… et l'essentiel se perd.",
    "chunks": [
     {
-     "say": "Demandes."
+     "say": "Des demandes."
     },
     {
-     "say": "Factures."
+     "say": "Des factures."
     },
     {
-     "say": "Relances."
+     "say": "Des relances."
     },
-    {
-     "say": "Rendez-vous."
-    }
-   ],
-   "at": 4.3,
-   "pause": 0.12,
-   "speed": 1.05
-  },
-  {
-   "id": "mass",
-   "text": "Tout arrive en même temps… et l'urgent se perd dans la masse.",
-   "chunks": [
     {
      "say": "Tout arrive en même temps…"
     },
     {
-     "say": "et l'urgent se perd dans la masse."
+     "say": "et l'essentiel se perd."
     }
    ],
-   "at": 8.1,
-   "pause": 0.25
+   "at": 4.6,
+   "speed": 0.99,
+   "pause": 0.18
   },
   {
    "id": "turn",
@@ -63,7 +58,9 @@
      "say": "travaillait pour vous ?"
     }
    ],
-   "at": 11.9
+   "at": 11.6,
+   "speed": 0.95,
+   "pause": 0.22
   },
   {
    "id": "meet",
@@ -73,136 +70,120 @@
      "say": "Voici Astria."
     }
    ],
-   "at": 15.5,
-   "speed": 0.95
-  },
-  {
-   "id": "tagline",
-   "text": "L'assistant e-mail qui travaille avec vous.",
-   "chunks": [
-    {
-     "say": "L'assistant imèle"
-    },
-    {
-     "say": "qui travaille avec vous."
-    }
-   ],
-   "at": 17.1,
-   "pause": 0.1
+   "at": 15.8,
+   "speed": 0.9,
+   "pause": 0.22
   },
   {
    "id": "read",
-   "text": "Chaque e-mail est lu, résumé, et classé par priorité.",
+   "text": "Astrya lit chaque message, le résume, et vous montre l'essentiel.",
    "chunks": [
     {
-     "say": "Chaque imèle est lu,"
+     "say": "Astria lit chaque message,"
     },
     {
-     "say": "résumé,"
+     "say": "le résume,"
     },
     {
-     "say": "et classé par priorité."
+     "say": "et vous montre l'essentiel."
     }
    ],
-   "at": 21.0
+   "at": 21.0,
+   "speed": 0.97,
+   "pause": 0.22
   },
   {
    "id": "urgent",
-   "text": "Astrya comprend ce qui est urgent pour votre entreprise.",
+   "text": "Il sait ce qui est urgent, pour votre entreprise.",
    "chunks": [
     {
-     "say": "Astria comprend ce qui est urgent"
+     "say": "Il sait ce qui est urgent,"
     },
     {
      "say": "pour votre entreprise."
     }
    ],
-   "at": 25.4
+   "at": 25.7,
+   "speed": 0.97,
+   "pause": 0.22
   },
   {
    "id": "draft",
-   "text": "Il prépare la réponse, dans le ton de votre entreprise.",
+   "text": "Votre réponse est prête, dans votre ton.",
    "chunks": [
     {
-     "say": "Il prépare la réponse,"
+     "say": "Votre réponse est prête,"
     },
     {
-     "say": "dans le ton de votre entreprise."
+     "say": "dans votre ton."
     }
    ],
-   "at": 29.2
+   "at": 29.5,
+   "speed": 0.97,
+   "pause": 0.22
   },
   {
    "id": "missing",
-   "text": "S'il manque une information, il vous le signale.",
+   "text": "Une information manque ? Il vous le signale.",
    "chunks": [
     {
-     "say": "S'il manque une information,"
+     "say": "Une information manque ?"
     },
     {
-     "say": "il vous le signale."
+     "say": "Il vous le signale."
     }
    ],
-   "at": 32.9
+   "at": 33.3,
+   "speed": 0.97,
+   "pause": 0.22
   },
   {
    "id": "validate",
-   "text": "Vous validez, puis vous envoyez maintenant… ou au bon moment.",
+   "text": "Vous relisez, vous validez… et vous l'envoyez maintenant, ou demain matin.",
    "chunks": [
     {
-     "say": "Vous validez,"
+     "say": "Vous relisez, vous validez…"
     },
     {
-     "say": "puis vous envoyez maintenant…"
-    },
-    {
-     "say": "ou au bon moment."
+     "say": "et vous l'envoyez maintenant, ou demain matin."
     }
    ],
-   "at": 36.1
+   "at": 36.6,
+   "speed": 0.97,
+   "pause": 0.22
   },
   {
    "id": "invoice",
-   "text": "Une facture arrive ? Astrya la classe, crée la tâche, et vous prévient.",
+   "text": "Une facture arrive ? Elle est classée, la tâche est créée, vous êtes prévenu.",
    "chunks": [
     {
      "say": "Une facture arrive ?"
     },
     {
-     "say": "Astria la classe,"
+     "say": "Elle est classée,"
     },
     {
-     "say": "crée la tâche,"
+     "say": "la tâche est créée,"
     },
     {
-     "say": "et vous prévient."
+     "say": "vous êtes prévenu."
     }
    ],
-   "at": 40.8,
-   "pause": 0.12
+   "at": 41.0,
+   "speed": 0.97,
+   "pause": 0.18
   },
   {
    "id": "control",
-   "text": "Par défaut, rien ne part sans votre validation.",
+   "text": "Et rien ne part sans votre accord.",
    "chunks": [
     {
-     "say": "Par défaut,"
-    },
-    {
-     "say": "rien ne part sans votre validation."
+     "say": "Et rien ne part sans votre accord."
     }
    ],
-   "at": 46.0
-  },
-  {
-   "id": "simple",
-   "text": "Simple, non ?",
-   "chunks": [
-    {
-     "say": "Simple, non ?"
-    }
-   ],
-   "at": 49.4
+   "at": 46.5,
+   "speed": 0.97,
+   "pause": 0.22
   },
   {
    "id": "slogan",
@@ -215,8 +196,9 @@
      "say": "Plus de maîtrise."
     }
    ],
-   "at": 52.4,
-   "pause": 0.25
+   "at": 52.2,
+   "speed": 0.92,
+   "pause": 0.22
   },
   {
    "id": "cta",
@@ -229,8 +211,10 @@
      "say": "Réservez votre démonstration."
     }
    ],
-   "at": 55.8,
-   "pause": 0.3
+   "at": 56.0,
+   "speed": 0.92,
+   "pause": 0.22
   }
- ]
+ ],
+ "max_speed": 1.04
 }

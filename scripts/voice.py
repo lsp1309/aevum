@@ -25,6 +25,10 @@ LANG = sys.argv[1] if len(sys.argv) > 1 else "en"
 MODEL = os.environ.get("KOKORO_DIR", "/home/user/tts")
 spec = json.load(open(os.path.join(ROOT, "scripts", f"narration.{LANG}.json")))
 k = Kokoro(os.path.join(MODEL, "kokoro-v1.0.onnx"), os.path.join(MODEL, "voices-v1.0.bin"))
+# "voice" is a Kokoro voice name, or a blend {"name": weight, …} of voice styles
+VOICE = spec["voice"]
+if isinstance(VOICE, dict):
+    VOICE = sum(w * k.get_voice_style(n) for n, w in VOICE.items()).astype("float32")
 out = os.path.join(ROOT, "scripts", ".vo", LANG)
 G2P = None
 if spec.get("g2p") == "misaki":
@@ -38,8 +42,8 @@ def say(text, speed):
     """One utterance → (samples, sr)."""
     if G2P:
         ph, _ = G2P(text)
-        return k.create(ph, voice=spec["voice"], speed=speed, is_phonemes=True)
-    return k.create(text, voice=spec["voice"], speed=speed, lang=spec["lang"])
+        return k.create(ph, voice=VOICE, speed=speed, is_phonemes=True)
+    return k.create(text, voice=VOICE, speed=speed, lang=spec["lang"])
 os.makedirs(out, exist_ok=True)
 
 
@@ -96,8 +100,9 @@ for i, line in enumerate(lines):
     limit = (nxt[0]["at"] - line["at"] - 0.3) if nxt else 6.0
     s, sr, ph = synth(line, speed)
     tries = 0
-    while len(s) / sr > limit and tries < 4 and speed < 1.2:
-        speed = min(1.2, speed * (len(s) / sr) / limit * 1.01)
+    MAXS = spec.get("max_speed", 1.2)
+    while len(s) / sr > limit and tries < 4 and speed < MAXS:
+        speed = min(MAXS, speed * (len(s) / sr) / limit * 1.01)
         s, sr, ph = synth(line, speed)
         tries += 1
     path = os.path.join(out, f"line_{i:02d}.wav")

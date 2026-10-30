@@ -19,23 +19,23 @@
   "focus": 25.2,
   "analysis": 25.6,
   "draft": 29.2,
-  "block": 34.5,
-  "fill": 35.5,
-  "ready": 36.1,
+  "block": 35,
+  "fill": 35.8,
+  "ready": 36.4,
   "schedule": 38.6,
   "scheduled": 39.6,
   "auto": 40.3,
   "rule": 40.7,
   "agents": 41.5,
-  "invoice": 42.2,
-  "task": 43.5,
-  "control": 45.9,
+  "invoice": 42.5,
+  "task": 43.7,
+  "control": 46.4,
   "calm": 48.9,
   "finale": 51,
   "fword": 51.6,
-  "slogan": 52.4,
-  "cta": 56.6,
-  "click": 58,
+  "slogan": 52.2,
+  "cta": 56.9,
+  "click": 58.3,
   "end": 61
  },
  "cues": [
@@ -66,7 +66,7 @@
    "gain": 0.5
   },
   {
-   "t": 4.3,
+   "t": 4.6,
    "type": "tick",
    "gain": 0.8
   },
@@ -81,24 +81,19 @@
    "gain": 0.5
   },
   {
-   "t": 5.12,
-   "type": "click",
-   "gain": 0.8
-  },
-  {
    "t": 5.53,
    "type": "tick",
    "gain": 0.5
   },
   {
+   "t": 5.808,
+   "type": "click",
+   "gain": 0.8
+  },
+  {
    "t": 5.959,
    "type": "tick",
    "gain": 0.5
-  },
-  {
-   "t": 6.025,
-   "type": "tick",
-   "gain": 0.8
   },
   {
    "t": 6.374,
@@ -111,8 +106,8 @@
    "gain": 0.5
   },
   {
-   "t": 6.887,
-   "type": "click",
+   "t": 7.03,
+   "type": "tick",
    "gain": 0.8
   },
   {
@@ -294,17 +289,17 @@
    "gain": 0.25
   },
   {
-   "t": 34.5,
+   "t": 35,
    "type": "click",
    "gain": 0.6
   },
   {
-   "t": 35.7,
+   "t": 36,
    "type": "tick",
    "gain": 0.6
   },
   {
-   "t": 36.1,
+   "t": 36.4,
    "type": "chime",
    "gain": 0.4
   },
@@ -329,17 +324,17 @@
    "gain": 0.5
   },
   {
-   "t": 42.2,
+   "t": 42.5,
    "type": "chime",
    "gain": 0.5
   },
   {
-   "t": 43.5,
+   "t": 43.7,
    "type": "soft",
    "gain": 0.5
   },
   {
-   "t": 45.9,
+   "t": 46.4,
    "type": "soft",
    "gain": 0.5
   },
@@ -360,19 +355,19 @@
    "gain": 0.5
   },
   {
-   "t": 56.6,
+   "t": 56.9,
    "type": "soft",
    "dur": 3,
    "gain": 0.5
   },
   {
-   "t": 57.2,
+   "t": 57.5,
    "type": "sweep",
    "dur": 1.6,
    "gain": 0.3
   },
   {
-   "t": 58,
+   "t": 58.3,
    "type": "click",
    "gain": 0.8
   }

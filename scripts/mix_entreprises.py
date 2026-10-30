@@ -205,45 +205,69 @@ hush[i1:i1 + int(0.4 * SR)] = np.linspace(0.3, 1, int(0.4 * SR))
 bed = bed * hush
 
 # ── voice-over ────────────────────────────────────────────────────────────
+# VO=pro: the professional narration (scripts/voice_pro.py), the default once it exists.
+# VO=kokoro: the first synthetic take. VO=none: music and sound design only, to compare.
+PRO = os.path.join(ROOT, "scripts", ".vo", "pro")
+VO = os.environ.get("VO") or ("pro" if os.path.exists(os.path.join(PRO, "meta.json")) else "kokoro")
 vo = np.zeros((2, N))
-VODIR = os.path.join(ROOT, "scripts", ".vo", "entreprises")
-meta = json.load(open(os.path.join(VODIR, "meta.json")))
+meta = []
+if VO == "pro":
+    VODIR = PRO
+    meta = json.load(open(os.path.join(VODIR, "meta.json")))["lines"]
+elif VO == "kokoro":
+    VODIR = os.path.join(ROOT, "scripts", ".vo", "entreprises")
+    meta = json.load(open(os.path.join(VODIR, "meta.json")))
 for m in meta:
     s, sr = sf.read(os.path.join(VODIR, f"line_{m['i']:02d}.wav"))
+    if s.ndim > 1:
+        s = s.mean(axis=1)
     if sr != SR:
         s = resample_poly(s, SR, sr)
-    s = hp(s, 85)
-    s = s + 0.25 * bp(s, 2500, 6000)  # presence
+    if VO == "pro":
+        # a real voice: clean the rumble, a touch of presence, tame the sibilants; no colouring
+        s = hp(s, 75)
+        s = s + 0.1 * bp(s, 2000, 4500) - 0.18 * bp(s, 6500, 9500)
+    else:
+        s = hp(s, 85)
+        s = s + 0.25 * bp(s, 2500, 6000)  # presence
     place(vo, s, m["at"], 1.0)
-lvl = lfilter([1 - 0.9995], [1, -0.9995], np.abs(vo[0]) + np.abs(vo[1]))
-vo *= np.where(lvl > 0.08, (0.08 / np.maximum(lvl, 1e-6)) ** 0.4, 1.0)  # gentle compression
-vo_mix = vo + np.stack([reverb(vo[0], 0.5, 0.7), reverb(vo[1], 1.7, 0.7)]) * 0.08
-# ducking: the bed dips under the narration, the speech band is carved out
-voice_env = np.abs(vo[0]) + np.abs(vo[1])
-att, rel = np.exp(-1 / (0.03 * SR)), np.exp(-1 / (0.4 * SR))
-e = np.zeros(N); acc = 0.0
-for i in range(0, N, 64):
-    v = voice_env[i:i + 64].max()
-    acc = att * acc + (1 - att) * v if v > acc else rel * acc + (1 - rel) * v
-    e[i:i + 64] = acc
-duck = 1 - 0.78 * np.clip(e / (e.max() * 0.3 + 1e-9), 0, 1)
-mid = np.stack([bp(bed[0], 300, 4000), bp(bed[1], 300, 4000)])
-bed = bed * duck - mid * (1 - duck) * 0.6
-mix = bed + vo_mix * 1.7
-for m in meta:
-    a, b = int(m["at"] * SR), int((m["at"] + m["dur"]) * SR)
-    rv = np.sqrt(np.mean(hp(vo_mix[0, a:b] * 1.7, 150) ** 2)) + 1e-9
-    rb = np.sqrt(np.mean(hp(bed[0, a:b], 150) ** 2)) + 1e-9
-    print(f"  voice/bed {m['id']:9s} {20 * np.log10(rv / rb):+5.1f} dB")
+if meta:
+    # light compression (≈ 2:1 above the threshold, slow release): even, never squashed
+    lvl = lfilter([1 - 0.9995], [1, -0.9995], np.abs(vo[0]) + np.abs(vo[1]))
+    thr = 0.08 if VO == "kokoro" else 0.1
+    vo *= np.where(lvl > thr, (thr / np.maximum(lvl, 1e-6)) ** (0.4 if VO == "kokoro" else 0.5), 1.0)
+    room = 0.08 if VO == "kokoro" else 0.035  # a studio voice stays close and dry
+    vo_mix = vo + np.stack([reverb(vo[0], 0.5, 0.6), reverb(vo[1], 1.7, 0.6)]) * room
+    # ducking: the bed dips under the narration, the speech band is carved out
+    voice_env = np.abs(vo[0]) + np.abs(vo[1])
+    att, rel = np.exp(-1 / (0.03 * SR)), np.exp(-1 / (0.45 * SR))
+    e = np.zeros(N); acc = 0.0
+    for i in range(0, N, 64):
+        v = voice_env[i:i + 64].max()
+        acc = att * acc + (1 - att) * v if v > acc else rel * acc + (1 - rel) * v
+        e[i:i + 64] = acc
+    duck = 1 - 0.78 * np.clip(e / (e.max() * 0.3 + 1e-9), 0, 1)
+    mid = np.stack([bp(bed[0], 300, 4000), bp(bed[1], 300, 4000)])
+    bed = bed * duck - mid * (1 - duck) * 0.6
+    mix = bed + vo_mix * 1.7
+    for m in meta:
+        a, b = int(m["at"] * SR), int((m["at"] + m["dur"]) * SR)
+        rv = np.sqrt(np.mean(hp(vo_mix[0, a:b] * 1.7, 150) ** 2)) + 1e-9
+        rb = np.sqrt(np.mean(hp(bed[0, a:b], 150) ** 2)) + 1e-9
+        print(f"  voice/bed {m['id']:9s} {20 * np.log10(rv / rb):+5.1f} dB")
+else:
+    mix = bed
+print("voice:", VO)
 mix = np.stack([hp(mix[0], 22), hp(mix[1], 22)])
 mix /= np.abs(mix).max()
-mix = np.tanh(mix * 1.6) / np.tanh(1.6)
+drive = 1.6 if VO == "kokoro" else 1.15  # a gentle peak limiter for a real voice, no audible saturation
+mix = np.tanh(mix * drive) / np.tanh(drive)
 t_all = np.arange(N) / SR
 mix *= np.clip((DUR + 0.1 - t_all) / 1.6, 0, 1) * 0.95
 mix = mix[:, : int((DUR + 0.05) * SR)]
 wav = os.path.join(ROOT, "scripts", ".mix-entreprises.wav")
 sf.write(wav, mix.T, SR)
-out = os.path.join(ROOT, "public", "audio", "astrya-entreprises.m4a")
+out = os.path.join(ROOT, "public", "audio", "astrya-entreprises-sans-voix.m4a" if VO == "none" else "astrya-entreprises.m4a")
 subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", wav, "-af", "loudnorm=I=-14:TP=-1:LRA=10", "-ar", "48000", "-c:a", "aac", "-b:a", "192k", out], check=True)
 os.remove(wav)
 print("wrote", out, f"{DUR:.1f}s")

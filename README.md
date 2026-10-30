@@ -64,6 +64,28 @@ The narration lives in `scripts/narration.entreprises.json` (`text` is what is s
 is spoken: « Astria », « imèle » so that the French voice pronounces the brand and « e-mail »
 correctly). Its timing (`src/narration.timing.entreprises.json`) drives the captions.
 
+### Professional voice-over (male, standard French)
+
+The first take used the only offline French voice (Kokoro *ff_siwis*, female, synthetic). The
+professional narration is written for the picture, not read from the captions, with silences on
+the freeze, the halo and the calm (`scripts/narration.entreprises.pro.json`: text, start time,
+tone and the scene each line goes with). It is generated with ElevenLabs (`eleven_multilingual_v2`):
+
+```bash
+export ELEVENLABS_API_KEY=…                   # environment secret; api.elevenlabs.io must be allowed
+python3 scripts/voice_pro.py voices           # French male voices + previews → scripts/.vo/pro/audition/previews/
+python3 scripts/voice_pro.py add <owner> <voice_id> <name>   # copy a shared voice into the account
+python3 scripts/voice_pro.py audition <id1,id2,id3>          # the same three lines with each voice, to compare
+python3 scripts/voice_pro.py render <voice_id>               # full narration → scripts/.vo/pro/ (+ phrase timings)
+python3 scripts/mix_entreprises.py            # VO=pro once it exists · VO=kokoro · VO=none (no voice, to compare)
+```
+
+Each line is sent with its neighbours (`previous_text` / `next_text`) so the intonation runs on;
+the « tone » sets stability / style / speed per part of the film (intrigue, problem, reveal, demo,
+conclusion). The mix keeps a real voice dry and close: high-pass, a touch of presence, softened
+sibilants, light ≈ 2:1 compression, music ducked under the voice, −14 LUFS, gentle peak limiting.
+`VO=none` writes `public/audio/astrya-entreprises-sans-voix.m4a` (the version without narration).
+
 Player: <kbd>Space</kbd> play/pause · <kbd>←</kbd>/<kbd>→</kbd> ±5 s · <kbd>R</kbd> restart ·
 <kbd>M</kbd> sound · <kbd>F</kbd> fullscreen. With reduced motion the page shows the final frame.
 
